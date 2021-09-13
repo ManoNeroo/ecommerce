@@ -1,0 +1,15 @@
+#page-alert {
+	width: 25em;
+	position: fixed;
+	top: 0;
+	margin-top: 1em;
+	right: -26em;
+	z-index: 1500;
+	transition: all ease-out 0.5s;
+	visibility: hidden;
+}
+
+#page-alert.active {
+	right: 0;
+	visibility: visible;
+}

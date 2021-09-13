@@ -1,0 +1,27 @@
+.table-list td {
+	vertical-align: middle;
+    font-size: 0.8em
+}
+.table-list .btn {
+    font-size: 0.8em !important;
+}
+
+.product-avatar, .product-avatar-th{
+	text-align: center;
+}
+
+.product-avatar img {
+    max-width: 5em;
+}
+
+.filter-form input, .filter-form select {
+	height: 2.5em !important;
+}
+
+.filter-form .select2-container textarea {
+	height: 1.7em !important;
+}
+
+.filter-form .select2-container {
+	width: 100% !important;
+}

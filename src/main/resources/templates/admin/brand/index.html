@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{admin/layouts/main-layout :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #style},
+                                                ~{:: #script},
+                                                ~{:: #main-content}
+                                               )}">
+
+<head>
+    <title>Thương hiệu</title>
+    <th:block id="style">
+        <link th:href="@{/common/select2/select2.min.css}" rel="stylesheet" type="text/css" />
+        <link th:href="@{/common/mylib/css/pagination.css}" rel="stylesheet" type="text/css" />
+        <link th:href="@{/admin/css/brand-page.css}" rel="stylesheet" type="text/css" />
+    </th:block>
+</head>
+
+<body>
+
+    <div id="main-content">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Danh sách các thương hiệu</h1>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-start">
+                        <button type="button" class="btn btn-outline-primary" id="btn-add-brand">
+                            <i class="fas fa-plus"></i> Thêm
+                        </button>
+                        <form class="ml-4 filter-form">
+                            <div class="form-row align-items-center">
+                                <div class="col-auto">
+                                    <input type="text" name="name" th:value="${searchName}" class="form-control"
+                                        placeholder="Nhập tên thương hiệu">
+                                </div>
+                                <div class="col-auto">
+                                    <select class="form-control" name="status">
+                                        <option th:selected="${searchStatus == null}" value="">Tất
+                                            cả</option>
+                                        <option th:selected="${searchStatus == true}" value="true">Enable</option>
+                                        <option th:selected="${searchStatus == false}" value="false">Disable</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <button type="submit" class="btn btn-outline-primary">
+                                        <i class="fa fa-search"></i> Lọc
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush table-list">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th width="6%">STT</th>
+                                    <th width="16%" class="brand-icon-th">Logo</th>
+                                    <th width="20%">Tên</th>
+                                    <th width="16%">Ngày tạo</th>
+                                    <th width="16%">Ngày cập nhật</th>
+                                    <th width="10%">Status</th>
+                                    <th width="16%">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <th:block th:each="brand, state : ${brands}">
+                                    <tr>
+                                        <td><span
+                                                th:text="${state.index + currentPage * pageSize - pageSize + 1}"></span>
+                                        </td>
+                                        <td class="brand-icon"><span>
+                                                <img th:src="${brand.getLogo()}" th:alt="${brand.getName()}">
+                                            </span></td>
+                                        <td><span th:text="${brand.getName()}"></span></td>
+                                        <td><span th:text="${#dates.format(brand.getCreatedAt(), 'dd-MM-yyyy')}"></span>
+                                        </td>
+                                        <td><span th:text="${#dates.format(brand.getUpdatedAt(), 'dd-MM-yyyy')}"></span>
+                                        </td>
+                                        <td><span class="badge"
+                                                th:classappend="${brand.isStatus()} ? badge-success : badge-warning"
+                                                th:text="${brand.isStatus()} ? Enable : Disable"></span></td>
+                                        <td><span><button th:attr="data-id=${brand.getId()}"
+                                                    class="btn btn-sm btn-toggle-status"
+                                                    th:classappend="${brand.isStatus()} ? btn-warning : btn-success"
+                                                    th:text="${brand.isStatus()} ? Disable : Enable"></button>
+                                                <button th:attr="data-id=${brand.getId()}"
+                                                    class="btn btn-sm btn-info btn-edit">Sửa</button></span></td>
+                                    </tr>
+                                </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer d-flex justify-content-center" id="brand-pagination"></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="brand-modal" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Thêm thương hiệu</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="brand-form">
+                            <input type="hidden" name="id" />
+                            <div class="form-group">
+                                <label>Logo</label>
+                                <div id="form-file">
+                                    <img th:src="@{/images/blank-logo.png}" alt="Logo">
+                                    <input accept="image/*" type="file" name="logo" class="d-none">
+                                    <button class="btn btn-success ml-2" type="button">Thay đổi</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Tên danh mục</label> <input class="form-control" type="text" name="name"
+                                    placeholder="Điền tên..." />
+                                <span class="text-danger name-error"></span>
+                            </div>
+                            <div class="form-group" id="brand-category">
+                                <label>Các danh mục kinh doanh</label>
+                                <select name="brandCategory[]" class="form-control select2-hidden-accessible"
+                                    multiple="multiple">
+                                    
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Trạng thái</label>
+                                <div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" checked="checked" type="radio" name="status"
+                                            id="enable-status" value="true"> <label class="form-check-label"
+                                            for="enable-status">Enable</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="status" id="disable-status"
+                                            value="false"> <label class="form-check-label"
+                                            for="disable-status">Disable</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        <button type="button" class="btn btn-primary" id="save">Lưu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block id="script">
+        <script th:inline="javascript">
+            var g_iTotalItem = /*[[${totalItem}]]*/'default';
+            var g_iPageSize = /*[[${pageSize}]]*/'default';
+            var g_iCurrentPage = /*[[${currentPage}]]*/'default';
+        </script>
+        <script th:src="@{/common/select2/select2.min.js}"></script>
+        <script th:src="@{/common/mylib/js/pagination.js}"></script>
+        <script th:src="@{/admin/js/brand-page.js}"></script>
+    </th:block>
+</body>
+
+</html>

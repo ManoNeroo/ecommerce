@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{admin/layouts/main-layout :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #style},
+                                                ~{:: #script},
+                                                ~{:: #main-content}
+                                               )}">
+
+<head>
+    <title>Sửa sản phẩm</title>
+    <th:block id="style">
+        <link th:href="@{/admin/css/productedit-page.css}" rel="stylesheet" type="text/css" />
+        <link th:href="@{/common/mylib/css/technical-data.css}" rel="stylesheet" type="text/css" />
+    </th:block>
+</head>
+
+<body>
+
+    <div id="main-content">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#basic-tab" role="tab">Thông tin cơ bản</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="article-nav" data-toggle="tab" href="#article-tab">Bài viết</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="technical-nav" data-toggle="tab" href="#technical-tab">Thông số kỹ thuật</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="picture-nav" data-toggle="tab" href="#picture-tab">Hình ảnh</a>
+            </li>
+        </ul>
+        <div class="tab-content mt-3">
+            <div class="tab-pane fade show active" id="basic-tab">
+                <div class="card">
+                    <div class="card-body">
+                        <form id="basic-form">
+                            <input type="hidden" name="id" th:value="${product.getId()}">
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <div class="form-row">
+                                        <div class="col-md-6 form-group">
+                                            <label>Tên sản phẩm</label>
+                                            <input type="text" name="name" class="form-control"
+                                                placeholder="Tên sảm phẩm" th:value="${product.getName()}">
+                                            <span class="text-danger name-error"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label>Danh mục</label>
+                                            <select name="categoryId" class="form-control">
+
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Thương hiệu</label>
+                                            <select name="brandId" class="form-control">
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label>Giá sản phẩm</label>
+                                            <input type="text" placeholder="Giá sản phẩm" class="form-control is-number"
+                                                name="price"
+                                                th:value="${#numbers.formatDecimal(product.getPrice(), 0, 'COMMA', 0, 'POINT')}">
+                                            <span class="text-danger price-error"></span>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Giá được giảm</label>
+                                            <input type="text" placeholder="Khuyến mãi" class="form-control is-number"
+                                                name="priceOff"
+                                                th:value="${#numbers.formatDecimal(product.getPriceOff(), 0, 'COMMA', 0, 'POINT')}">
+                                            <span class="text-danger priceoff-error"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label>Số lượng sản phẩm</label>
+                                            <input type="text" placeholder="Số lượng" class="form-control is-number"
+                                                name="quanlity"
+                                                th:value="${#numbers.formatDecimal(product.getQuanlity(), 0, 'COMMA', 0, 'POINT')}">
+                                            <span class="text-danger quanlity-error"></span>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Trạng thái</label>
+                                            <div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input"
+                                                        th:checked="${product.isStatus() == true}" type="radio"
+                                                        name="status" id="enable-status" value="true"> <label
+                                                        class="form-check-label" for="enable-status">Enable</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input"
+                                                        th:checked="${product.isStatus() == false}" type="radio"
+                                                        name="status" id="disable-status" value="false"> <label
+                                                        class="form-check-label" for="disable-status">Disable</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="form-file-wrapper">
+                                        <div id="form-file">
+                                            <img th:src="${product.getAvatar()}" alt="product image">
+                                            <input accept="image/*" type="file" name="avatar" class="d-none">
+                                            <button class="change-avatar-btn" type="button">
+                                                <svg viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z">
+                                                    </path>
+                                                </svg>
+                                            </button>
+                                            <div class="overlay"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mt-3">
+                                <button type="submit" class="btn btn-primary">
+                                    Lưu lại
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="article-tab">
+                <div class="card">
+                    <div class="card-body">
+                        <form id="article-form">
+                            <input type="hidden" name="id">
+                            <div class="form-group">
+                                <textarea id="product-article-editor"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="technical-tab">
+                <div class="card">
+                    <div class="card-body">
+                        <form id="technical-form">
+                            <input type="hidden" name="id">
+                            <div class="row">
+                                <div class="col-md-6 technical-data-overflow">
+                                    <div class="card technical-data-card">
+                                        <h2 class="card-title">Thêm thông số</h2>
+                                        <div class="card-body" id="technical-add-fields">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 technical-data-overflow">
+                                    <div class="card technical-data-card">
+                                        <h2 class="card-title">Thông số kỹ thuật</h2>
+                                        <div class="card-body" id="technical-data-preview">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mt-3">
+                                <button type="submit" class="btn btn-primary">Lưu lại</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="picture-tab">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Các hình ảnh của sản phẩm</h3>
+                    </div>
+                    <div class="card-body" id="image-list">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block id="script">
+        <script th:inline="javascript">
+            var g_iCategoryId = /*[[${product.getCategory().getId()}]]*/'default';
+            var g_iBrandId = /*[[${product.getBrand().getId()}]]*/'default';
+        </script>
+        <script th:src="@{/common/tinymce/tinymce.min.js}"></script>
+        <script th:src="@{/common/mylib/js/technical-data.js}"></script>
+        <script th:src="@{/admin/js/productedit-page.js}"></script>
+        <script th:src="@{/admin/js/product-article-editor.js}"></script>
+        <script th:src="@{/admin/js/product-technical-data.js}"></script>
+        <script th:src="@{/admin/js/product-picture.js}"></script>
+    </th:block>
+</body>
+
+</html>

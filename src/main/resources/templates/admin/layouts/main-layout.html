@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+	th:fragment="main-fragment (title, style, script, mainContent)">
+
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link th:href="@{/admin/img/logo/logo.png}" rel="icon" />
+<title th:replace="${title}">Blank Page</title>
+<link th:href="@{/common/fontawesome/css/all.min.css}" rel="stylesheet"
+	type="text/css" />
+<link th:href="@{/common/bootstrap/css/bootstrap.min.css}"
+	rel="stylesheet" type="text/css" />
+<link th:href="@{/admin/css/admin.min.css}" rel="stylesheet"
+	type="text/css" />
+<link th:href="@{/admin/css/page.css}" rel="stylesheet" type="text/css" />
+<th:block th:replace="${style} ?: ~{}"></th:block>
+</head>
+
+<body id="page-top">
+	<div id="wrapper">
+		<!-- Sidebar -->
+		<ul th:replace="~{/admin/fragments/sidebar :: sidebar}"></ul>
+		<!-- Sidebar -->
+		<div id="content-wrapper" class="d-flex flex-column">
+			<div id="content">
+				<!-- ToolBar -->
+				<nav th:replace="~{/admin/fragments/toolbar :: toolbar}"></nav>
+				<!-- Toolbar -->
+
+				<!-- Main content-->
+				<div class="container-fluid" id="container-wrapper"
+					th:insert="${mainContent} ?: ~{}"></div>
+				<!---Main content-->
+				<!-- Modal Logout -->
+				<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
+					aria-labelledby="exampleModalLabelLogout" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabelLogout">Cảnh
+									báo!</h5>
+								<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<p>Bạn có muốn đăng xuất không?</p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-outline-primary"
+									data-dismiss="modal">Cancel</button>
+								<a th:href="@{/admin/logout}" class="btn btn-primary">Đăng
+									xuất</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="alert" id="page-alert" role="alert">
+				<h6>
+					<i class="fas" ></i> <b class="title">Thành công!</b>
+				</h6>
+				<span class="message">Thành công!</span>
+			</div>
+			<!-- Footer -->
+			<footer th:replace="~{/admin/fragments/footer :: footer}"> </footer>
+			<!-- Footer -->
+		</div>
+	</div>
+
+	<!-- Scroll to top -->
+	<a class="scroll-to-top rounded" href="#page-top"> <i
+		class="fas fa-angle-up"></i>
+	</a>
+
+	<script th:src="@{/common/jquery/jquery.min.js}"></script>
+	<script th:src="@{/common/jquery/jquery.easing.min.js}"></script>
+	<script th:src="@{/common/bootstrap/js/bootstrap.bundle.min.js}"></script>
+	<script th:src="@{/admin/js/admin.min.js}"></script>
+	<script th:src="@{/admin/js/page.js}"></script>
+	<th:block th:replace="${script} ?: ~{}"></th:block>
+</body>
+
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{admin/layouts/main-layout :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #dashboard-style},
+                                                ~{:: #dashboard-script},
+                                                ~{:: #dashboard-main-content}
+                                               )}">
+<head>
+<title>Dashboard</title>
+<th:block id="dashboard-style">
+
+</th:block>
+</head>
+<body>
+
+	<div id="dashboard-main-content">
+		<div class="d-sm-flex align-items-center justify-content-between mb-4">
+			<h1 class="h3 mb-0 text-gray-800">Blank Page</h1>
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="./">Home</a></li>
+				<li class="breadcrumb-item">Pages</li>
+				<li class="breadcrumb-item active" aria-current="page">Blank
+					Page</li>
+			</ol>
+		</div>
+
+		<div class="text-center">
+			<img th:src="@{/admin/img/think.svg}" style="max-height: 90px">
+			<h4 class="pt-3">
+				save your <b>imagination</b> here!
+			</h4>
+		</div>
+
+	</div>
+
+	<th:block id="dashboard-script">
+
+	</th:block>
+</body>
+</html>

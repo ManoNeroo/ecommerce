@@ -1,0 +1,14 @@
+.table-list td {
+	vertical-align: middle;
+}
+
+.filter-form .form-control {
+	height: 2.5em;
+}
+
+.category-icon-th, .category-icon{
+	text-align: center;
+}
+.category-icon svg {
+	max-width: 4em;
+}

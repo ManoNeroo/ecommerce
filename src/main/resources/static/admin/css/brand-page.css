@@ -1,0 +1,29 @@
+.table-list td {
+	vertical-align: middle;
+}
+
+.filter-form .form-control {
+	height: 2.5em;
+}
+
+.brand-icon-th, .brand-icon{
+	text-align: center;
+}
+.brand-icon img {
+	max-width: 4em;
+}
+
+#brand-form #form-file img {
+	max-width: 10em;
+}
+#brand-form input {
+	height: 2.5em !important;
+}
+
+#brand-form .select2-container textarea {
+	height: 1.6em !important;
+}
+
+#brand-category .select2-container {
+	width: 100% !important;
+}

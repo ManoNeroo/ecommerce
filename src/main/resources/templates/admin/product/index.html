@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{admin/layouts/main-layout :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #style},
+                                                ~{:: #script},
+                                                ~{:: #main-content}
+                                               )}">
+
+<head>
+    <title>Sản phẩm</title>
+    <th:block id="style">
+        <link th:href="@{/common/select2/select2.min.css}" rel="stylesheet" type="text/css" />
+        <link th:href="@{/common/mylib/css/pagination.css}" rel="stylesheet" type="text/css" />
+        <link th:href="@{/admin/css/product-page.css}" rel="stylesheet" type="text/css" />
+    </th:block>
+</head>
+
+<body>
+
+    <div id="main-content">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Danh sách sản phẩm</h1>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header py-3">
+                        <div class="mb-2">
+                            <a th:href="@{/admin/product/add}" type="button" class="btn btn-outline-primary" id="btn-add-item">
+                                <i class="fas fa-plus"></i> Thêm sản phẩm
+                            </a>
+                        </div>
+                        <div>
+                            <form class="filter-form">
+                                <div class="form-row align-items-center">
+                                    <div class="form-group col-md-4">
+                                        <label>Tên sản phẩm</label>
+                                        <input type="text" class="form-control" name="name" th:value="${searchName}" placeholder="Nhập tên sản phẩm">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Danh mục</label>
+                                        <select name="category[]" class="form-control select2-hidden-accessible"
+                                        multiple="multiple" id="category">
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Hãng sản xuất</label>
+                                        <select name="brand[]" class="form-control select2-hidden-accessible"
+                                        multiple="multiple" id="brand">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row align-items-center">
+                                    <div class="form-group col-md-4">
+                                        <label>Mức giá</label>
+                                        <select name="priceRange[]" class="form-control select2-hidden-accessible"
+                                        multiple="multiple" id="priceRange">
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Trạng thái</label>
+                                        <select class="form-control" name="status">
+                                            <option th:selected="${searchStatus == null}" value="">Tất
+                                                cả</option>
+                                            <option th:selected="${searchStatus == true}" value="true">Enable</option>
+                                            <option th:selected="${searchStatus == false}" value="false">Disable
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>Sắp xếp</label>
+                                        <select class="form-control" name="isSort">
+                                            <option th:selected="${searchSort == null}" value="">Lựa chọn</option>
+                                            <option th:selected="${searchSort == true}" value="true">Giá tăng dần</option>
+                                            <option th:selected="${searchSort == false}" value="false">Giá giảm dần</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-outline-primary">
+                                        <i class="fa fa-search"></i> Lọc sản phẩm
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush table-list">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>STT</th>
+                                    <th class="product-avatar-th">Ảnh</th>
+                                    <th>Tên</th>
+                                    <th>Giá</th>
+                                    <th>Giá KM</th>
+                                    <th>SL</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <th:block th:each="item, state : ${list}">
+                                    <tr>
+                                        <td><span
+                                                th:text="${state.index + currentPage * pageSize - pageSize + 1}"></span>
+                                        </td>
+                                        <td class="product-avatar">
+                                            <img th:src="${item.getAvatar()}" th:alt="${item.getName()}">
+                                        </td>
+                                        <td>
+                                            <span th:text="${item.getName()}"></span>
+                                        </td>
+                                        <td>
+                                            <span
+                                                th:text="${#numbers.formatDecimal(item.getPrice(), 0, 'COMMA', 0, 'POINT')}"></span>
+                                        </td>
+                                        <td>
+                                            <span
+                                                th:text="${#numbers.formatDecimal(item.getPromoPrice(), 0, 'COMMA', 0, 'POINT')}"></span>
+                                        </td>
+                                        <td>
+                                            <span
+                                                th:text="${#numbers.formatDecimal(item.getQuanlity(), 0, 'COMMA', 0, 'POINT')}"></span>
+                                        </td>
+                                        <td>
+                                            <span th:text="${#dates.format(item.getCreatedAt(), 'dd-MM-yyyy')}"></span>
+                                        </td>
+                                        <td>
+                                            <span class="badge"
+                                                th:classappend="${item.isStatus()} ? badge-success : badge-warning"
+                                                th:text="${item.isStatus()} ? Enable : Disable"></span>
+                                        </td>
+                                        <td>
+                                            <button th:attr="data-id=${item.getId()}"
+                                                class="btn btn-sm btn-toggle-status"
+                                                th:classappend="${item.isStatus()} ? btn-warning : btn-success"
+                                                th:text="${item.isStatus()} ? Disable : Enable">
+                                            </button>
+                                            <a th:href="@{/admin/product/edit/{id}(id=${item.getId()})}"
+                                                class="btn btn-sm btn-info btn-edit">Sửa</a>
+                                        </td>
+                                    </tr>
+                                </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer d-flex justify-content-center" id="page-pagination"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block id="script">
+        <script th:inline="javascript">
+            var g_iTotalItem = /*[[${totalItem}]]*/'default';
+            var g_iPageSize = /*[[${pageSize}]]*/'default';
+            var g_iCurrentPage = /*[[${currentPage}]]*/'default';
+            var g_aSearchBrandIds = /*[[${brandIds}]]*/'default';
+            var g_aSearchCategoryIds = /*[[${categoryIds}]]*/'default';
+            var g_iPriceRangeIxs = /*[[${priceRangeIxs}]]*/'default';
+            var g_aCategories = /*[[${categories}]]*/'default';
+            var g_aBrands = /*[[${brands}]]*/'default';
+        </script>
+        <script th:src="@{/common/mylib/js/pagination.js}"></script>
+        <script th:src="@{/common/select2/select2.min.js}"></script>
+        <script th:src="@{/admin/js/product-page.js}"></script>
+    </th:block>
+</body>
+
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>Sidebar Fragment</title>
+</head>
+<body>
+
+	<ul th:fragment="sidebar"
+		class="navbar-nav sidebar sidebar-light accordion"
+		id="accordionSidebar">
+		<a
+			class="sidebar-brand d-flex align-items-center justify-content-center"
+			th:href="@{/admin/dashboard}">
+			<div class="sidebar-brand-icon">
+				<img th:src="@{/admin/img/logo/logo.png}">
+			</div>
+			<div class="sidebar-brand-text mx-3">Admin Page</div>
+		</a>
+		<hr class="sidebar-divider mt-0 mb-3">
+		<div class="sidebar-heading">Main</div>
+		<li class="nav-item"><a class="nav-link" th:href="@{/admin/dashboard}"> <i
+				class="fas fa-fw fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+		<li class="nav-item"><a class="nav-link" th:href="@{/admin/product}">
+				<i class="fas fa-fw fa-shopping-basket"></i> <span>Sản phẩm</span>
+		</a></li>
+		<li class="nav-item"><a class="nav-link" th:href="@{/admin/category}">
+				<i class="fas fa-fw fa-list"></i> <span>Danh mục</span>
+		</a></li>
+		<li class="nav-item"><a class="nav-link" th:href="@{/admin/brand}">
+				<i class="fas fa-fw fa-language"></i> <span>Thương hiệu</span>
+		</a></li>
+		<li class="nav-item"><a class="nav-link" th:href="@{/admin/order}">
+				<i class="fas fa-fw fa-shopping-cart"></i> <span>Đơn hàng</span>
+		</a></li>
+		<li class="nav-item"><a class="nav-link" th:href="@{/admin/order}">
+				<i class="fas fa-fw fa-credit-card"></i> <span>Giao dich</span>
+		</a></li>
+		<li class="nav-item"><a class="nav-link" th:href="@{/admin/customer}">
+				<i class="fas fa-fw fa-users"></i> <span>Khách hàng</span>
+		</a></li>
+		<li class="nav-item"><a class="nav-link" th:href="@{/admin/account}">
+				<i class="fas fa-fw fa-user"></i> <span>Tài khoản</span>
+		</a></li>
+		<hr class="sidebar-divider">
+		<div class="sidebar-heading">Cài đặt</div>
+		<li class="nav-item"><a class="nav-link" th:href="@{/admin/order}">
+				<i class="fas fa-fw fa-tv"></i> <span>Hồ sơ</span>
+		</a></li>
+		<li class="nav-item"><a class="nav-link" th:href="@{/admin/order}">
+				<i class="fas fa-fw fa-id-card"></i> <span>Mật khẩu</span>
+		</a></li>
+		<hr class="sidebar-divider">
+		<div class="version" id="version-admin"></div>
+	</ul>
+
+</body>
+</html>

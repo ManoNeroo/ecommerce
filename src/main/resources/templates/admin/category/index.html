@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{admin/layouts/main-layout :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #style},
+                                                ~{:: #script},
+                                                ~{:: #main-content}
+                                               )}">
+<head>
+<title>Danh mục</title>
+<th:block id="style">
+	<link th:href="@{/common/mylib/css/pagination.css}" rel="stylesheet"
+		type="text/css" />
+	<link th:href="@{/admin/css/category-page.css}" rel="stylesheet"
+		type="text/css" />
+</th:block>
+</head>
+<body>
+
+	<div id="main-content">
+		<div class="d-sm-flex align-items-center justify-content-between mb-4">
+			<h1 class="h3 mb-0 text-gray-800">Danh mục sản phẩm</h1>
+		</div>
+
+		<div class="row mb-3">
+			<div class="col-lg-12">
+				<div class="card">
+					<div
+						class="card-header py-3 d-flex flex-row align-items-center justify-content-start">
+						<button type="button" class="btn btn-outline-primary"
+							id="btn-add-category">
+							<i class="fas fa-plus"></i> Thêm
+						</button>
+						<form class="ml-4 filter-form">
+							<div class="form-row align-items-center">
+								<div class="col-auto">
+									<input type="text" name="name" th:value="${searchName}"
+										class="form-control" placeholder="Nhập tên danh mục">
+								</div>
+								<div class="col-auto">
+									<select class="form-control" name="status">
+										<option th:selected="${searchStatus == null}" value="">Tất
+											cả</option>
+										<option th:selected="${searchStatus == true}" value="true">Enable</option>
+										<option th:selected="${searchStatus == false}" value="false">Disable</option>
+									</select>
+								</div>
+								<div class="col-auto">
+									<button type="submit" class="btn btn-outline-primary">
+										<i class="fa fa-search"></i> Lọc
+									</button>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="table-responsive">
+						<table class="table align-items-center table-flush table-list">
+							<thead class="thead-light">
+								<tr>
+									<th width="6%">STT</th>
+									<th width="16%" class="category-icon-th">Icon</th>
+									<th width="20%">Tên</th>
+									<th width="16%">Ngày tạo</th>
+									<th width="16%">Ngày cập nhật</th>
+									<th width="10%">Status</th>
+									<th width="16%">Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<th:block th:each="category, state : ${categories}">
+									<tr>
+										<td><span
+											th:text="${state.index + currentPage * pageSize - pageSize + 1}"></span></td>
+										<td class="category-icon"><span>
+											<svg viewBox="0 0 24 24">
+												<path th:attr="d=${category.getLogo()}"></path>
+											</svg>
+										</span></td>
+										<td><span th:text="${category.getName()}"></span></td>
+										<td><span
+											th:text="${#dates.format(category.getCreatedAt(), 'dd-MM-yyyy')}"></span></td>
+										<td><span
+											th:text="${#dates.format(category.getUpdatedAt(), 'dd-MM-yyyy')}"></span></td>
+										<td><span class="badge"
+											th:classappend="${category.isStatus()} ? badge-success : badge-warning"
+											th:text="${category.isStatus()} ? Enable : Disable"></span></td>
+										<td><span><button th:attr="data-id=${category.getId()}" 
+										class="btn btn-sm btn-toggle-status"
+										th:classappend="${category.isStatus()} ? btn-warning : btn-success"
+										th:text="${category.isStatus()} ? Disable : Enable"></button>
+										<button th:attr="data-id=${category.getId()}" class="btn btn-sm btn-info btn-edit">Sửa</button></span></td>
+									</tr>
+								</th:block>
+							</tbody>
+						</table>
+					</div>
+					<div class="card-footer d-flex justify-content-center"
+						id="category-pagination"></div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="category-modal" role="dialog">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Thêm danh mục</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form id="category-form">
+							<input type="hidden" name="id" />
+							<div class="form-group">
+								<label>Tên danh mục</label> <input class="form-control"
+									type="text" name="name" placeholder="Điền tên..." />
+								<span class="text-danger name-error"></span>
+							</div>
+							<div class="form-group">
+								<label>Icon(SVG Path)</label> <textarea rows="3" class="form-control" name="logo" placeholder="Svg path..." ></textarea>
+									<span class="text-danger logo-error"></span>
+							</div>
+							<div class="form-group">
+								<label>Trạng thái</label>
+								<div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" checked="checked" type="radio" name="status"
+											id="enable-status" value="true"> <label
+											class="form-check-label" for="enable-status">Enable</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" type="radio" name="status"
+											id="disable-status" value="false"> <label
+											class="form-check-label" for="disable-status">Disable</label>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">Đóng</button>
+						<button type="button" class="btn btn-primary" id="save">Lưu</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<th:block id="script">
+		<script th:inline="javascript">
+			var g_iTotalItem = /*[[${totalItem}]]*/'default';
+			var g_iPageSize = /*[[${pageSize}]]*/'default';
+			var g_iCurrentPage = /*[[${currentPage}]]*/'default';
+		</script>
+		<script th:src="@{/common/mylib/js/pagination.js}"></script>
+		<script th:src="@{/admin/js/category-page.js}"></script>
+	</th:block>
+</body>
+</html>
