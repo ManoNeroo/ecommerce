@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{customer/layouts/main-layout :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #style},
+                                                ~{:: #script},
+                                                ~{:: #main-content}
+                                               )}">
+<head>
+<title>404 - Not found</title>
+<th:block id="style">
+	<link th:href="@{/customer/css/error-page.css}" rel="stylesheet" type="text/css" />
+</th:block>
+</head>
+<body>
+
+	<div id="main-content">
+		<div class="error-wrapper">
+            <h1>Lỗi!</h1>
+            <h2>404 - Không tìm thấy trang!</h2>
+            <p>Trang mà bạn đang tìm kiếm không có sẵn!</p>
+            <a th:href="@{/}">Trang chủ</a>
+        </div>
+	</div>
+
+	<th:block id="script">
+
+	</th:block>
+</body>
+</html>

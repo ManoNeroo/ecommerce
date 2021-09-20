@@ -58,9 +58,9 @@ public class CategoryService implements ICategoryService {
 	}
 
 	@Override
-	public List<Category> getAllCategory(Boolean isEnable) {
+	public List<Category> getAllCategory(Boolean isEnable, Boolean isSortByName) {
 		// TODO Auto-generated method stub
-		return categoryRepository.selectAllCategory(isEnable);
+		return categoryRepository.selectAllCategory(isEnable, isSortByName);
 	}
 
 }

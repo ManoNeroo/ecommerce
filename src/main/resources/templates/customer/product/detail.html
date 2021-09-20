@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{customer/layouts/main-layout :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #style},
+                                                ~{:: #script},
+                                                ~{:: #main-content}
+                                               )}">
+
+<head>
+    <title th:text="${product.name}"></title>
+    <th:block id="style">
+        <link th:href="@{/common/mylib/css/technical-data.css}" rel="stylesheet" type="text/css" />
+        <link th:href="@{/customer/css/product-page.css}" rel="stylesheet" type="text/css" />
+    </th:block>
+</head>
+
+<body>
+
+    <div id="main-content">
+        <section class="section">
+            <div class="row product-page-title">
+                <div class="product-page-name col-md-6">
+                    <h3 th:text="${product.name}"></h3>
+                    <span class="ml-2" th:text="${'(' + product.id + ')'}"></span>
+                </div>
+                <div class="product-page-vote col-md-6" id="star-list-1">
+                    <p th:text="${product.numberVote + ' đánh giá'}"></p>
+                </div>
+            </div>
+            <div class="section-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div id="product-slider" class="swiper">
+                            <div class="swiper-wrapper">
+                                <th:block th:each="image : ${pictures}">
+                                    <div class="swiper-slide">
+                                        <img th:src="${image.name}">
+                                    </div>
+                                </th:block>
+                                <th:block th:if="${pictures.size() == 0}">
+                                    <div class="swiper-slide">
+                                        <img th:src="${product.avatar}">
+                                    </div>
+                                </th:block>
+                            </div>
+                        </div>
+                        <div class="product-page-price">
+                            <div class="price-main"></div>
+                            <div class="price-sub">
+                                <del></del>
+                            </div>
+                        </div>
+                        <div class="product-page-action">
+                            <button type="button" class="btn btn-danger">Mua ngay</button>
+                            <button type="button" class="btn btn-outline-danger">Thêm vào giỏ hàng</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card technical-data-card">
+                            <h2 class="card-title">Thông số kỹ thuật</h2>
+                            <div class="card-body" id="product-technical-data">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section">
+            <div class="section-body">
+                <div class="product-page-article-wrapper container">
+                    <div class="product-page-article" id="product-article">
+                        <div class="product-page-article-content" th:utext="${article?.content}">
+
+                        </div>
+                        <div class="product-page-article-overlay">
+                            <span id="btn-expand-article" class="button-overlay">Đọc thêm<span
+                                    class="carret"></span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section">
+            <div class="section-body">
+                <ul class="nav nav-tabs product-page-vote-comment">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#vote">Đánh giá và nhận xét</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#comment">Bình luận</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="vote">
+                        <div class="product-rate-star">
+                            <div class="col">
+                                <div class="rate-point">
+                                    <p>Đánh giá trung bình</p>
+                                    <div class="point" id="star-point"></div>
+                                    <div class="product-page-vote" id="star-list-2">
+                                    </div>
+                                    <span th:text="${product.numberVote + ' đánh giá'}"></span>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <!-- <div class="product-rate-progresses">
+                                    <div class="product-rate-item">
+                                        <label>
+                                            <span>5</span>
+                                            <span>
+                                                <svg viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z">
+                                                    </path>
+                                                </svg>
+                                            </span>
+                                        </label>
+                                        <div class="product-rate-progress-bar">
+                                            <span class="product-rate-progress-value" style="width: 30%"></span>
+                                        </div>
+                                        <span>14</span>
+                                    </div>
+                                    <div class="product-rate-item">
+                                        <label>
+                                            <span>5</span>
+                                            <span>
+                                                <svg viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z">
+                                                    </path>
+                                                </svg>
+                                            </span>
+                                        </label>
+                                        <div class="product-rate-progress-bar">
+                                            <span class="product-rate-progress-value" style="width: 30%"></span>
+                                        </div>
+                                        <span>14</span>
+                                    </div>
+                                    <div class="product-rate-item">
+                                        <label>
+                                            <span>5</span>
+                                            <span>
+                                                <svg viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z">
+                                                    </path>
+                                                </svg>
+                                            </span>
+                                        </label>
+                                        <div class="product-rate-progress-bar">
+                                            <span class="product-rate-progress-value" style="width: 30%"></span>
+                                        </div>
+                                        <span>14</span>
+                                    </div>
+                                    <div class="product-rate-item">
+                                        <label>
+                                            <span>5</span>
+                                            <span>
+                                                <svg viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z">
+                                                    </path>
+                                                </svg>
+                                            </span>
+                                        </label>
+                                        <div class="product-rate-progress-bar">
+                                            <span class="product-rate-progress-value" style="width: 30%"></span>
+                                        </div>
+                                        <span>14</span>
+                                    </div>
+                                    <div class="product-rate-item">
+                                        <label>
+                                            <span>5</span>
+                                            <span>
+                                                <svg viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z">
+                                                    </path>
+                                                </svg>
+                                            </span>
+                                        </label>
+                                        <div class="product-rate-progress-bar">
+                                            <span class="product-rate-progress-value" style="width: 30%"></span>
+                                        </div>
+                                        <span>14</span>
+                                    </div>
+                                </div> -->
+                            </div>
+                            <div class="col">
+                                <div class="text-center">
+                                    <p>Bạn đã mua sản phẩm này?</p>
+                                    <button class="btn btn-danger">Gửi đánh giá của bạn</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-user-rate">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="user-rate-star">
+                                        <p>Bạn chấm sản phẩm này bao nhiêu sao?</p>
+                                        <div class="list-star">
+                                            <ul class="star-list size-3">
+                                                <li>
+                                                    <svg viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z">
+                                                        </path>
+                                                    </svg>
+                                                </li>
+                                                <li>
+                                                    <svg viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z">
+                                                        </path>
+                                                    </svg>
+                                                </li>
+                                                <li>
+                                                    <svg viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z">
+                                                        </path>
+                                                    </svg>
+                                                </li>
+                                                <li>
+                                                    <svg viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z">
+                                                        </path>
+                                                    </svg>
+                                                </li>
+                                                <li>
+                                                    <svg viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z">
+                                                        </path>
+                                                    </svg>
+                                                </li>
+                                            </ul>
+                                            <span>Tuyệt vời</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="user-comment-form">
+                                        <textarea rows="4"
+                                            placeholder="Cho chúng tôi biết đánh giá của bạn về sản phẩm?"></textarea>
+                                        <p class="error text-danger">Mời bạn viết bình luận.(Tối thiểu 3
+                                            ký tự)</p>
+                                        <button class="btn btn-danger">Gửi đánh giá</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="user-comment">
+                            <div class="comment-box">
+                                <div class="comment-box-avatar">
+                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHUndSzxcF1UbSXX3bVILVaUbSIhoc_GEA8g&usqp=CAU"
+                                        alt="Avatar">
+                                </div>
+                                <div class="comment-box-content">
+                                    <div class="comment-name">Lê Văn A</div>
+                                    <div class="list-star">
+                                        <ul class="star-list size-1">
+                                            <li>
+                                                <svg viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z">
+                                                    </path>
+                                                </svg>
+                                            </li>
+                                            <li>
+                                                <svg viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z">
+                                                    </path>
+                                                </svg>
+                                            </li>
+                                            <li>
+                                                <svg viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z">
+                                                    </path>
+                                                </svg>
+                                            </li>
+                                            <li>
+                                                <svg viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z">
+                                                    </path>
+                                                </svg>
+                                            </li>
+                                            <li>
+                                                <svg viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z">
+                                                    </path>
+                                                </svg>
+                                            </li>
+                                        </ul>
+                                        <span>vào ngày 04/07/2021</span>
+                                    </div>
+                                    <div class="comment-text">
+                                        Cho shop 5 sao. M mới mua con này cho con gái m.Con vua hết lop 3.Cháu gõ
+                                        văn bản ầm ầm ...Sử dụng pain ,xem phim lướt web ok. ..k quá nhanh ,k quá
+                                        chậm...Cam ,mic đầy đủ...thích hợp cho các con học online ,gọi zalo ,fb rất
+                                        ok...Pin khoảng 3or 4 hours tùy ng dùng...So với mức giá tiền...thì sử dụng
+                                        nv là ok lm rồi.K thể đòi hỏi or so với dòng cao cấp đc.Còn ai mun cao hơn
+                                        thì đầu tư thêm tiền mua máy đắt hơn nhé.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="comment">
+                        Bình luận
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <th:block id="script">
+        <script th:inline="javascript">
+            var g_oProduct = {
+                price: /*[[${product.price}]]*/'default',
+                promoPrice: /*[[${product.promoPrice}]]*/'default',
+                avgStar: /*[[${product.avgStar}]]*/'default',
+                technicalData: /*[[${technical?.content}]]*/'default'
+            }
+        </script>
+        <script th:src="@{/common/mylib/js/technical-data.js}"></script>
+        <script th:src="@{/customer/js/product-page.js}"></script>
+    </th:block>
+</body>
+
+</html>

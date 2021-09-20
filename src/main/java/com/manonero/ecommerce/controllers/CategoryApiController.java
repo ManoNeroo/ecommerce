@@ -1,4 +1,4 @@
-package com.manonero.ecommerce.admin.controllers;
+package com.manonero.ecommerce.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,8 +23,8 @@ public class CategoryApiController {
 	private ICategoryService categoryService;
 
 	@GetMapping()
-	public Response getAll() {
-		List<Category> categories = categoryService.getAllCategory(null);
+	public Response getAll(@RequestParam(required = false) Boolean isEnable, @RequestParam(required = false) Boolean isSortByName) {
+		List<Category> categories = categoryService.getAllCategory(isEnable, isSortByName);
 		return new Response(categories, true);
 	}
 

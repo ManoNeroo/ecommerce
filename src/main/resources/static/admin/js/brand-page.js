@@ -69,7 +69,7 @@ async function handleOpenModalAdd() {
 }
 
 async function generateSelectOptions(selectedList = []) {
-	const resp = await httpClient("/api/category");
+	const resp = await httpClient("/api/category?isSortByName=true");
 	if(resp.isSuccess) {
 		let data = [];
 		resp.data.forEach(category => {

@@ -47,8 +47,8 @@ public class ProductController {
         List<Product> list = productService.filterProduct(offset, limit, category, brand, priceRange, name, status,
                 isSort, false);
         int total = productService.getProductCount();
-        List<Brand> brands = brandService.getAllBrand(null);
-        List<Category> categories = categoryService.getAllCategory(null);
+        List<Brand> brands = brandService.getAllBrand(null, true);
+        List<Category> categories = categoryService.getAllCategory(null, true);
         model.addAttribute("list", list);
         model.addAttribute("brands", brands);
         model.addAttribute("categories", categories);
@@ -67,8 +67,8 @@ public class ProductController {
     @GetMapping("/add")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_EMPLOYEE')")
     public String add(Model model) {
-        List<Brand> brands = brandService.getAllBrand(null);
-        List<Category> categories = categoryService.getAllCategory(null);
+        List<Brand> brands = brandService.getAllBrand(null, true);
+        List<Category> categories = categoryService.getAllCategory(null, true);
         model.addAttribute("brands", brands);
         model.addAttribute("categories", categories);
         return "admin/product/add";

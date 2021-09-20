@@ -90,7 +90,7 @@ public class CategoryRepository implements ICategoryRepository {
 	}
 
 	@Override
-	public List<Category> selectAllCategory(Boolean isEnable) {
+	public List<Category> selectAllCategory(Boolean isEnable, Boolean isSortByName) {
 		String queryStr = "SELECT * FROM category";
 		if(isEnable != null) {
 			if(isEnable) {
@@ -99,7 +99,13 @@ public class CategoryRepository implements ICategoryRepository {
 				queryStr += " WHERE category_status=0";
 			}
 		}
-		queryStr += " ORDER BY category_name ASC";
+		if(isSortByName != null) {
+			if(isSortByName) {
+				queryStr += " ORDER BY category_name ASC";
+			} else {
+				queryStr += " ORDER BY category_name DESC";
+			}
+		}
 		Query query = entityManager.createNativeQuery(queryStr, Category.class);
 
 		@SuppressWarnings("unchecked")

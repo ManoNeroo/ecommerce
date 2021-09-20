@@ -13,4 +13,5 @@ public interface IProductService {
     Product save(ProductRequest request);
     Product getProductById(String id);
     void updateProductStatus(UpdateProductStatusRequest request);
+    List<Object> getTopProduct(int top, int[] categoryIds);
 }

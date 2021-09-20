@@ -11,5 +11,5 @@ public interface IBrandService {
 	Brand save(BrandRequest request);
 	boolean toggleBrandStatus(int id, boolean status);
 	Brand getBrandById(int id);
-	List<Brand> getAllBrand(Boolean isEnable);
+	List<Brand> getAllBrand(Boolean isEnable, Boolean isSortByName);
 }

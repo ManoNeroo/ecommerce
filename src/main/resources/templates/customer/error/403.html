@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{customer/layouts/main-layout :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #style},
+                                                ~{:: #script},
+                                                ~{:: #main-content}
+                                               )}">
+<head>
+<title>403 - Forbidden</title>
+<th:block id="style">
+	<link th:href="@{/customer/css/error-page.css}" rel="stylesheet" type="text/css" />
+</th:block>
+</head>
+<body>
+
+	<div id="main-content">
+		<div class="error-wrapper">
+            <h1>Lỗi!</h1>
+            <h2>403 - Kết nối bị từ chối!</h2>
+            <p>Bạn không có quyền truy cập trang này!</p>
+            <a th:href="@{/}">Trang chủ</a>
+        </div>
+	</div>
+
+	<th:block id="script">
+
+	</th:block>
+</body>
+</html>

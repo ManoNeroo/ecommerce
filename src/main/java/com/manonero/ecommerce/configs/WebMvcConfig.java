@@ -8,14 +8,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
     @Bean
-    public AdminUserSessionInterceptor adminUserSessionInterceptor() {
-        return new AdminUserSessionInterceptor();
+    public UserSessionInterceptor userSessionInterceptor() {
+        return new UserSessionInterceptor();
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(adminUserSessionInterceptor())
-        .addPathPatterns("/admin/**")
-        .excludePathPatterns("/admin/login", "/admin/logout");
+        registry.addInterceptor(userSessionInterceptor()).addPathPatterns("/admin/**", "/**")
+                .excludePathPatterns("/admin/login", "/admin/logout", "/login", "/logout");
     }
 }

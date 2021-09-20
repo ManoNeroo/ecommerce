@@ -1,21 +1,30 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
-
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{admin/layouts/main-layout :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #style},
+                                                ~{:: #script},
+                                                ~{:: #main-content}
+                                               )}">
 <head>
-<meta charset="utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<link th:href="@{/admin/img/logo/logo.png}" rel="icon" />
-<title>Not Found</title>
-<link th:href="@{/common/bootstrap/css/bootstrap.min.css}"
-	rel="stylesheet" type="text/css" />
-<link th:href="@{/admin/css/admin.min.css}" rel="stylesheet"
-	type="text/css" />
-
+<title>404 - Not found</title>
+<th:block id="style">
+	<link th:href="@{/admin/css/error-page.css}" rel="stylesheet" type="text/css" />
+</th:block>
 </head>
+<body>
 
-<body >
-	<h1>The Page Is Not Found!!!</h1>
+	<div id="main-content">
+		<div class="error-wrapper">
+            <h1>Lỗi!</h1>
+            <h2>404 - Không tìm thấy trang!</h2>
+            <p>Trang mà bạn đang tìm kiếm không có sẵn!</p>
+            <a th:href="@{/admin/dashboard}">Trang chủ</a>
+        </div>
+	</div>
+
+	<th:block id="script">
+
+	</th:block>
 </body>
-
 </html>

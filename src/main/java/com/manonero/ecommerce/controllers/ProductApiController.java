@@ -1,4 +1,4 @@
-package com.manonero.ecommerce.admin.controllers;
+package com.manonero.ecommerce.controllers;
 
 import java.util.List;
 
@@ -30,8 +30,7 @@ public class ProductApiController {
             @RequestParam(required = false) Integer limit, @RequestParam(required = false) int[] brand,
             @RequestParam(required = false) int[] category, @RequestParam(required = false) int[] priceRange,
             @RequestParam(required = false) String name, @RequestParam(required = false) Boolean status,
-            @RequestParam(required = false) Boolean isSort,
-            @RequestParam(required = false) Boolean onlyEnable) {
+            @RequestParam(required = false) Boolean isSort, @RequestParam(required = false) Boolean onlyEnable) {
         if (limit == null) {
             limit = 1;
         }
@@ -63,5 +62,11 @@ public class ProductApiController {
     public Response toggleStatus(@RequestBody UpdateProductStatusRequest request) {
         productService.updateProductStatus(request);
         return new Response(true);
+    }
+
+    @GetMapping("/top")
+    public Response getTopProduct(@RequestParam int top, @RequestParam int[] categoryIds) {
+        List<Object> list = productService.getTopProduct(top, categoryIds);
+        return new Response(list, true);
     }
 }

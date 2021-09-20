@@ -1,4 +1,4 @@
-package com.manonero.ecommerce.admin.controllers;
+package com.manonero.ecommerce.controllers;
 
 import java.util.List;
 

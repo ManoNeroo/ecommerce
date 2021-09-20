@@ -1,5 +1,6 @@
 package com.manonero.ecommerce.services;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -64,7 +65,7 @@ public class ProductService implements IProductService {
         Date now = new Date();
         Product product = new Product();
         if(request.getId() == null) {
-            product.setId(AppUtils.generateRandomString(15));
+            product.setId(AppUtils.generateRandomString(10));
             product.setCreatedAt(now);
             product.setUpdatedAt(now);
         } else {
@@ -100,6 +101,19 @@ public class ProductService implements IProductService {
     @Transactional
     public void updateProductStatus(UpdateProductStatusRequest request) {
         productRepository.updateProductStatus(request.getStatus(), request.getProductId());
+    }
+
+    @Override
+    @Transactional
+    public List<Object> getTopProduct(int top, int[] categoryIds) {
+        ArrayList<Object> list = new ArrayList<>();
+        if(categoryIds != null && top > 0) {
+            for(int categoryId : categoryIds) {
+                List<Product> listProd = productRepository.selectTopProduct(top, categoryId);
+                list.add(listProd);
+            }
+        }
+        return list;
     }
 
 }

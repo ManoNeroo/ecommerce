@@ -18,25 +18,30 @@ import com.manonero.ecommerce.services.IUserAccountService;
 @Component
 public class CustomerPageSuccessHandler implements AuthenticationSuccessHandler {
 
-    @Autowired
-    private IUserAccountService userService;
-	
+	@Autowired
+	private IUserAccountService userService;
+
 	@Override
-	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
-			throws IOException, ServletException {
+	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+			Authentication authentication) throws IOException, ServletException {
 
 		String userName = authentication.getName();
-		
-		System.out.println("userName=" + userName);
+
+		System.out.println("User name is: " + userName);
 
 		UserAccount userAccount = userService.findByUserName(userName);
-		
+
 		System.out.println("Full Name Is: " + userAccount.getFullName());
-		
+
 		HttpSession session = request.getSession();
 		session.setAttribute("user", userAccount);
-		
-		response.sendRedirect(request.getContextPath() + "/");
+
+		String returnUrl = request.getParameter("returnUrl");
+		if (returnUrl != null) {
+			response.sendRedirect(request.getContextPath() + returnUrl);
+		} else {
+			response.sendRedirect(request.getContextPath() + "/");
+		}
 	}
 
 }

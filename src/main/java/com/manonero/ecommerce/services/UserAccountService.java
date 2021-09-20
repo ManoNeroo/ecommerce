@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.manonero.ecommerce.configs.UserAccountRole;
+import com.manonero.ecommerce.configs.UserAccountRoleEnum;
 import com.manonero.ecommerce.entities.UserAccount;
 import com.manonero.ecommerce.entities.UserRole;
 import com.manonero.ecommerce.models.RegisterUser;
@@ -41,18 +41,20 @@ public class UserAccountService implements IUserAccountService {
 	@Override
 	@Transactional
 	public UserAccount save(RegisterUser registerUser, int roleIndex) {
-		UserAccount user = new UserAccount();
-
-		user.setUserName(registerUser.getUserName());
-		user.setPassword(passwordEncoder.encode(registerUser.getPassword()));
-		user.setFirstName(registerUser.getFirstName());
-		user.setLastName(registerUser.getLastName());
-		user.setPhoneNumber(registerUser.getPhoneNumber());
-
-		user.setRoles(Arrays.asList(roleRepository
-				.selectRoleByName(UserAccountRole.values()[roleIndex].name())));
-
-		return userRepository.save(user);
+		try {
+			String roleName = UserAccountRoleEnum.values()[roleIndex].name();
+			UserAccount user = new UserAccount();
+			user.setUserName(registerUser.getUserName());
+			user.setPassword(passwordEncoder.encode(registerUser.getPassword()));
+			user.setFirstName(registerUser.getFirstName());
+			user.setLastName(registerUser.getLastName());
+			user.setPhoneNumber(registerUser.getPhoneNumber());
+			user.setRoles(Arrays.asList(roleRepository.selectRoleByName(roleName)));
+			return userRepository.save(user);
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+		}
+		return null;
 	}
 
 	@Override

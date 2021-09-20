@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{customer/layouts/main-layout :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #style},
+                                                ~{:: #script},
+                                                ~{:: #main-content}
+                                               )}">
+
+<head>
+	<title>Trang chủ</title>
+	<th:block id="style">
+
+	</th:block>
+</head>
+
+<body>
+
+	<div id="main-content">
+		<div class="row">
+			<div class="col-12">
+				<section class="section" style="padding: 0.25em">
+					<div class="section-body" style="padding: 0">
+						<div id="home-slider">
+							<div class="swiper-wrapper">
+								<div class="swiper-slide">
+									<a target="_blank" href="#" title="" class="fixed-ratio ratio-25">
+										<img alt=""
+											src="https://images.fpt.shop/unsafe/fit-in/1200x300/filters:quality(90):fill(white)/fptshop.com.vn/Uploads/Originals/2021/8/31/637660292386915827_F-C1_1200x300.png">
+									</a>
+								</div>
+								<div class="swiper-slide">
+									<a target="_blank" href="#" title="" class="fixed-ratio ratio-25">
+										<img alt=""
+											src="https://images.fpt.shop/unsafe/fit-in/1200x300/filters:quality(90):fill(white)/fptshop.com.vn/Uploads/Originals/2021/9/4/637663744526489882_F-C1_1200x300.png">
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12" id="top-product-section"></div>
+		</div>
+
+	</div>
+
+	<th:block id="script">
+		<script th:src="@{/customer/js/home-page.js}"></script>
+	</th:block>
+</body>
+
+</html>

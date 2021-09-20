@@ -1,4 +1,4 @@
-package com.manonero.ecommerce.admin.controllers;
+package com.manonero.ecommerce.controllers;
 
 import com.manonero.ecommerce.entities.ProductTechnicalData;
 import com.manonero.ecommerce.models.ProductTechnicalDataRequest;

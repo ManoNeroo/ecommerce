@@ -158,4 +158,14 @@ public class ProductRepository implements IProductRepository {
         query.setParameter(2, productId);
         query.executeUpdate();
     }
+
+    @Override
+    public List<Product> selectTopProduct(int top, int categoryId) {
+        String sqlString = "SELECT TOP " + top + " * FROM product WHERE category_id=?";
+        Query query = entityManager.createNativeQuery(sqlString, Product.class);
+        query.setParameter(1, categoryId);
+        @SuppressWarnings("unchecked")
+        List<Product> products = query.getResultList();
+        return products;
+    }
 }

@@ -1,4 +1,4 @@
-package com.manonero.ecommerce.admin.controllers;
+package com.manonero.ecommerce.controllers;
 
 import java.util.List;
 
@@ -24,8 +24,8 @@ public class BrandApiController {
 	private IBrandService brandService;
 
 	@GetMapping()
-	public Response getAll() {
-		List<Brand> list = brandService.getAllBrand(null);
+	public Response getAll(@RequestParam(required = false) Boolean isEnable, @RequestParam(required = false) Boolean isSortByName) {
+		List<Brand> list = brandService.getAllBrand(isEnable, isSortByName);
 		return new Response(list, true);
 	}
     

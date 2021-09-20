@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{customer/layouts/main-layout :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #style},
+                                                ~{:: #script},
+                                                ~{:: #main-content}
+                                               )}">
+
+<head>
+    <title>Trang chủ</title>
+    <th:block id="style">
+        <link th:href="@{/customer/css/cart-page.css}" rel="stylesheet" type="text/css" />
+    </th:block>
+</head>
+
+<body>
+
+    <div id="main-content">
+        <div id="cart-item-list" th:classappend="${cart.cartItems.size() > 0} ? 'row' : 'row d-none'">
+            <div class="col-8">
+                <div class="section cart-section">
+                    <div class="section-body">
+                        <div class="cart-header">
+                            <label class="checkbox" id="select-all-cart-item">
+                                <input type="checkbox">
+                                <i></i>
+                                Chọn tất cả
+                            </label>
+                            <span class="cart-delete" id="delete-all-cart-item">
+                                <span class="icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z">
+                                        </path>
+                                    </svg>
+                                </span>
+                                <span>Xóa</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="section cart-section cart-item-list page-scrollbar">
+                    <div class="section-body" id="item-list">
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="section cart-summary">
+                    <div class="section-header">
+                        <h4 class="section-title">Đơn hàng của bạn</h4>
+                    </div>
+                    <div class="section-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Sản phẩm</th>
+                                    <th>SL</th>
+                                    <th>Tổng tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cart-summary-body"></tbody>
+                        </table>
+                        <div class="cart-total">
+                            <span>Tổng cộng: </span>
+                            <span class="cart-total-price" id="cart-summary-total">0₫</span>
+                        </div>
+                        <button class="btn btn-danger" id="open-cart-modal">Xác nhận đơn hàng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:classappend="${cart.cartItems.size() == 0} ? 'row' : 'row d-none'" id="cart-null">
+            <div class="col-12">
+                <div class="section">
+                    <div class="section-body">
+                        <div class="cart-null cart-item-list">
+                            <p><img th:src="@{/common/mylib/img/null.png}"></p>
+                            <p>Không có sản phẩm nào trong giỏ hàng của bạn!</p>
+                            <p><a th:href="@{/}" title="Trang chủ">ĐẾN TRANG CHỦ</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal" id="cart-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <form id="cart-form">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Đơn hàng của bạn</h5>
+                            <button type="button" class="close" data-dismiss="modal">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Sản phẩm</th>
+                                        <th>Số lượng</th>
+                                        <th>Tổng tiền</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <div class="cart-form">
+                                <div class="cart-form-block">
+                                    <div class="form-customer">
+                                        <div class="cart-form-line">
+                                            <div class="cart-form-title">Thông tin khách hàng</div>
+                                            <div class="e-radio mr-3">
+                                                <input type="radio" id="radio-cart1" name="gender"
+                                                    th:checked="${session.user.gender == false}" value="false">
+                                                <label for="radio-cart1">Anh</label>
+                                            </div>
+                                            <div class="e-radio">
+                                                <input type="radio" id="radio-cart2" name="gender"
+                                                    th:checked="${session.user.gender == true}" value="true">
+                                                <label for="radio-cart2">Chị</label>
+                                            </div>
+                                        </div>
+                                        <div class="cart-form-line">
+                                            <div class="box-namecus">
+                                                <input type="text" name="fullName" class="e-input" placeholder="Nhập họ và tên*"
+                                                    th:value="${session.user.getFullName()}">
+                                                <span class="text-danger" id="fullName-error"></span>
+                                            </div>
+                                            <div class="box-phonecus">
+                                                <input type="text" name="phoneNumber" class="e-input" placeholder="Nhập số điện thoại*"
+                                                    th:value="${session.user.phoneNumber}">
+                                                <span class="text-danger" id="phoneNumber-error"></span>
+                                            </div>
+                                        </div>
+                                        <div class="cart-form-line">
+                                            <div class="cart-form-title">Địa chỉ giao hàng</div>
+                                            <input type="text" name="address" class="e-input" placeholder="Nhập địa chỉ giao hàng*">
+                                            <span class="text-danger" id="address-error"></span>
+                                        </div>
+                                        <div class="cart-form-line">
+                                            <div class="cart-form-title">Ghi chú</div>
+                                            <textarea rows="3" name="description" placeholder="Ghi chú yêu cầu" class="e-input"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger btn-lg">Hoàn tất đặt hàng</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block id="script">
+        <script th:inline="javascript">
+            g_oCart = /*[[${cart}]]*/'default'
+        </script>
+        <script th:src="@{/customer/js/cart-page.js}"></script>
+    </th:block>
+</body>
+
+</html>

@@ -26,7 +26,7 @@ public class Product {
     private int quanlity;
 
     @Column(name = "product_avg_star")
-    private int avgStar;
+    private double avgStar;
 
     @Column(name = "product_price")
     private int price;
@@ -63,7 +63,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(String id, String name, int quanlity, int avgStar, int price, int priceOff, int promoPrice,
+    public Product(String id, String name, int quanlity, double avgStar, int price, int priceOff, int promoPrice,
             String avatar, boolean status, Date createdAt, Date updatedAt, int numberVote, Brand brand,
             Category category) {
         this.id = id;
@@ -114,11 +114,11 @@ public class Product {
         this.quanlity = quanlity;
     }
 
-    public int getAvgStar() {
+    public double getAvgStar() {
         return avgStar;
     }
 
-    public void setAvgStar(int avgStar) {
+    public void setAvgStar(double avgStar) {
         this.avgStar = avgStar;
     }
 

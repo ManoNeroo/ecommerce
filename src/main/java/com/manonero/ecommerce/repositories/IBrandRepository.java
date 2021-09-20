@@ -10,5 +10,5 @@ public interface IBrandRepository {
 	Brand save(Brand brand);
 	boolean updateBrandStatus(int id, boolean status);
 	Brand selectBrandById(int id);
-	List<Brand> selectAllBrand(Boolean isEnable);
+	List<Brand> selectAllBrand(Boolean isEnable, Boolean isSortByName);
 }

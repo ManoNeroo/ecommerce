@@ -13,7 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-public class AdminUserSessionInterceptor implements HandlerInterceptor {
+public class UserSessionInterceptor implements HandlerInterceptor {
     @Autowired
     private IUserAccountService userService;
 
@@ -26,7 +26,7 @@ public class AdminUserSessionInterceptor implements HandlerInterceptor {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (!(auth instanceof AnonymousAuthenticationToken)) {
                 String userName = auth.getName();
-                System.out.println("User name: " + userName);
+                System.out.println("User name is: " + userName);
                 UserAccount userAccount = userService.findByUserName(userName);
                 System.out.println("Full name is: " + userAccount.getFullName());
                 session.setAttribute("user", userAccount);

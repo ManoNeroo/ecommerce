@@ -1,6 +1,6 @@
 package com.manonero.ecommerce.configs;
 
-public enum UserAccountRole {
+public enum UserAccountRoleEnum {
 	ROLE_ADMIN,
 	ROLE_MANAGER,
 	ROLE_EMPLOYEE,

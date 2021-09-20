@@ -18,25 +18,32 @@ import com.manonero.ecommerce.services.IUserAccountService;
 @Component
 public class AdminPageSuccessHandler implements AuthenticationSuccessHandler {
 
-    @Autowired
-    private IUserAccountService userService;
-	
+	@Autowired
+	private IUserAccountService userService;
+
 	@Override
-	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
-			throws IOException, ServletException {
+	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+			Authentication authentication) throws IOException, ServletException {
 
-		String userName = authentication.getName();
-		
-		System.out.println("User name: " + userName);
+		boolean hasCustomerRole = authentication.getAuthorities().stream()
+				.anyMatch(r -> r.getAuthority().equals("ROLE_CUSTOMER"));
 
-		UserAccount userAccount = userService.findByUserName(userName);
-		
-		System.out.println("Full name is: " + userAccount.getFullName());
-		
-		HttpSession session = request.getSession();
-		session.setAttribute("user", userAccount);
-		
-		response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+		if (hasCustomerRole) {
+			response.sendRedirect(request.getContextPath() + "/admin/logout");
+		} else {
+			String userName = authentication.getName();
+
+			System.out.println("User name is: " + userName);
+
+			UserAccount userAccount = userService.findByUserName(userName);
+
+			System.out.println("Full name is: " + userAccount.getFullName());
+
+			HttpSession session = request.getSession();
+			session.setAttribute("user", userAccount);
+
+			response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+		}
 	}
 
 }

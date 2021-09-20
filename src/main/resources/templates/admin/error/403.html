@@ -9,29 +9,18 @@
 <head>
 <title>403 - Forbidden</title>
 <th:block id="style">
-
+	<link th:href="@{/admin/css/error-page.css}" rel="stylesheet" type="text/css" />
 </th:block>
 </head>
 <body>
 
 	<div id="main-content">
-		<div class="d-sm-flex align-items-center justify-content-between mb-4">
-			<h1 class="h3 mb-0 text-gray-800">Bạn không có quyên truy cập trang này!</h1>
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="./">Home</a></li>
-				<li class="breadcrumb-item">Pages</li>
-				<li class="breadcrumb-item active" aria-current="page">Blank
-					Page</li>
-			</ol>
-		</div>
-
-		<div class="text-center">
-			<img th:src="@{/admin/img/think.svg}" style="max-height: 90px">
-			<h4 class="pt-3">
-				save your <b>imagination</b> here!
-			</h4>
-		</div>
-
+		<div class="error-wrapper">
+            <h1>Lỗi!</h1>
+            <h2>403 - Kết nối bị từ chối!</h2>
+            <p>Bạn không có quyền truy cập trang này!</p>
+            <a th:href="@{/admin/dashboard}">Trang chủ</a>
+        </div>
 	</div>
 
 	<th:block id="script">

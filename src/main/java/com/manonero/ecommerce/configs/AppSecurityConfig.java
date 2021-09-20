@@ -14,7 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.manonero.ecommerce.services.IUserAccountService;
 
-@Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AppSecurityConfig {
@@ -39,12 +38,16 @@ public class AppSecurityConfig {
 	public static class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
 		@Autowired
 		private DaoAuthenticationProvider authenticationProvider;
-		
+
 		@Autowired
 		private IUserAccountService userService;
-		
+
 		@Autowired
-	    private AdminPageSuccessHandler adminPageSuccessHandler;
+		private AdminPageSuccessHandler adminPageSuccessHandler;
+
+		public AdminSecurityConfig() {
+			super();
+		}
 
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -53,13 +56,14 @@ public class AppSecurityConfig {
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
-			http.csrf().disable()
-			.authorizeRequests().antMatchers("/admin/css/**", "/admin/font/**", "/common/**").permitAll()
-			.and().formLogin().loginPage("/admin/login").loginProcessingUrl("/admin/login")
-			.failureUrl("/admin/login?error=true").successHandler(adminPageSuccessHandler).permitAll()
-			.and().rememberMe().rememberMeCookieName("admin-rememberme").key("61admin*!remember#me@ecommerce$group2").userDetailsService(userService)
-			.and().logout().logoutUrl("/admin/logout").logoutSuccessUrl("/admin/login").deleteCookies("JSESSIONID")
-			.and().exceptionHandling().accessDeniedPage("/admin/403");
+			http.csrf().disable().antMatcher("/admin/**").authorizeRequests().and().formLogin()
+					.loginPage("/admin/login").loginProcessingUrl("/admin/login").failureUrl("/admin/login?error=true")
+					.successHandler(adminPageSuccessHandler).permitAll().and().rememberMe()
+					.rememberMeCookieName("admin-rememberme").key("61admin*!remember#me@ecommerce$group2")
+					.userDetailsService(userService).and().logout().logoutUrl("/admin/logout")
+					.logoutSuccessUrl("/admin/login")
+					.deleteCookies("JSESSIONID", "admin-rememberme", "customer-rememberme").and().exceptionHandling()
+					.accessDeniedPage("/admin/403");
 		}
 	}
 
@@ -68,12 +72,16 @@ public class AppSecurityConfig {
 	public static class CustomerSecurityConfig extends WebSecurityConfigurerAdapter {
 		@Autowired
 		private DaoAuthenticationProvider authenticationProvider;
-		
+
 		@Autowired
 		private IUserAccountService userService;
-		
+
 		@Autowired
-	    private CustomerPageSuccessHandler customerPageSuccessHandler;
+		private CustomerPageSuccessHandler customerPageSuccessHandler;
+
+		public CustomerSecurityConfig() {
+			super();
+		}
 
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -82,12 +90,13 @@ public class AppSecurityConfig {
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
-			http.csrf().disable()
-			.authorizeRequests().antMatchers("/common/**").permitAll()
-			.and().formLogin().loginPage("/login").loginProcessingUrl("/login").successHandler(customerPageSuccessHandler).permitAll()
-			.and().rememberMe().rememberMeCookieName("admin-rememberme").key("42customer+=remember#me@ecommerce$group2").userDetailsService(userService)
-			.and().logout().logoutUrl("/logout").logoutSuccessUrl("/login").deleteCookies("JSESSIONID")
-			.and().exceptionHandling().accessDeniedPage("/403");
+			http.csrf().disable().antMatcher("/**").authorizeRequests().and().formLogin().loginPage("/login")
+					.loginProcessingUrl("/login").failureUrl("/login?error=true")
+					.successHandler(customerPageSuccessHandler).permitAll().and().rememberMe()
+					.rememberMeCookieName("customer-rememberme").key("42customer+=remember#me@ecommerce$group2")
+					.userDetailsService(userService).and().logout().logoutUrl("/logout").logoutSuccessUrl("/login")
+					.deleteCookies("JSESSIONID", "admin-rememberme", "customer-rememberme").and().exceptionHandling()
+					.accessDeniedPage("/403");
 		}
 	}
 }

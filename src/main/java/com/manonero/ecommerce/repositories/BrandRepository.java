@@ -33,7 +33,10 @@ public class BrandRepository implements IBrandRepository {
     query.setParameter("name", name);
     query.setParameter("status", status);
     query.execute();
-    int count = (Integer) query.getOutputParameterValue("count");
+    Integer count = (Integer) query.getOutputParameterValue("count");
+    if(count == null) {
+      return 0;
+    }
     return count;
   }
 
@@ -62,7 +65,7 @@ public class BrandRepository implements IBrandRepository {
   }
 
   @Override
-  public List<Brand> selectAllBrand(Boolean isEnable) {
+  public List<Brand> selectAllBrand(Boolean isEnable, Boolean isSortByName) {
     String queryStr = "SELECT * FROM brand";
     if (isEnable != null) {
       if (isEnable) {
@@ -71,7 +74,13 @@ public class BrandRepository implements IBrandRepository {
         queryStr += " WHERE brand_status=0";
       }
     }
-    queryStr += " ORDER BY brand_name ASC";
+    if (isSortByName != null) {
+      if (isSortByName) {
+        queryStr += " ORDER BY brand_name ASC";
+      } else {
+        queryStr += " ORDER BY brand_name DESC";
+      }
+    }
     Query query = entityManager.createNativeQuery(queryStr, Brand.class);
 
     @SuppressWarnings("unchecked")

@@ -10,4 +10,5 @@ public interface IProductRepository {
     Product save(Product product);
     Product selectProductById(String id);
     void updateProductStatus(Boolean status, String productId);
+    List<Product> selectTopProduct(int top, int categoryId);
 }

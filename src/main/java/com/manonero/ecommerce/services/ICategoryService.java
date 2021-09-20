@@ -5,7 +5,7 @@ import java.util.List;
 import com.manonero.ecommerce.entities.Category;
 
 public interface ICategoryService {
-	List<Category> getAllCategory(Boolean isEnable);
+	List<Category> getAllCategory(Boolean isEnable, Boolean isSortByName);
 	List<Category> getCategoryByOffsetLimit(int offset, int limit, String name, Boolean status);
 	int getCategoryCount(String name, Boolean status);
 	boolean addCategory(Category category);
