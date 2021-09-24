@@ -147,8 +147,8 @@
     function handleSubmitCart(evt) {
         evt.preventDefault();
         const formData = getFormData(CARTFORM);
-        if(validateForm(formData)) {
-
+        if (validateForm(formData)) {
+            evt.target.submit();
         }
     }
 
@@ -156,8 +156,9 @@
         let { fullName, phoneNumber, address } = formData;
         fullName = fullName.trim();
         phoneNumber = phoneNumber.trim();
+        address = address.trim();
         const nameRegex = /^[a-z][a-z\d\s]{2,}$/gi;
-        const addressRegex = /^[a-z][a-z\d\s\.,\\)(/-]{5,}$/gi;
+        const addressRegex = /^[\w\s\.,\\)(/-]{6,}$/i;
         const phoneRegex = /^\d{10,11}$/;
         let rs = true;
         if (fullName == '') {
@@ -170,14 +171,14 @@
         if (phoneNumber == '') {
             PHONENUMBER_ERROR.innerText = "Nhập số điện thoại!";
             rs = false;
-        }else if(!phoneRegex.test(phoneNumber)) {
+        } else if (!phoneRegex.test(phoneNumber)) {
             PHONENUMBER_ERROR.innerText = "Số điện thoại không hợp lệ!";
             rs = false;
         }
         if (address == '') {
             ADDRESS_ERROR.innerText = "Nhập địa chỉ giao hàng!";
             rs = false;
-        }else if(!addressRegex.test(address)) {
+        } else if (!addressRegex.test(removeAccent(address))) {
             ADDRESS_ERROR.innerText = "Địa chỉ không hợp lệ!";
             rs = false;
         }
@@ -192,8 +193,10 @@
             cartList.data.forEach((item, ix) => {
                 if (item.checked) {
                     const tr = document.createElement("tr");
-                    total += item.quanlity * item.product.promoPrice;
-                    tr.innerHTML = `<td>1</td>
+                    const totalPromoPrice = item.quanlity * item.product.promoPrice;
+                    const totalPrice = item.quanlity * item.product.price;
+                    total += totalPromoPrice;
+                    tr.innerHTML = `<td>${ix + 1}</td>
                     <td class="d-flex">
                         <div class="cart-item-picture">
                             <img src="${item.product.avatar}"
@@ -212,7 +215,9 @@
                             ${formatNumber(item.quanlity * item.product.promoPrice)}₫
                         </div>
                         <div class="cart-item-price root-price">
-                            <del>${formatNumber(item.quanlity * item.product.price)}₫</del>
+                            <del>${totalPrice != totalPromoPrice
+                            ? formatNumber(item.quanlity * item.product.price) + '₫'
+                            : ''}</del>
                         </div>
                     </td>`;
                     tbody.appendChild(tr);

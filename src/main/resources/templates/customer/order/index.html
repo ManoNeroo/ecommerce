@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{customer/layouts/user-layout :: user-fragment(  
+                                                ~{::title},
+                                                ~{:: #style},
+                                                ~{:: #script},
+                                                ~{:: #main-content}
+                                               )}">
+
+<head>
+    <title>Đơn hàng</title>
+    <th:block id="style">
+        <link th:href="@{/common/mylib/css/pagination.css}" rel="stylesheet" type="text/css" />
+    </th:block>
+</head>
+
+<body>
+
+    <div id="main-content">
+        <div th:replace="~{/customer/fragments/order-header :: orderHeader}"></div>
+        <div class="order-list-search">
+            <div>
+                <svg width="19px" height="19px" viewBox="0 0 19 19">
+                    <g stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g transform="translate(-399.000000, -221.000000)" stroke-width="2">
+                            <g transform="translate(400.000000, 222.000000)">
+                                <circle cx="7" cy="7" r="7"></circle>
+                                <path d="M12,12 L16.9799555,16.919354" stroke-linecap="round" stroke-linejoin="round">
+                                </path>
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+                <input type="text" id="order-search-input" th:value="${param.search}"
+                    placeholder="Nhập mã đơn hàng hoặc tên sản phẩm">
+            </div>
+        </div>
+        <th:block th:if="${orders.size() > 0}">
+            <div class="order-list">
+                <div class="order-wrapper">
+                    <th:block th:each="order : ${orders}">
+                        <div class="order">
+                            <div class="order-header">
+                                <div class="order-id">
+                                    <span>Mã đơn hàng:</span>
+                                    <span th:text="${order.id}"></span>
+                                </div>
+                                <div class="order-status" th:text="${statusNames[order.status]}"></div>
+                            </div>
+                            <a th:href="${'/user/order/' + order.id}" class="order-body">
+                                <th:block th:each="item : ${order.orderItems}">
+                                    <div class="order-item">
+                                        <div class="order-item-body">
+                                            <div class="left-side">
+                                                <div class="order-avatar">
+                                                    <img th:src="${item.productAvatar}" th:alt="${item.productName}">
+                                                </div>
+                                                <div class="order-product">
+                                                    <div class="product-name" th:text="${item.productName}"></div>
+                                                    <div class="product-price"
+                                                        th:text="${'Giá: ' + #numbers.formatDecimal(item.productPromoPrice, 0, 'COMMA', 0, 'POINT') + '₫'}">
+                                                    </div>
+                                                    <div class="product-quanlity"
+                                                        th:text="${'Số lượng: ' + item.quanlity}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="right-side">
+                                                <div class="order-item-total"
+                                                    th:text="${#numbers.formatDecimal(item.productPromoPrice * item.quanlity, 0, 'COMMA', 0, 'POINT') + '₫'}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th:block>
+                            </a>
+                            <div class="order-total">
+                                <span>Tổng cộng:</span>
+                                <span
+                                    th:text="${#numbers.formatDecimal(order.total, 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
+                            </div>
+                            <div class="order-action">
+                                <th:block th:if="${order.status == 0}">
+                                    <a th:href="${'/user/order/cancel/' + order.id}" class="btn btn-danger"
+                                    onclick="return confirm('Xác nhận hủy đơn hàng này?')">Hủy đơn hàng</a>
+                                </th:block>
+                                <th:block th:if="${order.status == 3}">
+                                    <button class="btn btn-outline-danger" th:attr="data-id=${order.id}">Gửi đánh giá</button>
+                                </th:block>
+                                <a th:href="${'/user/order/' + order.id}" class="btn btn-outline-danger">Xem chi tiết
+                                    đơn hàng</a>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+                <div id="page-pagination"></div>
+            </div>
+        </th:block>
+        <th:block th:if="${orders.size() == 0}">
+            <div class="order-list-null">
+                <div></div>
+                <div>Không có đơn hàng nào!</div>
+            </div>
+        </th:block>
+    </div>
+    <th:block id="script">
+        <script th:inline="javascript">
+            var g_iTotalItem = /*[[${totalItem}]]*/ 'default';
+            var g_iPageSize = /*[[${pageSize}]]*/ 'default';
+            var g_iCurrentPage = /*[[${currentPage}]]*/ 'default';
+        </script>
+        <script th:src="@{/common/mylib/js/pagination.js}"></script>
+        <script th:src="@{/customer/js/order-page.js}"></script>
+    </th:block>
+</body>
+
+</html>

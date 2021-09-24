@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{admin/layouts/main-layout :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #style},
+                                                ~{:: #script},
+                                                ~{:: #main-content}
+                                               )}">
+
+<head>
+    <title>Đơn hàng</title>
+    <th:block id="style">
+        <link th:href="@{/common/daterangepicker/daterangepicker.min.css}" rel="stylesheet" type="text/css" />
+        <link th:href="@{/common/select2/select2.min.css}" rel="stylesheet" type="text/css" />
+        <link th:href="@{/common/mylib/css/pagination.css}" rel="stylesheet" type="text/css" />
+        <link th:href="@{/admin/css/order-page.css}" rel="stylesheet" type="text/css" />
+    </th:block>
+</head>
+
+<body>
+
+    <div id="main-content">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Danh sách đơn hàng</h1>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="page-filter">
+                    <form class="filter-form">
+                        <div class="filter-item item-search">
+                            <i class="fa fa-search icon" aria-hidden="true"></i>
+                            <input type="text" th:value="${param.search}" name="search" class="form-control" placeholder="Tìm kiếm đơn hàng">
+                        </div>
+                        <div class="filter-item item-daterange">
+                            <i class="fa fa-calendar icon" aria-hidden="true"></i>
+                            <input type="text" id="daterange" name="daterange" class="form-control"
+                                placeholder="Khoảng thời gian">
+                            <i class="fa fa-chevron-down icon" aria-hidden="true"></i>
+                        </div>
+                        <div class="filter-item item-status">
+                            <i class="fa fa-tags icon" aria-hidden="true"></i>
+                            <select name="orderStatus[]" class="form-control select2-hidden-accessible"
+                                multiple="multiple" id="order-status">
+                            </select>
+                            <i class="fa fa-chevron-down icon" aria-hidden="true"></i>
+                        </div>
+                        <div class="filter-item item-submit">
+                            <button type="submit" class="btn btn-outline-info">
+                                <i class="fa fa-filter"></i> Lọc
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush table-list">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Mã đơn</th>
+                                    <th>Khách hàng</th>
+                                    <th>SĐT Khách hàng</th>
+                                    <th>Tổng giá</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <th:block th:each="item, state : ${orders}">
+                                    <tr>
+                                        <td>
+                                            <span
+                                                th:text="${state.index + currentPage * pageSize - pageSize + 1}"></span>
+                                        </td>
+                                        <td><span th:text="${item.id}"></span></td>
+                                        <td>
+                                            <span th:text="${item.fullName}"></span>
+                                        </td>
+                                        <td>
+                                            <span th:text="${item.phoneNumber}"></span>
+                                        </td>
+                                        <td>
+                                            <span
+                                                th:text="${#numbers.formatDecimal(item.total, 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
+                                        </td>
+                                        <td>
+                                            <span th:text="${#dates.format(item.createdAt, 'dd-MM-yyyy')}"></span>
+                                        </td>
+                                        <td>
+                                            <span class="badge"
+                                                th:classappend="${item.status == 4} ? badge-danger : badge-success"
+                                                th:text="${statusNames[item.status]}"></span>
+                                        </td>
+                                        <td>
+                                            <a th:href="${'/admin/order/' + item.id}"
+                                                class="btn btn-sm btn-info btn-edit">Chi tiết</a>
+                                        </td>
+                                    </tr>
+                                </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer d-flex justify-content-center" id="page-pagination"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block id="script">
+        <script th:inline="javascript">
+            var g_iTotalItem = /*[[${totalItem}]]*/'default';
+            var g_iPageSize = /*[[${pageSize}]]*/'default';
+            var g_iCurrentPage = /*[[${currentPage}]]*/'default';
+            var g_dStartDate = /*[[${startDate}]]*/'default';
+            var g_dEndDate = /*[[${endDate}]]*/'default';
+            var g_aStatuses = /*[[${statuses}]]*/'default';
+        </script>
+        <script th:src="@{/common/moment/moment.min.js}"></script>
+        <script th:src="@{/common/daterangepicker/daterangepicker.min.js}"></script>
+        <script th:src="@{/common/mylib/js/pagination.js}"></script>
+        <script th:src="@{/common/select2/select2.min.js}"></script>
+        <script th:src="@{/admin/js/order-page.js}"></script>
+    </th:block>
+</body>
+
+</html>

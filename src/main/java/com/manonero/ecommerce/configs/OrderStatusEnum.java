@@ -1,7 +1,7 @@
 package com.manonero.ecommerce.configs;
 
 public enum OrderStatusEnum {
-    UNCONFIRM(0), PREPARESHIP(1), SHIPPING(2), SHIPPED(3);
+    UNCONFIRM(0), PREPARESHIP(1), SHIPPING(2), SHIPPED(3), CANCELLED(4);
 
     private final int value;
 
@@ -11,5 +11,9 @@ public enum OrderStatusEnum {
 
     public int getValue() {
         return value;
+    }
+
+    public String getName() {
+        return AppSettings.orderStatusNames[value];
     }
 }

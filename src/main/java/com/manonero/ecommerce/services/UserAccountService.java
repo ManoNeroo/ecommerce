@@ -72,4 +72,10 @@ public class UserAccountService implements IUserAccountService {
 		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
 	}
 
+	@Override
+	@Transactional
+	public UserAccount getById(int id) {
+		return userRepository.selectById(id);
+	}
+
 }

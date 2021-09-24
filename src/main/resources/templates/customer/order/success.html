@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{customer/layouts/main-layout :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #style},
+                                                ~{:: #script},
+                                                ~{:: #main-content}
+                                               )}">
+
+<head>
+	<title>Đặt hàng thành công</title>
+	<th:block id="style">
+        <style>
+            .order-success-wrapper{width:65vw;margin:0 auto;background:#fff;border-radius:.25em}.order-success-wrapper>h3{text-align:center;padding:1.25em 0 .875em}.order-success-wrapper .success-icon{text-align:center;font-size:7em;line-height:1;color:#2dc258}.message{text-align:center;margin:.675em}.message h4{font-size:1em;font-weight:500;margin-bottom:.5em}.message p{color:rgba(0,0,0,.75)}.success-section .title{padding:4px 24px;box-shadow:inset -1px 0 2px 0 #e1e4e6;display:flex;align-items:center;justify-content:space-between;font-weight:500;background:#f8f9fa}.success-section .title-modified{padding:4px 24px;box-shadow:inset -1px -1px 2px 0 #e1e4e6;display:flex;align-items:center;justify-content:space-between;background:#f8f9fa}.success-section .title-modified span{font-size:16px;line-height:24px;font-weight:500}.success-section .title-modified span:not(:first-child){text-align:center;margin-left:24px;flex-basis:126px}.success-section .title-modified span:last-child{text-align:right}.success-section .title-modified span:first-child{flex:1}.success-section .section-table{width:calc(100% - 3em);border-collapse:collapse;margin:.5em auto}.success-section .section-table tr:not(:last-child){box-shadow:inset 0 -1px 0 0 #e9ecef}.success-section .section-table td{color:#495057;padding:6px 0;vertical-align:baseline;font-size:14px;line-height:20px}.success-section .section-table td:first-child{width:216px;padding-right:8px;color:#99a2aa;padding:6px 0}.success-section .product-cart{display:flex;width:100%;font-size:14px;line-height:20px;padding:16px 24px;box-shadow:inset 0 -1px 0 0 #edeeef}.success-section .product-cart .product-cart-img{width:80px;height:80px;margin-bottom:8px;margin-right:8px;display:inline-flex;align-items:center;justify-content:center;position:relative}.success-section .product-cart .product-cart-img img{width:100%}.success-section .product-cart .product-cart-info{flex:1;display:flex;flex-wrap:wrap}.success-section .product-cart .product-cart-inside{flex:1}.success-section .product-cart .product-cart-line{margin-bottom:4px;display:flex}.success-section .product-cart .product-cart-name{margin-bottom:4px;font-size:16px;line-height:24px;font-weight:500;color:#32373d}.success-section .product-cart .product-cart-quality{flex-basis:94px;margin-left:24px;display:flex;align-items:center;justify-content:center;flex-direction:column;align-self:baseline}.success-section .product-cart .product-cart-price{flex-basis:182px;text-align:right;padding-left:8px;margin-bottom:4px;color:#cb1c22;font-weight:500}.product-cart-total{display:flex;justify-content:flex-end;padding:16px 24px 24px;box-shadow:inset 0 -1px 0 0 #edeeef}.product-cart-total span:first{width:126px;text-align:center}.product-cart-total span:last-child{color:#cb1c22;font-weight:500;width:126px;text-align:right;margin-left:24px}.success-section-footer{text-align:center;box-shadow:inset 0 1px 0 0 #e1e4e6;padding:24px 0}.success-section-footer .btn{font-weight:500;padding:15px 23px;font-size:20px;line-height:20px;text-transform:uppercase}
+        </style>
+	</th:block>
+</head>
+
+<body>
+
+	<div id="main-content">
+		<div class="order-success-wrapper">
+            <h3>Đặt hàng thành công</h3>
+            <div class="success-icon">
+                <i class="fa fa-check-circle"></i>
+            </div>
+            <div class="message">
+                <h4>Cảm ơn bạn đã mua hàng tại cửa hàng</h4>
+                <p>Chúng tôi sẽ liên hệ lại với bạn sớm nhất để xác nhận đơn hàng!</p>
+            </div>
+            <div class="success-section">
+                <div class="title">Thông tin khách hàng</div>
+                <table class="section-table">
+                    <tbody>
+                        <tr>
+                            <td>Mã số đơn hàng</td>
+                            <td th:text="${order.id}"></td>
+                        </tr>
+                        <tr>
+                            <td>Họ và tên</td>
+                            <td th:text="${order.fullName}"></td>
+                        </tr>
+                        <tr>
+                            <td>Số điện thoại</td>
+                            <td th:text="${order.phoneNumber}"></td>
+                        </tr>
+                        <tr>
+                            <td>Địa chỉ</td>
+                            <td th:text="${order.address}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="success-section">
+                <div class="title-modified">
+                    <span>Thông tin đơn hàng</span>
+                    <span>Số lượng</span>
+                    <span>Thành tiền</span>
+                </div>
+                <th:block th:each="item : ${order.getOrderItems()}">
+                    <div class="product-cart">
+                        <div class="product-cart-img"><img
+                                th:src="${item.productAvatar}"
+                                th:alt="${item.productName}">
+                        </div>
+                        <div class="product-cart-info">
+                            <div class="product-cart-inside">
+                                <a href="#" class="product-cart-line">
+                                    <h3 class="product-cart-name" th:text="${item.productName}"></h3>
+                                </a>
+                            </div>
+                            <div class="product-cart-quality"><span th:text="${item.quanlity}"></span></div>
+                            <div class="product-cart-price" 
+                            th:text="${#numbers.formatDecimal(item.productPromoPrice * item.quanlity, 0, 'COMMA', 0, 'POINT') + '₫'}"></div>
+                        </div>
+                    </div>
+                </th:block>
+                <div class="product-cart-total">
+                    <span>Cần thanh toán:</span>
+                    <span th:text="${#numbers.formatDecimal(order.total, 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
+                </div>
+                <div class="success-section-footer">
+                    <a th:href="@{/}" class="btn btn-danger">Về trang chủ</a>
+                </div>
+            </div>
+        </div>
+	</div>
+
+	<th:block id="script">
+	</th:block>
+</body>
+
+</html>

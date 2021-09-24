@@ -1,8 +1,11 @@
 package com.manonero.ecommerce.repositories;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.StoredProcedureQuery;
 
+import com.manonero.ecommerce.entities.CartItem;
 import com.manonero.ecommerce.models.CartItemRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +45,20 @@ public class CartItemRepository implements ICartItemRepository {
         query.setParameter("cartId", request.getCartId());
         query.setParameter("productId", request.getProductId());
         query.executeUpdate();
+    }
+
+    @Override
+    public CartItem selectByCartIdAndProductId(String cartId, String productId) {
+        StoredProcedureQuery query = entityManager
+                .createNamedStoredProcedureQuery("CartItem.selectByCartIdAndProductId");
+        query.setParameter("cartId", cartId);
+        query.setParameter("productId", productId);
+        @SuppressWarnings("unchecked")
+        List<CartItem> cartItems = query.getResultList();
+        if (cartItems.size() > 0) {
+            return cartItems.get(0);
+        }
+        return null;
     }
 
 }

@@ -21,6 +21,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
                 @StoredProcedureParameter(name = "checked", type = Boolean.class) }),
         @NamedStoredProcedureQuery(name = "CartItem.deleteCartItem", procedureName = "usp_deleteCartItem", parameters = {
                 @StoredProcedureParameter(name = "cartId", type = String.class),
+                @StoredProcedureParameter(name = "productId", type = String.class) }),
+        @NamedStoredProcedureQuery(name = "CartItem.selectByCartIdAndProductId", procedureName = "usp_selectByCartIdAndProductId", resultClasses = CartItem.class, parameters = {
+                @StoredProcedureParameter(name = "cartId", type = String.class),
                 @StoredProcedureParameter(name = "productId", type = String.class) }) })
 public class CartItem implements Serializable {
     private static final long serialVersionUID = 1L;

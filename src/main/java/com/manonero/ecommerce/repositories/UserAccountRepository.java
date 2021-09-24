@@ -36,4 +36,10 @@ public class UserAccountRepository implements IUserAccountRepository {
 		UserAccount userAccount = entityManager.merge(user);
 		return userAccount;	
 	}
+
+	@Override
+	public UserAccount selectById(int id) {
+		UserAccount account = entityManager.find(UserAccount.class, id);
+		return account;
+	}
 }

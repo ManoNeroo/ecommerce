@@ -73,7 +73,7 @@ function generateSelectPriceRangeOptions(selectedList) {
     let data = [
         {
             id: 0,
-            text: "0 - 10,000,000"
+            text: "Dưới 10,000,000"
         },
         {
             id: 1,

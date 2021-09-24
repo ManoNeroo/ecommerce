@@ -2,22 +2,6 @@
 	loadCategories();
 	loadCartNumberItem();
 
-	async function loadCartNumberItem() {
-		if (g_sUserName) {
-			const resp = await httpClient(`/api/cart/${g_sUserName}/numberitem`);
-			if (resp.isSuccess) {
-				let numberItem = resp.data;
-				if (numberItem > 0) {
-					const span = document.createElement("span");
-					const cartElm = document.querySelector(".header-top-menu ul .cart");
-					span.className = "number-item";
-					span.innerText = numberItem;
-					cartElm.appendChild(span);
-				}
-			}
-		}
-	}
-
 	async function loadCategories() {
 		const resp = await httpClient("/api/category?isEnable=true");
 		if (resp.isSuccess) {
@@ -58,13 +42,20 @@
 	}
 })();
 
-function toggleLoading(isShow) {
-    const loading = document.getElementById("page-loading");
-    if (isShow) {
-        loading.classList.add("active");
-    } else {
-        loading.classList.remove("active");
-    }
+async function loadCartNumberItem() {
+	if (g_sUserName) {
+		const resp = await httpClient(`/api/cart/${g_sUserName}/numberitem`);
+		if (resp.isSuccess) {
+			let numberItem = resp.data;
+			if (numberItem > 0) {
+				const span = document.querySelector(".header-top-menu ul .cart number-item") || document.createElement("span");
+				const cartElm = document.querySelector(".header-top-menu ul .cart");
+				span.className = "number-item";
+				span.innerText = numberItem;
+				cartElm.appendChild(span);
+			}
+		}
+	}
 }
 
 function generateProductItem(product, className) {

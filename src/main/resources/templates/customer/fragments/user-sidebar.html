@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>user sidebar fragment</title>
+</head>
+
+<body>
+    <ul class="navbar-nav account-sidebar"  th:fragment="userSidebar">
+        <a href="#" class="account-summary">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHUndSzxcF1UbSXX3bVILVaUbSIhoc_GEA8g&usqp=CAU"
+                alt="">
+            <span>Trần Văn A</span>
+        </a>
+        <li class="nav-item">
+            <a href="#" class="nav-link" data-toggle="collapse" data-target="#myaccount-collapse" aria-expanded="true"
+                aria-controls="collapseBootstrap">
+                <i class="fa fa-user" aria-hidden="true"></i>
+                <span>Tài khoản của tôi</span>
+            </a>
+            <div id="myaccount-collapse" class="collapse show" aria-labelledby="headingBootstrap">
+                <a href="#" class="collapse-item">Hồ sơ</a>
+                <a href="#" class="collapse-item">Đổi mật khẩu</a>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a th:href="@{/user/order}" class="nav-link" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/user/order') ? 'active':''}">
+                <i class="fa fa-calendar-check" aria-hidden="true"></i>
+                <span>Đơn hàng</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a th:href="@{/user/cart}" class="nav-link">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Giỏ hàng</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="fa fa-bell" aria-hidden="true"></i>
+                <span>Thông báo</span>
+            </a>
+        </li>
+    </ul>
+</body>
+
+</html>

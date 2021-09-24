@@ -176,6 +176,7 @@ CREATE TABLE user_order(
 	order_total INT NOT NULL,
 	buyer_full_name NVARCHAR(100) NOT NULL,
 	buyer_phone_number VARCHAR(11) NOT NULL,
+	buyer_gender BIT NOT NULL,
 	created_at DATE DEFAULT GETDATE(),
 	updated_at DATE DEFAULT GETDATE(),
 	CONSTRAINT user_order_user_id_FK FOREIGN KEY(user_id) REFERENCES user_acc(user_id)
@@ -719,5 +720,12 @@ GO
 CREATE PROC usp_updateOrderStatus(@orderId VARCHAR(30), @status TINYINT)
 AS
 UPDATE user_order SET order_status=@status WHERE order_id=@orderId
+
+
+GO
+
+CREATE PROC usp_selectByCartIdAndProductId(@cartId VARCHAR(30), @productId VARCHAR(30))
+AS
+SELECT * FROM cart_item WHERE cart_id=@cartId AND product_id=@productId
 
 GO

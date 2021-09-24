@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrderService implements IOrderService {
 
+    private int numberOrder;
+
     @Autowired
     private IOrderRepository orderRepository;
 
@@ -37,22 +39,36 @@ public class OrderService implements IOrderService {
     @Override
     @Transactional
     public Order save(OrderRequest request) {
-        Order order = new Order();
-        String orderId = AppUtils.generateRandomString(10);
-        order.setId(orderId);
+        Order order = null;
+        Date dateNow = new Date();
+        if (request.getOrderId() != null) {
+            order = getById(request.getOrderId());
+        }
+        if (order == null) {
+            order = new Order();
+            order.setStatus(OrderStatusEnum.UNCONFIRM.getValue());
+            order.setCreatedAt(dateNow);
+            order.setUpdatedAt(dateNow);
+        } else {
+            order.setUpdatedAt(dateNow);
+        }
         order.setUserId(request.getUserId());
         order.setAddress(request.getAddress());
         order.setFullName(request.getFullName());
         order.setPhoneNumber(request.getPhoneNumber());
-        order.setStatus(OrderStatusEnum.UNCONFIRM.getValue());
+        order.setGender(request.getGender());
         order.setDescription(request.getDescription());
-        Date dateNow = new Date();
-        order.setCreatedAt(dateNow);
-        order.setUpdatedAt(dateNow);
+        if (order.getId() != null) {
+            Order rs = orderRepository.save(order);
+            return rs;
+        }
+        String orderId = AppUtils.generateRandomString(10);
+        order.setId(orderId);
         Set<OrderItem> orderItems = generateOrderItems(request.getUserName(), order);
         if (orderItems.size() > 0) {
             Order rs = orderRepository.save(order);
-            // phải set order item sau khi save order, hibernate sẽ tự động thêm order item ứng với order vừa save
+            // phải set order item sau khi save order, hibernate sẽ tự động thêm order item
+            // ứng với order vừa save
             rs.setOrderItems(orderItems);
             return rs;
         }
@@ -88,6 +104,35 @@ public class OrderService implements IOrderService {
     @Transactional
     public Integer updateOrderStatus(OrderRequest request) {
         return orderRepository.updateOrderStatus(request.getOrderId(), request.getStatus());
+    }
+
+    @Override
+    @Transactional
+    public List<Order> filter(Integer offset, Integer limit, Integer userId, String orderId, int[] orderStatuses,
+            String productName, String phoneNumber, Date beginDate, Date endDate) {
+        List<Order> orders = orderRepository.selectFilter(userId, orderId, orderStatuses, productName, phoneNumber,
+                beginDate, endDate);
+        this.numberOrder = orders.size();
+        if (offset != null && limit != null) {
+            int ix1 = offset - 1;
+            int ix2 = offset + limit - 1;
+            ix1 = ix1 >= 0 ? ix1 : 0;
+            ix2 = ix2 >= 1 ? ix2 : 1;
+            ix1 = this.numberOrder > ix1 ? ix1 : 0;
+            ix2 = this.numberOrder > ix2 ? ix2 : this.numberOrder;
+            return orders.subList(ix1, ix2);
+        }
+        return orders;
+    }
+
+    public int getNumberOrder() {
+        return numberOrder;
+    }
+
+    @Override
+    @Transactional
+    public Order getById(String id) {
+        return orderRepository.selectById(id);
     }
 
 }

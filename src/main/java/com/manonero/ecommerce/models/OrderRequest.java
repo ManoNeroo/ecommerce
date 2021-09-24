@@ -8,19 +8,21 @@ public class OrderRequest {
     private String fullName;
     private String phoneNumber;
     private String address;
+    private boolean gender;
     private String description;
 
     public OrderRequest() {
     }
 
     public OrderRequest(String orderId, int status, int userId, String userName, String fullName, String phoneNumber,
-            String address, String description) {
+            boolean gender, String address, String description) {
         this.orderId = orderId;
         this.status = status;
         this.userId = userId;
         this.userName = userName;
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
+        this.gender = gender;
         this.address = address;
         this.description = description;
     }
@@ -31,6 +33,14 @@ public class OrderRequest {
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
+    }
+
+    public boolean getGender() {
+        return gender;
+    }
+
+    public void setGender(boolean gender) {
+        this.gender = gender;
     }
 
     public int getStatus() {

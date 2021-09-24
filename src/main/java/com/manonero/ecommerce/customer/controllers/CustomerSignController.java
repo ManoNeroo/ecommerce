@@ -18,4 +18,14 @@ public class CustomerSignController {
 		}
 		return "redirect:/";
 	}
+
+	@GetMapping("/register")
+	public String signup() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (auth instanceof AnonymousAuthenticationToken) {
+			return "customer/sign/signup";
+		}
+		return "redirect:/";
+	}
+	
 }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/cart")
+@RequestMapping("/user/cart")
 public class CartController {
     @Autowired
     private ICartService cartService;

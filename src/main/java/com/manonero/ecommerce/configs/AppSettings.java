@@ -11,4 +11,5 @@ public class AppSettings {
     	{20000000, 25000000},
     	{25000000, 1000000000}
     };
+	public static String[] orderStatusNames = {"Chờ xác nhận", "Chờ lấy hàng", "Đang giao", "Đã giao", "Đã hủy"};
 }

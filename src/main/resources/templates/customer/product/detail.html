@@ -51,8 +51,8 @@
                             </div>
                         </div>
                         <div class="product-page-action">
-                            <button type="button" class="btn btn-danger">Mua ngay</button>
-                            <button type="button" class="btn btn-outline-danger">Thêm vào giỏ hàng</button>
+                            <button type="button" class="btn btn-danger" id="btn-buynow">Mua ngay</button>
+                            <button type="button" class="btn btn-outline-danger" id="btn-addtocart">Thêm vào giỏ hàng</button>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -322,6 +322,7 @@
     <th:block id="script">
         <script th:inline="javascript">
             var g_oProduct = {
+                id: /*[[${product.id}]]*/'default',
                 price: /*[[${product.price}]]*/'default',
                 promoPrice: /*[[${product.promoPrice}]]*/'default',
                 avgStar: /*[[${product.avgStar}]]*/'default',

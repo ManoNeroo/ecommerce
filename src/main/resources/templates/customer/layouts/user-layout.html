@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+    th:fragment="user-fragment (title, style, script, mainContent)">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title th:replace="${title}">Blank Page</title>
+    <link rel="shortcut icon" th:href="@{/customer/img/favicon.ico}" type="image/x-icon">
+    <link th:href="@{/common/bootstrap/css/bootstrap.min.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/common/swiper/swiper.min.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/common/fontawesome/css/all.min.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/customer/css/page.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/customer/css/user-page.css}" rel="stylesheet" type="text/css" />
+    <th:block th:replace="${style} ?: ~{}"></th:block>
+</head>
+
+<body>
+    <header th:replace="~{/customer/fragments/header :: header}"></header>
+
+    <main id="main">
+        <div class="wrapper">
+            <div class="row py-2">
+                <div class="col-3">
+                    <ul th:replace="~{/customer/fragments/user-sidebar :: userSidebar}"></ul>
+                </div>
+                <div class="col-9">
+                    <div class="account-content" th:insert="${mainContent} ?: ~{}">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{/customer/fragments/footer :: footer}"></footer>
+
+    <div th:replace="~{/customer/fragments/another :: logoutModal}"></div>
+    <div th:replace="~{/customer/fragments/another :: confirmModal}"></div>
+    <div th:replace="~{/customer/fragments/another :: pageLoading}"></div>
+    <div th:replace="~{/customer/fragments/another :: pageAlert}"></div>
+
+    <script>
+        var g_sUserName;
+    </script>
+    <th:block sec:authorize="isAuthenticated()">
+        <script th:inline="javascript">
+            g_sUserName = /*[[${#authentication.principal.username}]]*/'default'
+        </script>
+    </th:block>
+    <script th:src="@{/common/jquery/jquery.min.js}"></script>
+    <script th:src="@{/common/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/common/swiper/swiper.min.js}"></script>
+    <script th:src="@{/common/mylib/js/utils.js}"></script>
+    <script th:src="@{/customer/js/page.js}"></script>
+    <th:block th:replace="${script} ?: ~{}"></th:block>
+</body>
+
+</html>

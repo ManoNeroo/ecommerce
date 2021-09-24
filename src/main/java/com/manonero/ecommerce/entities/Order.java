@@ -34,6 +34,9 @@ public class Order {
     @Column(name = "buyer_phone_number")
     private String phoneNumber;
 
+    @Column(name = "buyer_gender")
+    private boolean gender;
+
     @Column(name = "order_description")
     private String description;
 
@@ -50,7 +53,7 @@ public class Order {
     }
 
     public Order(String id, int userId, String address, int status, int total, String fullName, String phoneNumber,
-            String description, Date createdAt, Date updatedAt, Collection<OrderItem> orderItems) {
+            boolean gender, String description, Date createdAt, Date updatedAt, Collection<OrderItem> orderItems) {
         this.id = id;
         this.userId = userId;
         this.address = address;
@@ -58,6 +61,7 @@ public class Order {
         this.total = total;
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
+        this.gender = gender;
         this.description = description;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -65,7 +69,7 @@ public class Order {
     }
 
     public Order(String id, int userId, String address, int status, int total, String fullName, String phoneNumber,
-            String description, Date createdAt, Date updatedAt) {
+            boolean gender, String description, Date createdAt, Date updatedAt) {
         this.id = id;
         this.userId = userId;
         this.address = address;
@@ -73,6 +77,7 @@ public class Order {
         this.total = total;
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
+        this.gender = gender;
         this.description = description;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -84,6 +89,14 @@ public class Order {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public boolean getGender() {
+        return gender;
+    }
+
+    public void setGender(boolean gender) {
+        this.gender = gender;
     }
 
     public int getUserId() {

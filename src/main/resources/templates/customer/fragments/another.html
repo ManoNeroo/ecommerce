@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>another fragment</title>
+</head>
+
+<body>
+	<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
+		aria-hidden="true" th:fragment="logoutModal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabelLogout">Cảnh báo!</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Bạn có muốn đăng xuất không?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-outline-danger" data-dismiss="modal">Đóng</button>
+					<a th:href="@{/logout}" class="btn btn-danger">Đăng xuất</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="confirm-modal" tabindex="-1" role="dialog" aria-hidden="true"
+		th:fragment="confirmModal">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Cảnh báo!</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<span class="icon">
+						<svg viewBox="0 0 24 24">
+							<path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path>
+						</svg>
+					</span>
+					<span class="confirm-content">Xác nhận hành động!</span>
+				</div>
+				<div class="modal-footer">
+					<button data-dismiss="modal" class="btn btn-warning">Xác nhận</button>
+					<button data-dismiss="modal" class="btn btn-outline-warning">Đóng</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="page-loading" th:fragment="pageLoading">
+		<img class="loading-gif" th:src="@{/common/mylib/img/loading.gif}" />
+	</div>
+
+	<div class="alert" id="page-alert" role="alert" th:fragment="pageAlert">
+		<button type="button" class="close">
+			<span aria-hidden="true">×</span>
+		</button>
+		<h6>
+			<i class="fas"></i> <b class="title">Thành công!</b>
+		</h6>
+		<span class="message">Thành công!</span>
+	</div>
+
+	<div class="modal fade" id="sign" th:fragment="loginModal">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header border-bottom-0">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-title text-center">
+						<h4>Đăng nhập</h4>
+					</div>
+					<div class="d-flex flex-column">
+						<form method="POST" th:action="@{/login}">
+							<div class="form-group">
+								<input type="text" name="username" class="form-control" id="username2"
+									placeholder="Tên đăng nhập...">
+							</div>
+							<div class="form-group">
+								<input type="password" name="password" class="form-control" id="password2"
+									placeholder="Mật khẩu...">
+							</div>
+							<div class="form-group">
+								<div class="custom-control custom-checkbox small"
+									style="line-height: 1.5rem;">
+									<input type="checkbox" name="remember-me" class="custom-control-input"
+										id="customCheck2"> <label class="custom-control-label"
+										for="customCheck2">Nhớ tài khoản</label>
+								</div>
+							</div>
+							<button type="submit" class="btn btn-danger btn-block btn-round">Đăng nhập</button>
+						</form>
+					</div>
+				</div>
+				<div class="modal-footer d-flex justify-content-center">
+					<div class="signup-section">Bạn chưa có tài khoản? <a th:href="@{/register}" class="text-danger">Đăng
+							ký</a>.
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
