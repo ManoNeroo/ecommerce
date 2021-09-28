@@ -6,6 +6,22 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "user_acc")
+@NamedStoredProcedureQueries({
+		@NamedStoredProcedureQuery(name = "UserAccount.updateBasicInfo", procedureName = "usp_updateUserBasicInfo", parameters = {
+				@StoredProcedureParameter(name = "id", type = Integer.class),
+				@StoredProcedureParameter(name = "firstName", type = String.class),
+				@StoredProcedureParameter(name = "lastName", type = String.class),
+				@StoredProcedureParameter(name = "phoneNumber", type = String.class),
+				@StoredProcedureParameter(name = "gender", type = Boolean.class) }),
+		@NamedStoredProcedureQuery(name = "UserAccount.updatePassword", procedureName = "usp_updateUserPassword", parameters = {
+				@StoredProcedureParameter(name = "id", type = Integer.class),
+				@StoredProcedureParameter(name = "password", type = String.class) }),
+		@NamedStoredProcedureQuery(name = "UserAccount.updateAvatar", procedureName = "usp_updateUserAvatar", parameters = {
+				@StoredProcedureParameter(name = "id", type = Integer.class),
+				@StoredProcedureParameter(name = "avatar", type = String.class) }),
+		@NamedStoredProcedureQuery(name = "UserAccount.updateStatus", procedureName = "usp_updateUserStatus", parameters = {
+				@StoredProcedureParameter(name = "id", type = Integer.class),
+				@StoredProcedureParameter(name = "status", type = Boolean.class) }) })
 public class UserAccount {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

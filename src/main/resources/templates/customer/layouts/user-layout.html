@@ -48,6 +48,7 @@
     <th:block sec:authorize="isAuthenticated()">
         <script th:inline="javascript">
             g_sUserName = /*[[${#authentication.principal.username}]]*/'default'
+            var g_iUserId = /*[[${session.user.id}]]*/'default';
         </script>
     </th:block>
     <script th:src="@{/common/jquery/jquery.min.js}"></script>

@@ -1,22 +1,17 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org"
-	th:fragment="main-fragment (title, style, script, mainContent)">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:fragment="main-fragment (title, style, script, mainContent)">
 
 <head>
-<meta charset="utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<link th:href="@{/admin/img/logo/logo.png}" rel="icon" />
-<title th:replace="${title}">Blank Page</title>
-<link th:href="@{/common/fontawesome/css/all.min.css}" rel="stylesheet"
-	type="text/css" />
-<link th:href="@{/common/bootstrap/css/bootstrap.min.css}"
-	rel="stylesheet" type="text/css" />
-<link th:href="@{/admin/css/admin.min.css}" rel="stylesheet"
-	type="text/css" />
-<link th:href="@{/admin/css/page.css}" rel="stylesheet" type="text/css" />
-<th:block th:replace="${style} ?: ~{}"></th:block>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<link th:href="@{/admin/img/logo/logo.png}" rel="icon" />
+	<title th:replace="${title}">Blank Page</title>
+	<link th:href="@{/common/fontawesome/css/all.min.css}" rel="stylesheet" type="text/css" />
+	<link th:href="@{/common/bootstrap/css/bootstrap.min.css}" rel="stylesheet" type="text/css" />
+	<link th:href="@{/admin/css/admin.min.css}" rel="stylesheet" type="text/css" />
+	<link th:href="@{/admin/css/page.css}" rel="stylesheet" type="text/css" />
+	<th:block th:replace="${style} ?: ~{}"></th:block>
 </head>
 
 <body id="page-top">
@@ -31,8 +26,7 @@
 				<!-- Toolbar -->
 
 				<!-- Main content-->
-				<div class="container-fluid" id="container-wrapper"
-					th:insert="${mainContent} ?: ~{}"></div>
+				<div class="container-fluid" id="container-wrapper" th:insert="${mainContent} ?: ~{}"></div>
 				<!---Main content-->
 				<!-- Modal Logout -->
 				<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
@@ -42,8 +36,7 @@
 							<div class="modal-header">
 								<h5 class="modal-title" id="exampleModalLabelLogout">Cảnh
 									báo!</h5>
-								<button type="button" class="close" data-dismiss="modal"
-									aria-label="Close">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 									<span aria-hidden="true">&times;</span>
 								</button>
 							</div>
@@ -60,9 +53,17 @@
 					</div>
 				</div>
 			</div>
-			<div class="alert" id="page-alert" role="alert">
+			
+			<div id="page-loading" th:fragment="pageLoading">
+				<img class="loading-gif" th:src="@{/common/mylib/img/loading.gif}" />
+			</div>
+		
+			<div class="alert" id="page-alert" role="alert" th:fragment="pageAlert">
+				<button type="button" class="close">
+					<span aria-hidden="true">×</span>
+				</button>
 				<h6>
-					<i class="fas" ></i> <b class="title">Thành công!</b>
+					<i class="fas"></i> <b class="title">Thành công!</b>
 				</h6>
 				<span class="message">Thành công!</span>
 			</div>
@@ -73,14 +74,19 @@
 	</div>
 
 	<!-- Scroll to top -->
-	<a class="scroll-to-top rounded" href="#page-top"> <i
-		class="fas fa-angle-up"></i>
+	<a class="scroll-to-top rounded" href="#page-top"> <i class="fas fa-angle-up"></i>
 	</a>
+
+	<script th:inline="javascript">
+		var g_aUserRoles = /*[[${#authentication.getAuthorities()}]]*/'default';
+		var g_iUserId = /*[[${session.user.id}]]*/'default';
+	</script>
 
 	<script th:src="@{/common/jquery/jquery.min.js}"></script>
 	<script th:src="@{/common/jquery/jquery.easing.min.js}"></script>
 	<script th:src="@{/common/bootstrap/js/bootstrap.bundle.min.js}"></script>
 	<script th:src="@{/admin/js/admin.min.js}"></script>
+	<script th:src="@{/common/mylib/js/utils.js}"></script>
 	<script th:src="@{/admin/js/page.js}"></script>
 	<th:block th:replace="${script} ?: ~{}"></th:block>
 </body>

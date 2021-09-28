@@ -1,7 +1,9 @@
 package com.manonero.ecommerce.services;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -17,7 +19,7 @@ import org.springframework.stereotype.Service;
 import com.manonero.ecommerce.configs.UserAccountRoleEnum;
 import com.manonero.ecommerce.entities.UserAccount;
 import com.manonero.ecommerce.entities.UserRole;
-import com.manonero.ecommerce.models.RegisterUser;
+import com.manonero.ecommerce.models.UserRequest;
 import com.manonero.ecommerce.repositories.IUserAccountRepository;
 import com.manonero.ecommerce.repositories.IUserRoleRepository;
 
@@ -32,6 +34,8 @@ public class UserAccountService implements IUserAccountService {
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
+	private int numberAccount;
+
 	@Override
 	@Transactional
 	public UserAccount findByUserName(String userName) {
@@ -40,21 +44,43 @@ public class UserAccountService implements IUserAccountService {
 
 	@Override
 	@Transactional
-	public UserAccount save(RegisterUser registerUser, int roleIndex) {
+	public UserAccount add(UserRequest request) {
 		try {
-			String roleName = UserAccountRoleEnum.values()[roleIndex].name();
-			UserAccount user = new UserAccount();
-			user.setUserName(registerUser.getUserName());
-			user.setPassword(passwordEncoder.encode(registerUser.getPassword()));
-			user.setFirstName(registerUser.getFirstName());
-			user.setLastName(registerUser.getLastName());
-			user.setPhoneNumber(registerUser.getPhoneNumber());
-			user.setRoles(Arrays.asList(roleRepository.selectRoleByName(roleName)));
-			return userRepository.save(user);
+			if (request.getPassword().equals(request.getMatchingPassword())) {
+				UserAccount user = new UserAccount();
+				user.setUserName(request.getUserName());
+				user.setPassword(passwordEncoder.encode(request.getPassword()));
+				user.setFirstName(request.getFirstName());
+				user.setLastName(request.getLastName());
+				user.setPhoneNumber(request.getPhoneNumber());
+				boolean gender = request.getGender() != null ? request.getGender() : false;
+				user.setGender(gender);
+				user.setAvatar(gender ? "/admin/img/girl.png" : "/admin/img/boy.png");
+				user.setStatus(true);
+				Set<UserRole> roles = generateRoles(request.getRoleIxs());
+				if (roles.size() > 0) {
+					user.setRoles(roles);
+				}
+				return userRepository.save(user);
+			}
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
 		return null;
+	}
+
+	private Set<UserRole> generateRoles(int[] roleIxs) {
+		Set<UserRole> roles = new HashSet<>();
+		if (roleIxs != null) {
+			for (int i = 0; i < roleIxs.length; i++) {
+				int ix = roleIxs[i] - 1;
+				if (ix >= 0 && ix <= 3) {
+					String roleName = UserAccountRoleEnum.values()[ix].name();
+					roles.add(roleRepository.selectRoleByName(roleName));
+				}
+			}
+		}
+		return roles;
 	}
 
 	@Override
@@ -76,6 +102,82 @@ public class UserAccountService implements IUserAccountService {
 	@Transactional
 	public UserAccount getById(int id) {
 		return userRepository.selectById(id);
+	}
+
+	@Override
+	@Transactional
+	public List<UserAccount> filter(Integer offset, Integer limit, String userName, String phoneNumber, int[] roleIds,
+			Boolean status) {
+		List<UserAccount> accounts = userRepository.selectFilter(userName, phoneNumber, roleIds, status);
+		this.numberAccount = accounts.size();
+		if (offset != null && limit != null) {
+			int ix1 = offset - 1;
+			int ix2 = offset + limit - 1;
+			ix1 = ix1 >= 0 ? ix1 : 0;
+			ix2 = ix2 >= 1 ? ix2 : 1;
+			ix1 = this.numberAccount > ix1 ? ix1 : 0;
+			ix2 = this.numberAccount > ix2 ? ix2 : this.numberAccount;
+			return accounts.subList(ix1, ix2);
+		}
+		return accounts;
+	}
+
+	@Override
+	public int getNumberAccount() {
+		return this.numberAccount;
+	}
+
+	@Override
+	@Transactional
+	public void updateBasicInfo(UserRequest request) {
+		userRepository.updateBasicInfo(request.getUserId(), request.getFirstName(), request.getLastName(),
+				request.getPhoneNumber(), request.getGender());
+	}
+
+	@Override
+	@Transactional
+	public boolean updatePassword(UserRequest request) {
+		if (request.getNewPassword().equals(request.getMatchingPassword())) {
+			UserAccount dbAccount = getById(request.getUserId());
+			String encodeNewPassword = passwordEncoder.encode(request.getNewPassword());
+			if (passwordEncoder.matches(request.getPassword(), dbAccount.getPassword())) {
+				userRepository.updatePassword(request.getUserId(), encodeNewPassword);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	@Transactional
+	public int[] updateRoles(UserRequest request) {
+		if (request.getRoleIxs() != null) {
+			if (request.getRoleIxs().length > 0) {
+				UserAccount account = getById(request.getUserId());
+				if (account != null) {
+					Set<UserRole> roles = generateRoles(request.getRoleIxs());
+					if (roles.size() > 0) {
+						account.setRoles(generateRoles(request.getRoleIxs()));
+						userRepository.save(account);
+						return request.getRoleIxs();
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	@Override
+	@Transactional
+	public boolean updateStatus(UserRequest request) {
+		userRepository.updateStatus(request.getUserId(), request.getStatus());
+		return request.getStatus();
+	}
+
+	@Override
+	@Transactional
+	public void updateAvatar(UserRequest request) {
+		userRepository.updateAvatar(request.getUserId(), request.getAvatar());
 	}
 
 }

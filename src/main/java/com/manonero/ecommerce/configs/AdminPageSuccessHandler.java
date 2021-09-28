@@ -25,10 +25,10 @@ public class AdminPageSuccessHandler implements AuthenticationSuccessHandler {
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 
-		boolean hasCustomerRole = authentication.getAuthorities().stream()
-				.anyMatch(r -> r.getAuthority().equals("ROLE_CUSTOMER"));
+		boolean isAllow = authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN")
+				|| r.getAuthority().equals("ROLE_MANAGER") || r.getAuthority().equals("ROLE_EMPLOYEE"));
 
-		if (hasCustomerRole) {
+		if (!isAllow) {
 			response.sendRedirect(request.getContextPath() + "/admin/logout");
 		} else {
 			String userName = authentication.getName();
@@ -39,10 +39,17 @@ public class AdminPageSuccessHandler implements AuthenticationSuccessHandler {
 
 			System.out.println("Full name is: " + userAccount.getFullName());
 
-			HttpSession session = request.getSession();
-			session.setAttribute("user", userAccount);
-
-			response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+			if(userAccount.getStatus() != null) {
+				if(userAccount.getStatus() == true) {
+					HttpSession session = request.getSession();
+					session.setAttribute("user", userAccount);
+					response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+				} else {
+					response.sendRedirect(request.getContextPath() + "/admin/logout");
+				}
+			} else {
+				response.sendRedirect(request.getContextPath() + "/admin/logout");
+			}
 		}
 	}
 

@@ -1,0 +1,36 @@
+.item-add {
+    width: 12.675em;
+}
+
+button.select2-selection__clear {
+    display: none !important;
+}
+
+.table-list td {
+	vertical-align: middle;
+    font-size: 0.875em
+}
+
+.table-list .btn {
+    font-size: 0.875em !important;
+}
+
+.user-avatar, .user-avatar-th{
+	text-align: center;
+}
+
+.user-avatar img {
+    max-width: 5em;
+}
+
+.user-form input {
+	height: 2.5em !important;
+}
+
+.user-form .select2-container textarea {
+	height: 1.6em !important;
+}
+
+#form-user-roles1 ~ .select2-container, #form-user-roles2 ~ .select2-container {
+	width: 100% !important;
+}

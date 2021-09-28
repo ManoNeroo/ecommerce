@@ -23,12 +23,13 @@ public class SignController {
 		if (auth instanceof AnonymousAuthenticationToken) {
 			return "admin/sign/signin";
 		} else {
-			boolean hasCustomerRole = auth.getAuthorities().stream()
-					.anyMatch(r -> r.getAuthority().equals("ROLE_CUSTOMER"));
-			if (hasCustomerRole) {
-				return "redirect:/admin/logout";
+			boolean isAllow = auth.getAuthorities().stream()
+					.anyMatch(r -> r.getAuthority().equals("ROLE_ADMIN") || r.getAuthority().equals("ROLE_MANAGER")
+					|| r.getAuthority().equals("ROLE_EMPLOYEE"));
+			if (isAllow) {
+				return "redirect:/admin/dashboard";
 			}
-			return "redirect:/admin/dashboard";
+			return "redirect:/admin/logout";
 		}
 	}
 }

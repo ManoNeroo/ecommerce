@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.StoredProcedureQuery;
 
 import com.manonero.ecommerce.configs.AppSettings;
 import com.manonero.ecommerce.entities.Product;
@@ -28,7 +29,9 @@ public class ProductRepository implements IProductRepository {
         if (onlyEnable != null) {
             if (onlyEnable) {
                 mainQueryStr += ", brand b, category c";
-                whereQueryString += " WHERE b.brand_status=1 AND c.category_status=1 AND p.category_id=c.category_id AND p.brand_id=b.brand_id";
+                whereQueryString += " WHERE p.product_status=1 AND b.brand_status=1 AND c.category_status=1 AND p.category_id=c.category_id AND p.brand_id=b.brand_id";
+            } else {
+                whereQueryString += " WHERE p.product_status=0";
             }
         }
         if (categoryIds != null) {
@@ -147,8 +150,8 @@ public class ProductRepository implements IProductRepository {
     @Override
     public void updateProductStatus(Boolean status, String productId) {
         int sInt = 0;
-        if(status != null) {
-            if(status) {
+        if (status != null) {
+            if (status) {
                 sInt = 1;
             }
         }
@@ -160,10 +163,41 @@ public class ProductRepository implements IProductRepository {
     }
 
     @Override
+    public void updateProductAvatar(String avatar, String productId) {
+        if (avatar != null) {
+            String sqlStr = "UPDATE product SET product_avatar=? WHERE product_id=?";
+            Query query = entityManager.createNativeQuery(sqlStr);
+            query.setParameter(1, avatar);
+            query.setParameter(2, productId);
+            query.executeUpdate();
+        }
+    }
+
+    @Override
     public List<Product> selectTopProduct(int top, int categoryId) {
         String sqlString = "SELECT TOP " + top + " * FROM product WHERE category_id=?";
         Query query = entityManager.createNativeQuery(sqlString, Product.class);
         query.setParameter(1, categoryId);
+        @SuppressWarnings("unchecked")
+        List<Product> products = query.getResultList();
+        return products;
+    }
+
+    @Override
+    public List<Product> selectTopSale(int top) {
+        StoredProcedureQuery query = entityManager.createNamedStoredProcedureQuery("Product.selectTopProductSale");
+        query.setParameter("top", top);
+        @SuppressWarnings("unchecked")
+        List<Product> products = query.getResultList();
+        return products;
+    }
+
+    @Override
+    public List<Product> selectTopByName(int top, String name, Boolean status) {
+        StoredProcedureQuery query = entityManager.createNamedStoredProcedureQuery("Product.selectTopProductByName");
+        query.setParameter("top", top);
+        query.setParameter("name", name);
+        query.setParameter("status", status);
         @SuppressWarnings("unchecked")
         List<Product> products = query.getResultList();
         return products;

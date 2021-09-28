@@ -11,6 +11,7 @@
     <th:block id="style">
         <link th:href="@{/admin/css/productedit-page.css}" rel="stylesheet" type="text/css" />
         <link th:href="@{/common/mylib/css/technical-data.css}" rel="stylesheet" type="text/css" />
+        <link th:href="@{/common/mylib/css/upload-modal.css}" rel="stylesheet" type="text/css" />
     </th:block>
 </head>
 
@@ -108,8 +109,7 @@
                                     <div class="form-file-wrapper">
                                         <div id="form-file">
                                             <img th:src="${product.getAvatar()}" alt="product image">
-                                            <input accept="image/*" type="file" name="avatar" class="d-none">
-                                            <button class="change-avatar-btn" type="button">
+                                            <button class="change-avatar-btn" type="button" th:attr="data-id=${product.id}">
                                                 <svg viewBox="0 0 24 24">
                                                     <path
                                                         d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z">
@@ -192,6 +192,7 @@
         </script>
         <script th:src="@{/common/tinymce/tinymce.min.js}"></script>
         <script th:src="@{/common/mylib/js/technical-data.js}"></script>
+        <script th:src="@{/common/mylib/js/upload-modal.js}"></script>
         <script th:src="@{/admin/js/productedit-page.js}"></script>
         <script th:src="@{/admin/js/product-article-editor.js}"></script>
         <script th:src="@{/admin/js/product-technical-data.js}"></script>

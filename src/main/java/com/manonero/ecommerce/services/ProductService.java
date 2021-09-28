@@ -68,6 +68,7 @@ public class ProductService implements IProductService {
             product.setId(AppUtils.generateRandomString(10));
             product.setCreatedAt(now);
             product.setUpdatedAt(now);
+            product.setAvatar(request.getAvatar());
         } else {
             Product prod = productRepository.selectProductById(request.getId());
             product.setId(prod.getId());
@@ -75,9 +76,9 @@ public class ProductService implements IProductService {
             product.setCreatedAt(prod.getCreatedAt());
             product.setAvgStar(prod.getAvgStar());
             product.setNumberVote(prod.getNumberVote());
+            product.setAvatar(prod.getAvatar());
         }
         product.setName(request.getName());
-        product.setAvatar(request.getAvatar());
         product.setPrice(request.getPrice());
         product.setPriceOff(request.getPriceOff());
         product.setStatus(request.isStatus());
@@ -105,6 +106,12 @@ public class ProductService implements IProductService {
 
     @Override
     @Transactional
+    public void updateProductAvatar(ProductRequest request) {
+        productRepository.updateProductAvatar(request.getAvatar(), request.getId());
+    }
+
+    @Override
+    @Transactional
     public List<Object> getTopProduct(int top, int[] categoryIds) {
         ArrayList<Object> list = new ArrayList<>();
         if(categoryIds != null && top > 0) {
@@ -114,6 +121,18 @@ public class ProductService implements IProductService {
             }
         }
         return list;
+    }
+
+    @Override
+    @Transactional
+    public List<Product> getTopSale(int top) {
+        return productRepository.selectTopSale(top);
+    }
+
+    @Override
+    @Transactional
+    public List<Product> getTopByName(int top, String name, Boolean status) {
+        return productRepository.selectTopByName(top, name, status);
     }
 
 }

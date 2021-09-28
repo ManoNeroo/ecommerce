@@ -9,9 +9,8 @@
 <body>
     <ul class="navbar-nav account-sidebar"  th:fragment="userSidebar">
         <a href="#" class="account-summary">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHUndSzxcF1UbSXX3bVILVaUbSIhoc_GEA8g&usqp=CAU"
-                alt="">
-            <span>Trần Văn A</span>
+            <img th:src="${session.user.avatar}" th:alt="${session.user.getFullName()}">
+            <span th:text="${session.user.getFullName()}"></span>
         </a>
         <li class="nav-item">
             <a href="#" class="nav-link" data-toggle="collapse" data-target="#myaccount-collapse" aria-expanded="true"
@@ -20,8 +19,10 @@
                 <span>Tài khoản của tôi</span>
             </a>
             <div id="myaccount-collapse" class="collapse show" aria-labelledby="headingBootstrap">
-                <a href="#" class="collapse-item">Hồ sơ</a>
-                <a href="#" class="collapse-item">Đổi mật khẩu</a>
+                <a th:href="@{/user/account/profile}" class="collapse-item"
+                th:classappend="${#httpServletRequest.getRequestURI() == '/user/account/profile' ? 'active':''}">Hồ sơ</a>
+                <a th:href="@{/user/account/password}" class="collapse-item"
+                th:classappend="${#httpServletRequest.getRequestURI() == '/user/account/password' ? 'active':''}">Đổi mật khẩu</a>
             </div>
         </li>
         <li class="nav-item">

@@ -411,16 +411,16 @@
 
 .order-detail-step .step .step-text {
     text-transform: capitalize;
-    font-size: .875rem;
-    color: rgba(0,0,0,.8);
+    font-size: 0.875rem;
+    color: rgba(0, 0, 0, 0.8);
     line-height: 1.25rem;
-    margin: 1.25rem 0 .25rem;
+    margin: 1.25rem 0 0.25rem;
 }
 
 .order-detail-step .step .step-date {
-    font-size: .75rem;
-    color: rgba(0,0,0,.26);
-    height: .875rem;
+    font-size: 0.75rem;
+    color: rgba(0, 0, 0, 0.26);
+    height: 0.875rem;
 }
 
 .steps-line {
@@ -430,7 +430,8 @@
     width: 100%;
 }
 
-.steps-line .steps-line-bg, .steps-line .steps-line-fg {
+.steps-line .steps-line-bg,
+.steps-line .steps-line-fg {
     position: absolute;
     width: calc(100% - 140px);
     margin: 0 70px;
@@ -442,7 +443,7 @@
 .steps-line .steps-line-fg {
     background: rgb(45, 194, 88);
     width: calc((100% - 140px) * 1);
-    transition: width 1s cubic-bezier(.4,0,.2,1);
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .order-detail-info {
@@ -495,7 +496,7 @@
     height: 29.65em;
     text-align: center;
     box-shadow: 0 1px 1px 0 rgb(0 0 0 / 5%);
-    border-radius: .125em;
+    border-radius: 0.125em;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -517,5 +518,103 @@
     margin: 1.25em 0 0;
     font-size: 1.125em;
     line-height: 1.4;
-    color: rgba(0,0,0,.8);
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.user-page-wrapper {
+    position: relative;
+    box-sizing: border-box;
+    background: #fff;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 13%);
+    border-radius: 0.125rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-page-header {
+    border-bottom: 0.0625rem solid #efefef;
+    padding: 1.125rem 1.5rem;
+}
+
+.user-page-header h1 {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 500;
+    line-height: 1.5rem;
+    text-transform: capitalize;
+    color: #333;
+}
+
+.user-page-header p {
+    margin-top: 0.1875rem;
+    font-size: 0.875rem;
+    line-height: 1.0625rem;
+    color: #555;
+}
+
+.user-page-body {
+    padding: 1.875rem 1.5rem 0;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    min-height: 31.625rem;
+}
+
+.user-page-body form .error {
+    margin-top: 0.375em;
+    display: block;
+}
+
+.user-page-body form .mb-25 {
+    margin-bottom: 2.5rem;
+}
+
+.user-profile-form {
+    flex: 1;
+    padding-right: 3.125rem;
+}
+
+.user-profile-avatar {
+    width: 17.5rem;
+    border-left: 0.0625rem solid #efefef;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user-profile-avatar .btn {
+    background: #fff;
+}
+
+.user-profile-avatar .user-avatar-wrapper {
+    flex-direction: column;
+    align-items: center;
+    display: flex;
+}
+
+.user-profile-avatar .user-avatar-wrapper img {
+    height: 6.25rem;
+    width: 6.25rem;
+    margin: 1.25rem 0;
+    position: relative;
+    border-radius: 50%;
+}
+
+.user-profile-avatar .user-avatar-description {
+    margin-top: .75rem;
+    display: block;
+    color: #999;
+    font-size: .875rem;
+    line-height: 1.25rem;
+}
+
+input:read-only {
+    outline: none;
+    border: none;
+}
+
+input,
+.form-check-label {
+    color: #000 !important;
 }

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{admin/layouts/main-layout :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #style},
+                                                ~{:: #script},
+                                                ~{:: #main-content}
+                                               )}">
+
+<head>
+    <title>Hồ sơ</title>
+    <th:block id="style">
+        <link th:href="@{/common/mylib/css/upload-modal.css}" rel="stylesheet" type="text/css" />
+        <link th:href="@{/admin/css/profile-page.css}" rel="stylesheet" type="text/css" />
+    </th:block>
+</head>
+
+<body>
+
+    <div id="main-content">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Hồ sơ của tôi</h1>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-10">
+                                <div class="row">
+                                    <div class="col-8 user-info">
+                                        <form id="user-basic-info-form" method="POST">
+                                            <input type="hidden" name="userId" th:value="${session.user.id}">
+                                            <div class="form-group row mb-4">
+                                                <label class="col-3 col-form-label">Tên đăng nhập:</label>
+                                                <div class="col-9">
+                                                    <input type="text" readonly class="form-control-plaintext" th:value="${session.user.userName}">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row mb-5">
+                                                <label class="col-3 col-form-label">Tên họ:</label>
+                                                <div class="col-9">
+                                                    <input type="text" name="lastName" th:value="${session.user.lastName}" class="form-control" placeholder="Nhập tên họ">
+                                                    <span class="text-danger lastName-error"></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row mb-5">
+                                                <label class="col-3 col-form-label">Tên:</label>
+                                                <div class="col-9">
+                                                    <input type="text" name="firstName" th:value="${session.user.firstName}" class="form-control" placeholder="Nhập tên">
+                                                    <span class="text-danger firstName-error"></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row mb-5">
+                                                <label class="col-3 col-form-label">Số điện thoại:</label>
+                                                <div class="col-9">
+                                                    <input type="text" name="phoneNumber" th:value="${session.user.phoneNumber}" class="form-control" placeholder="Nhập số điện thoại">
+                                                    <span class="text-danger phoneNumber-error"></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row mb-5">
+                                                <label class="col-3 col-form-label">Giới tính</label>
+                                                <div class="col-9 d-flex align-items-center">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="gender"
+                                                            id="maleRadio" value="false" th:checked="${!session.user.gender}">
+                                                        <label class="form-check-label" for="maleRadio">Nam</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="gender"
+                                                            id="femaleRadio" value="true" th:checked="${session.user.gender}">
+                                                        <label class="form-check-label" for="femaleRadio">Nữ</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-3"></label>
+                                                <div class="col-9">
+                                                    <button class="btn btn-info">Lưu lại</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="user-avatar">
+                                            <h4>Ảnh đại diện</h4>
+                                            <div>
+                                                <img th:src="${session.user.avatar}">
+                                                <button class="change-avatar-btn" type="button">
+                                                    <svg viewBox="0 0 24 24">
+                                                        <path
+                                                            d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z">
+                                                        </path>
+                                                    </svg>
+                                                </button>
+                                                <div class="overlay"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block id="script">
+        <script th:src="@{/common/mylib/js/upload-modal.js}"></script>
+        <script th:src="@{/admin/js/profile-page.js}"></script>
+    </th:block>
+</body>
+
+</html>

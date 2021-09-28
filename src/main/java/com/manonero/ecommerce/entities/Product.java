@@ -2,18 +2,19 @@ package com.manonero.ecommerce.entities;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ForeignKey;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "product")
+@NamedStoredProcedureQueries({
+        @NamedStoredProcedureQuery(name = "Product.selectTopProductSale", procedureName = "usp_selectTopProductSale", resultClasses = Product.class, parameters = {
+                @StoredProcedureParameter(name = "top", type = Integer.class) }),
+        @NamedStoredProcedureQuery(name = "Product.selectTopProductByName", procedureName = "usp_selectTopProductByName", resultClasses = Product.class, parameters = {
+                @StoredProcedureParameter(name = "top", type = Integer.class),
+                @StoredProcedureParameter(name = "name", type = String.class),
+                @StoredProcedureParameter(name = "status", type = Boolean.class) }) })
 public class Product {
     @Id
     @Column(name = "product_id")

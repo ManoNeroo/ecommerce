@@ -1,6 +1,6 @@
 const PAGE_ALERT_CLOSE_BTN = document.querySelector("#page-alert .close");
 
-PAGE_ALERT_CLOSE_BTN.addEventListener("click", handleClickCloseAlert);
+PAGE_ALERT_CLOSE_BTN && PAGE_ALERT_CLOSE_BTN.addEventListener("click", handleClickCloseAlert);
 
 function toggleLoading(isShow) {
     const loading = document.getElementById("page-loading");

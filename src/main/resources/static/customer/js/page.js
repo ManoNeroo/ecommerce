@@ -1,6 +1,60 @@
 (function () {
+	const FORM_HEADER_SEARCH = document.querySelector(".header-search form");
+	const FORM_HEADER_SEARCH_INPUT = FORM_HEADER_SEARCH.querySelector("input");
+	const HEADER_TOP = $("#header .header-top");
+
 	loadCategories();
 	loadCartNumberItem();
+	FORM_HEADER_SEARCH.addEventListener("submit", handleSubmitHeaderSearch);
+	FORM_HEADER_SEARCH_INPUT.addEventListener("focus", handleFocusHeaderSearch);
+	FORM_HEADER_SEARCH_INPUT.addEventListener("keyup", handleKeyupHeaderSearch);
+	HEADER_TOP.click(handleClickOutSearchInput);
+
+	function handleSubmitHeaderSearch(evt) {
+		evt.preventDefault();
+		const searchValue = FORM_HEADER_SEARCH_INPUT.value.trim();
+		if (searchValue != '') {
+			window.location.href = window.location.origin + "/search?keyword=" + searchValue;
+		}
+	}
+
+	function handleClickOutSearchInput(e) {
+		var t = $(e.target);
+		t.is(".header-search form") || t.is(".header-search form *") || t.is(".header-search-suggest")
+			|| t.is(".header-search-suggest *") || handleHideSuggest();
+	}
+
+	function handleHideSuggest() {
+		const overlay = document.querySelector(".overlay-suggest");
+		overlay && overlay.remove();
+		clearSuggestItems();
+	}
+
+	async function handleKeyupHeaderSearch() {
+		const data = await searchProductByName();
+		generateSuggestItems(data);
+	}
+
+	async function handleFocusHeaderSearch() {
+		const data = await searchProductByName();
+		handleHideSuggest();
+		const overlay = document.createElement("div");
+		overlay.className = "overlay-suggest";
+		overlay.addEventListener("click", handleHideSuggest);
+		document.body.appendChild(overlay);
+		generateSuggestItems(data);
+	}
+
+	async function searchProductByName() {
+		const searchValue = FORM_HEADER_SEARCH_INPUT.value.trim();
+		if (searchValue != '') {
+			const resp = await httpClient("/api/product/topbyname?top=5&status=true&name=" + searchValue);
+			if (resp.isSuccess) {
+				return resp.data;
+			}
+		}
+		return null;
+	}
 
 	async function loadCategories() {
 		const resp = await httpClient("/api/category?isEnable=true");
@@ -39,6 +93,66 @@
 				}
 			});
 		}
+	}
+
+	function clearSuggestItems() {
+		const SUGGEST_DIV = document.querySelector(".header-search-suggest");
+		const SUGGEST_TITLE = SUGGEST_DIV.querySelector(".suggest-title");
+		const SUGGEST_UL = SUGGEST_DIV.querySelector("ul");
+		SUGGEST_DIV.classList.remove("active");
+		SUGGEST_TITLE.innerText = '';
+		SUGGEST_UL.innerHTML = '';
+	}
+
+	function generateSuggestItems(items) {
+		const SUGGEST_DIV = document.querySelector(".header-search-suggest");
+		const SUGGEST_TITLE = SUGGEST_DIV.querySelector(".suggest-title");
+		const SUGGEST_UL = SUGGEST_DIV.querySelector("ul");
+		const SEARCH_TRENDS = [{ link: "/search?keyword=iPhone", text: "iPhone" },
+		{ link: "/search?keyword=ipad", text: "iPad" },
+		{ link: "/search?keyword=macbook", text: "Macbook" },
+		{ link: "/search?keyword=samsung galaxy", text: "Samsung Galaxy" },
+		{ link: "/search?keyword=oppo", text: "OPPO" },
+		{ link: "/search?keyword=xiaomi", text: "Xiaomi" }];
+		SUGGEST_DIV.classList.add("active");
+		SUGGEST_TITLE.classList.remove("text-danger");
+		SUGGEST_UL.innerHTML = '';
+		if (items != null) {
+			if (items.length > 0) {
+				SUGGEST_TITLE.innerText = "Kết quả gợi ý";
+				items.forEach(val => {
+					const li = document.createElement("li");
+					const itemAElm = generateSuggestItem(val);
+					li.className = "hits-item";
+					li.appendChild(itemAElm);
+					SUGGEST_UL.appendChild(li);
+				});
+			} else {
+				SUGGEST_TITLE.innerText = "Không có kết quả nào!";
+				SUGGEST_TITLE.classList.add("text-danger");
+			}
+		} else {
+			SUGGEST_TITLE.innerText = "Xu hướng tìm kiếm";
+			SEARCH_TRENDS.forEach(val => {
+				const li = document.createElement("li");
+				li.innerHTML = `<a href="${val.link}">${val.text}</a>`;
+				SUGGEST_UL.appendChild(li);
+			})
+		}
+	}
+	function generateSuggestItem(product) {
+		const a = document.createElement("a");
+		a.href = "/product/" + product.id;
+		a.innerHTML = `<div class="suggest-item">
+							<div class="suggest-item-img"><img src="${product.avatar}" alt="${product.name}"></div>
+							<div class="suggest-item-info">
+								<h3 class="suggest-item-name">${product.name}</h3>
+								<div class="suggest-item-promo-price">${formatNumber(product.promoPrice)}₫
+									<del class="suggest-item-price">${product.promoPrice != product.price ? formatNumber(product.price) + '₫' : ''}</del>
+								</div>
+							</div>
+						</div>`;
+		return a;
 	}
 })();
 

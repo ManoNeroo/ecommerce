@@ -3,6 +3,7 @@ package com.manonero.ecommerce.controllers;
 import java.util.List;
 
 import com.manonero.ecommerce.entities.Product;
+import com.manonero.ecommerce.models.PaginationResponse;
 import com.manonero.ecommerce.models.ProductRequest;
 import com.manonero.ecommerce.models.Response;
 import com.manonero.ecommerce.models.UpdateProductStatusRequest;
@@ -26,7 +27,7 @@ public class ProductApiController {
     private IProductService productService;
 
     @GetMapping("/filter")
-    public List<Product> filterProduct(@RequestParam(required = false) Integer page,
+    public PaginationResponse filterProduct(@RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer limit, @RequestParam(required = false) int[] brand,
             @RequestParam(required = false) int[] category, @RequestParam(required = false) int[] priceRange,
             @RequestParam(required = false) String name, @RequestParam(required = false) Boolean status,
@@ -43,7 +44,8 @@ public class ProductApiController {
         int offset = (page * limit) - limit + 1;
         List<Product> products = productService.filterProduct(offset, limit, category, brand, priceRange, name, status,
                 isSort, onlyEnable);
-        return products;
+        int totalItem = productService.getProductCount();
+        return new PaginationResponse(products, true, limit, page, totalItem);
     }
 
     @PostMapping
@@ -64,9 +66,21 @@ public class ProductApiController {
         return new Response(true);
     }
 
+    @PatchMapping("/avatar")
+    public Response toggleStatus(@RequestBody ProductRequest request) {
+        productService.updateProductAvatar(request);
+        return new Response(true);
+    }
+
     @GetMapping("/top")
     public Response getTopProduct(@RequestParam int top, @RequestParam int[] categoryIds) {
         List<Object> list = productService.getTopProduct(top, categoryIds);
+        return new Response(list, true);
+    }
+
+    @GetMapping("/topbyname")
+    public Response getTopByName(@RequestParam int top,  @RequestParam String name, @RequestParam(required = false) Boolean status) {
+        List<Product> list = productService.getTopByName(top, name, status);
         return new Response(list, true);
     }
 }

@@ -1,0 +1,86 @@
+h4 , input, .form-check-label{
+    color: #000 !important;
+}
+
+input:read-only{
+    outline: none;
+    border: none;
+}
+
+.user-card {
+    min-height: 500px;
+}
+
+.user-card .card-body {
+    display: flex;
+    align-items: center;
+}
+
+.user-card .card-body .row {
+    width: 100%;
+}
+
+.user-info {
+    padding-right: 1.5em;
+}
+
+.user-avatar {
+    border-left: .0625rem solid #efefef;
+    padding-left: 1.5em;
+}
+.user-avatar h4 {
+    text-align: center;
+    font-size: 1.25em;
+    margin-bottom: 1em;
+}
+
+.user-avatar > div {
+    position: relative;
+    width: 100%;
+}
+
+.user-avatar > div img {
+    width: 100%;
+}
+
+.user-avatar > div:hover .overlay {
+    display: block;
+}
+
+.user-avatar > div:hover .change-avatar-btn {
+    display: inline;
+}
+
+.user-avatar > div .overlay {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    -webkit-tap-highlight-color: transparent;
+    display: none;
+}
+
+.user-avatar > div .change-avatar-btn {
+    outline: none;
+    border: none;
+    padding: 0.5em;
+    color: #c7bc02;
+    background: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    display: none;
+}
+
+.user-avatar > div .change-avatar-btn svg {
+    width: 2em;
+    height: 2em;
+    fill: currentColor;
+}

@@ -1,41 +1,205 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{admin/layouts/main-layout :: main-fragment(  
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{admin/layouts/main-layout :: main-fragment(  
                                                 ~{::title},
                                                 ~{:: #dashboard-style},
                                                 ~{:: #dashboard-script},
                                                 ~{:: #dashboard-main-content}
                                                )}">
-<head>
-<title>Dashboard</title>
-<th:block id="dashboard-style">
 
-</th:block>
+<head>
+	<title>Dashboard</title>
+	<th:block id="dashboard-style">
+		<link th:href="@{/admin/css/dashboard-page.css}" rel="stylesheet" type="text/css" />
+	</th:block>
 </head>
+
 <body>
 
 	<div id="dashboard-main-content">
 		<div class="d-sm-flex align-items-center justify-content-between mb-4">
-			<h1 class="h3 mb-0 text-gray-800">Blank Page</h1>
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="./">Home</a></li>
-				<li class="breadcrumb-item">Pages</li>
-				<li class="breadcrumb-item active" aria-current="page">Blank
-					Page</li>
-			</ol>
+			<h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
 		</div>
 
-		<div class="text-center">
-			<img th:src="@{/admin/img/think.svg}" style="max-height: 90px">
-			<h4 class="pt-3">
-				save your <b>imagination</b> here!
-			</h4>
+		<div class="row mb-3">
+			<th:block th:if="${earningList.size() > 0}">
+				<th:block th:with="earning=${earningList.get(earningList.size() - 1)}">
+					<div class="col-xl-3 col-md-6 mb-4">
+						<div class="card h-100">
+							<div class="card-body d-flex align-items-center">
+								<div class="row w-100 align-items-center justify-content-between">
+									<div class="col mr-2">
+										<div class="text-xs font-weight-bold text-uppercase mb-1">Doanh thu tháng
+										</div>
+										<div class="h5 mb-0 font-weight-bold text-gray-800"
+											th:text="${#numbers.formatDecimal(earning.monthEarning, 0, 'COMMA', 0, 'POINT') + '₫'}">
+										</div>
+									</div>
+									<div class="col-auto">
+										<i class="fa fa-credit-card fa-2x text-primary"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-md-6 mb-4">
+						<div class="card h-100">
+							<div class="card-body d-flex align-items-center">
+								<div class="row no-gutters w-100 align-items-center justify-content-between">
+									<div class="col mr-2">
+										<div class="text-xs font-weight-bold text-uppercase mb-1">Số sản phẩm đã bán
+										</div>
+										<div class="h5 mb-0 font-weight-bold text-gray-800"
+											th:text="${earning.productSold + ' sản phẩm'}"></div>
+									</div>
+									<div class="col-auto">
+										<i class="fas fa-shopping-cart fa-2x text-success"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-md-6 mb-4">
+						<div class="card h-100">
+							<div class="card-body d-flex align-items-center">
+								<div class="row no-gutters w-100 align-items-center justify-content-between">
+									<div class="col mr-2">
+										<div class="text-xs font-weight-bold text-uppercase mb-1">Số đơn hàng chưa giao
+										</div>
+										<div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"
+											th:text="${earning.orderUnShipped + ' đơn hàng'}"></div>
+									</div>
+									<div class="col-auto">
+										<i class="fas fa-truck fa-2x text-warning"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-md-6 mb-4">
+						<div class="card h-100">
+							<div class="card-body d-flex align-items-center">
+								<div class="row no-gutters w-100 align-items-center justify-content-between">
+									<div class="col mr-2">
+										<div class="text-xs font-weight-bold text-uppercase mb-1">Số đơn hàng bị huỷ
+										</div>
+										<div class="h5 mb-0 font-weight-bold text-gray-800"
+											th:text="${earning.orderCanceled + ' đơn hàng'}"></div>
+									</div>
+									<div class="col-auto">
+										<i class="fas fa-ban fa-2x text-danger"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</th:block>
+			</th:block>
+		</div>
+		<div class="row mb-3">
+			<div class="col-8">
+				<div class="row">
+					<div class="col-12">
+						<div class="card mb-4">
+							<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+								<h6 class="m-0 font-weight-bold text-primary">Doanh thu từng tháng</h6>
+							</div>
+							<div class="card-body">
+								<div class="chart-area">
+									<canvas id="myAreaChart"></canvas>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="card">
+							<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+								<h6 class="m-0 font-weight-bold text-primary">Top đơn hàng</h6>
+								<a class="m-0 float-right btn btn-danger btn-sm" th:href="@{/admin/order}">Xem tất cả <i
+										class="fas fa-chevron-right"></i></a>
+							</div>
+							<div class="table-responsive">
+								<table class="table align-items-center table-flush">
+									<thead class="thead-light">
+										<tr>
+											<th>Mã đơn hàng</th>
+											<th>Khách hàng</th>
+											<th>Số điện thoại</th>
+											<th>Trạng thái</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<th:block th:each="item : ${topOrders}">
+											<tr>
+												<td><span th:text="${item.id}"></span></td>
+												<td>
+													<span th:text="${item.fullName}"></span>
+												</td>
+												<td>
+													<span th:text="${item.phoneNumber}"></span>
+												</td>
+												<td>
+													<span class="badge"
+														th:classappend="${item.status == 4} ? badge-danger : badge-success"
+														th:text="${statusNames[item.status]}"></span>
+												</td>
+												<td>
+													<a th:href="${'/admin/order/' + item.id}"
+														class="btn btn-sm btn-primary">Chi
+														tiết</a>
+												</td>
+											</tr>
+										</th:block>
+									</tbody>
+								</table>
+							</div>
+							<div class="card-footer"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-4">
+				<div class="row">
+					<div class="col-12">
+						<div class="card mb-4">
+							<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+								<h6 class="m-0 font-weight-bold text-primary">Top sản phẩm bán chạy</h6>
+							</div>
+							<div class="card-body pb-0">
+								<th:block th:each="product : ${topSales}">
+									<div class="mb-3 product-item">
+										<a th:href="${'/admin/product/' + product.id}" class="item-wrapper">
+											<div class="item-avatar">
+												<img th:src="${product.avatar}" th:alt="${product.name}">
+											</div>
+											<div class="item-info">
+												<p th:text="${product.name}"></p>
+												<p>Đã bán [[${product.quanlity}]] sản phẩm</p>
+											</div>
+										</a>
+									</div>
+								</th:block>
+							</div>
+							<div class="card-footer text-center pt-0">
+								<a class="m-0 small text-primary card-link" th:href="@{/admin/product}">Xem Tất Cả <i
+										class="fas fa-chevron-right"></i></a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 
 	</div>
 
 	<th:block id="dashboard-script">
-
+		<script th:inline="javascript">
+			var g_aEarnings = /*[[${earningList}]]*/'default';
+			var test = /*[[${topSales}]]*/'default';
+		</script>
+		<script th:src="@{/common/chartjs/chart.min.js}"></script>
+		<script th:src="@{/admin/js/dashboard.js}"></script>
 	</th:block>
 </body>
+
 </html>

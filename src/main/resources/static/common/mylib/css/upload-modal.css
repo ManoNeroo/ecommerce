@@ -1,0 +1,131 @@
+.e-upload-overlay {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1060;
+    position: fixed;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: all ease-in-out 0.3s;
+	opacity: 0;
+	visibility: hidden;
+}
+
+.e-upload-htmlbody {
+    overflow: hidden;
+}
+
+.e-upload.active, .e-upload-overlay.active{
+	visibility: visible;
+	opacity: 1;
+}
+
+.e-upload {
+	transition: all ease-in-out 0.3s;
+	visibility: hidden;
+	opacity: 0;
+	background: #fff;
+	border-radius: 4px;
+	box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
+	width: 420px;
+	border: 1px solid #ccc;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 1061;
+}
+
+.e-upload .e-upload-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 16px 24px 8px 24px;
+}
+
+.e-upload .e-upload-header .e-upload-title {
+	font-size: 20px;
+	font-weight: 500;
+	color: #000;
+	margin: 0;
+}
+
+.e-upload .e-upload-icon {
+	color: rgba(0, 0, 0, 0.75);
+}
+
+.e-upload .e-upload-icon svg {
+	width: 18px;
+	height: 18px;
+	fill: currentColor;
+}
+
+.e-upload .e-upload-btn {
+	outline: none;
+	border: none;
+	cursor: pointer;
+	border-radius: 3px;
+	padding: 6px 10px;
+	line-height: 16px;
+}
+
+.e-upload .e-upload-btn:hover {
+	background: #dee0e2;
+}
+
+.e-upload .e-upload-body {
+	padding: 8px 24px 24px 24px;
+}
+
+.e-upload .e-upload-body label {
+	color: #000 !important;
+	display: block;
+	margin-bottom: 6px;
+}
+
+.e-upload .e-upload-resource {
+	display: flex;
+	align-items: center;
+}
+
+.e-upload .e-upload-resource .e-upload-resource-input {
+	flex: 1;
+	height: 36px;
+	border: 1px solid #ced4da;
+	border-radius: 0.25rem;
+	background: #fff;
+	color: #000;
+	padding: 0 10px;
+}
+
+.e-upload .e-upload-resource .e-upload-resource-input:focus {
+	border-color: #bac8f3;
+	outline: 0;
+}
+
+.e-upload .e-upload-resource .e-upload-file-exp {
+	padding: 6px 10px;
+	margin-left: 4px;
+}
+
+.e-upload .e-upload-resource .e-upload-file-exp svg {
+	width: 22px;
+	height: 22px;
+}
+
+.e-upload .e-upload-footer {
+	padding: 12px 24px 16px 24px;
+	border-top: 1px solid #ccc;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.e-upload .e-upload-footer .e-upload-btn {
+	padding: 8px 12px;
+}
+
+.e-upload .e-upload-footer .e-upload-btn:not(:first-child) {
+	margin-left: 8px;
+}

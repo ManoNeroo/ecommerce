@@ -77,7 +77,6 @@ public class BrandService implements IBrandService {
 
     @Override
     public List<Brand> getAllBrand(Boolean isEnable, Boolean isSortByName) {
-        // TODO Auto-generated method stub
         return brandRepository.selectAllBrand(isEnable, isSortByName);
     }
     

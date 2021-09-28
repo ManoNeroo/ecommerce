@@ -35,16 +35,17 @@ public class CustomerProductController {
     public String detail(@PathVariable String id, Model model) {
         Product product = productService.getProductById(id);
         if (product != null) {
-            ProductArticle article = articleService.getArticleByProductId(id);
-            ProductTechnicalData technicalData = technicalDataService.getByProductId(id);
-            List<ProductPicture> pictures = pictureService.getByProductId(id);
-            model.addAttribute("product", product);
-            model.addAttribute("article", article);
-            model.addAttribute("technical", technicalData);
-            model.addAttribute("pictures", pictures);
-            return "customer/product/detail";
-        } else {
-            return "customer/error/404";
+            if (product.isStatus()) {
+                ProductArticle article = articleService.getArticleByProductId(id);
+                ProductTechnicalData technicalData = technicalDataService.getByProductId(id);
+                List<ProductPicture> pictures = pictureService.getByProductId(id);
+                model.addAttribute("product", product);
+                model.addAttribute("article", article);
+                model.addAttribute("technical", technicalData);
+                model.addAttribute("pictures", pictures);
+                return "customer/product/detail";
+            }
         }
+        return "customer/error/404";
     }
 }

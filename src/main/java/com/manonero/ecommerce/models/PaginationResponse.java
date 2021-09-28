@@ -1,25 +1,15 @@
 package com.manonero.ecommerce.models;
 
-
-public class PaginationResponse {
-	private Object obj;
+public class PaginationResponse extends Response {
 	private int limit;
 	private int currentPage;
 	private int totalItem;
 
-	public PaginationResponse(Object obj, int limit, int currentPage, int totalItem) {
-		this.obj = obj;
+	public PaginationResponse(Object data, Boolean isSuccess, int limit, int currentPage, int totalItem) {
+		super(data, isSuccess);
 		this.limit = limit;
 		this.currentPage = currentPage;
 		this.totalItem = totalItem;
-	}
-
-	public Object getObj() {
-		return obj;
-	}
-
-	public void setObj(Object obj) {
-		this.obj = obj;
 	}
 
 	public int getLimit() {

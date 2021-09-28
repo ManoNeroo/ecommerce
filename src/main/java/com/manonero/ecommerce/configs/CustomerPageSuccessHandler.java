@@ -33,14 +33,22 @@ public class CustomerPageSuccessHandler implements AuthenticationSuccessHandler 
 
 		System.out.println("Full Name Is: " + userAccount.getFullName());
 
-		HttpSession session = request.getSession();
-		session.setAttribute("user", userAccount);
+		if (userAccount.getStatus() != null) {
+			if (userAccount.getStatus() == true) {
+				HttpSession session = request.getSession();
+				session.setAttribute("user", userAccount);
 
-		String returnUrl = request.getParameter("returnUrl");
-		if (returnUrl != null) {
-			response.sendRedirect(request.getContextPath() + returnUrl);
+				String returnUrl = request.getParameter("returnUrl");
+				if (returnUrl != null) {
+					response.sendRedirect(request.getContextPath() + returnUrl);
+				} else {
+					response.sendRedirect(request.getContextPath() + "/");
+				}
+			} else {
+				response.sendRedirect(request.getContextPath() + "/logout");
+			}
 		} else {
-			response.sendRedirect(request.getContextPath() + "/");
+			response.sendRedirect(request.getContextPath() + "/logout");
 		}
 	}
 

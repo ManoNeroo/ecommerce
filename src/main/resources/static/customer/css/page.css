@@ -702,6 +702,7 @@ body {
 .header-top {
     position: relative;
     background: #cd1818;
+    z-index: 100;
 }
 
 .header-menu {
@@ -853,8 +854,11 @@ body {
     padding: 0.3rem 0rem;
 }
 
-@media screen and (min-width: 768px) {
+.e-upload {
+    transform: translate(-50%, -125%) !important;
+}
 
+@media screen and (min-width: 768px) {
     #sign .modal-dialog {
         max-width: 400px;
     }
@@ -944,6 +948,7 @@ body {
         height: 2.375em;
         width: 90%;
         display: flex;
+        position: relative;
     }
     .header-search form button,
     .header-search form input {
@@ -974,6 +979,109 @@ body {
         padding: 0 0 0 1em;
         border-radius: 0.125em;
         font-size: 0.875em;
+    }
+
+    .header-search-suggest {
+        display: none;
+        position: absolute;
+        overflow: hidden;
+        box-shadow: 0 1px 2px 0 rgb(0 0 0 / 25%);
+        background-color: #fff;
+        z-index: 100;
+        border-radius: 0 0 4px 4px;
+        width: 100%;
+        top: 2.5em;
+        padding: 10px 0;
+    }
+
+    .header-search-suggest.active {
+        display: block;
+    }
+
+    .overlay-suggest {
+        position: fixed;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        opacity: 0.7;
+        background-color: rgba(0, 0, 0, 0.7);
+        width: 100%;
+        height: 100%;
+        transition: all 0.3s;
+        z-index: 99;
+    }
+
+    .header-search-suggest .suggest-title {
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+        color: #6c757d;
+        background-color: #f8f9fa;
+        padding: 2px 16px;
+        margin-bottom: 4px;
+    }
+
+    .header-search-suggest ul li {
+        padding: 4px 16px 4px;
+    }
+    
+    .header-search-suggest ul li.hits-item {
+        padding: 8px 16px;
+    }
+
+    .header-search-suggest ul li.hits-item:not(:last-child) {
+        box-shadow: 0 1px 0 0 #e7e6e6;
+    }
+
+    .header-search-suggest ul li:hover {
+        background-color: #f8f9fa;
+    }
+
+    .header-search-suggest ul li a {
+        color: #495057;
+        display: block;
+        font-size: 13px;
+    }
+    .header-search-suggest .suggest-item {
+        display: flex;
+        justify-content: space-between;
+    }
+    .header-search-suggest .suggest-item .suggest-item-img {
+        width: 60px;
+        height: 60px;
+        margin-right: 8px;
+    }
+    .header-search-suggest .suggest-item .suggest-item-info {
+        flex: 1;
+    }
+    .header-search-suggest .suggest-item .suggest-item-name {
+        font-size: 16px;
+        font-weight: 400;
+        line-height: normal;
+        color: #0168fa;
+        display: -webkit-box !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        word-break: break-word;
+        margin-bottom: 4px;
+    }
+
+    .header-search-suggest .suggest-item .suggest-item-promo-price {
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 24px;
+        color: #cb1c22;
+        text-align: left;
+    }
+
+    .header-search-suggest .suggest-item .suggest-item-price {
+        display: inline-block;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+        color: #919191;
     }
 
     .header-top-menu ul {

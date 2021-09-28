@@ -200,6 +200,36 @@ CREATE TABLE order_item(
 
 GO
 
+-------------------- TẠO VIEW ----------------------------------------
+
+/* CREATE VIEW uv_month_earning
+AS
+SELECT MONTH(od.created_at) AS month, YEAR(od.created_at) AS year, SUM(oi.quanlity) AS total_product, 
+SUM(oi.product_promo_price * oi.quanlity) AS total_earning, 
+(SELECT COUNT(order_id) FROM user_order WHERE order_status=3 AND MONTH(created_at) = MONTH(od.created_at)) as shipped,
+(SELECT COUNT(order_id) FROM user_order WHERE order_status <> 3 AND order_status<>4 AND MONTH(created_at) = MONTH(od.created_at)) as un_shipped,
+(SELECT COUNT(order_id) FROM user_order WHERE order_status=4 AND MONTH(created_at) = MONTH(od.created_at)) as canceled
+FROM user_order od INNER JOIN order_item oi ON od.order_id=oi.order_id
+WHERE YEAR(GETDATE())=YEAR(od.created_at) AND od.order_status=3
+GROUP BY MONTH(od.created_at), YEAR(od.created_at)
+
+GO
+*/
+
+CREATE VIEW uv_month_earning
+AS
+SELECT MONTH(od.created_at) AS month, YEAR(od.created_at) AS year,
+(SELECT ISNULL(SUM(order_item.quanlity), 0) FROM order_item INNER JOIN user_order ON order_item.order_id=user_order.order_id 
+WHERE MONTH(user_order.created_at)=MONTH(od.created_at) AND user_order.order_status=3) product_sold, 
+(SELECT ISNULL(SUM(order_item.product_promo_price * order_item.quanlity), 0) FROM order_item INNER JOIN user_order ON order_item.order_id=user_order.order_id 
+WHERE MONTH(user_order.created_at)=MONTH(od.created_at) AND user_order.order_status=3) earning,
+(SELECT COUNT(order_id) FROM user_order WHERE order_status=3 AND MONTH(created_at) = MONTH(od.created_at)) shipped,
+(SELECT COUNT(order_id) FROM user_order WHERE order_status <> 3 AND order_status<>4 AND MONTH(created_at) = MONTH(od.created_at)) un_shipped,
+(SELECT COUNT(order_id) FROM user_order WHERE order_status=4 AND MONTH(created_at) = MONTH(od.created_at)) canceled
+FROM user_order od
+GROUP BY MONTH(od.created_at), YEAR(od.created_at)
+
+GO
 
 ----------------------------------------------- TẠO TRIGGER ----------------------------------------------------
 
@@ -693,6 +723,34 @@ WHERE brand_id=@id
 
 GO
 
+CREATE PROC usp_selectTopProductSale(@top INT)
+AS
+SELECT TOP(@top) p.product_id, p.brand_id, p.category_id, p.product_name, p.product_avatar, p.product_price_off, p.created_at,
+(SELECT ISNULL(SUM(order_item.quanlity), 0) FROM order_item 
+INNER JOIN product ON product.product_id=p.product_id AND order_item.product_id=p.product_id
+INNER JOIN user_order ON user_order.order_id = order_item.order_id AND user_order.order_status=3
+) product_quanlity, p.product_status, p.updated_at,
+p.product_price, p.product_promo_price, p.product_avg_star, p.product_number_vote
+FROM product p WHERE p.product_status = 1
+ORDER BY product_quanlity DESC
+
+GO
+
+CREATE PROC usp_selectTopProductByName(@top INT, @name NVARCHAR(100), @status BIT)
+AS
+BEGIN
+	IF @status IS NULL
+	BEGIN
+		SELECT TOP(@top) * FROM product WHERE product_name LIKE '%' + @name + '%'
+	END
+	ELSE
+	BEGIN
+		SELECT TOP(@top) * FROM product WHERE product_name LIKE '%' + @name + '%' AND product_status=@status
+	END
+END
+
+GO
+
 CREATE PROC usp_selectNumberCartItem(@cartId VARCHAR(30), @numberItem INT OUTPUT)
 AS
 SELECT @numberItem = number_item FROM cart WHERE cart_id = @cartId
@@ -727,5 +785,29 @@ GO
 CREATE PROC usp_selectByCartIdAndProductId(@cartId VARCHAR(30), @productId VARCHAR(30))
 AS
 SELECT * FROM cart_item WHERE cart_id=@cartId AND product_id=@productId
+
+GO
+
+CREATE PROC usp_updateUserBasicInfo(@id INT, @firstName NVARCHAR(50), @lastName NVARCHAR(50), @phoneNumber VARCHAR(11), @gender BIT)
+AS
+UPDATE user_acc SET user_first_name=@firstName, user_last_name=@lastName, user_phone_number=@phoneNumber, user_gender=@gender WHERE user_id = @id
+
+GO
+
+CREATE PROC usp_updateUserPassword(@id INT, @password VARCHAR(100))
+AS
+UPDATE user_acc SET user_password=@password WHERE user_id=@id
+
+GO
+
+CREATE PROC usp_updateUserAvatar(@id INT, @avatar NVARCHAR(200))
+AS
+UPDATE user_acc SET user_avatar=@avatar WHERE user_id=@id
+
+GO
+
+CREATE PROC usp_updateUserStatus(@id INT, @status BIT)
+AS 
+UPDATE user_acc SET user_status=@status WHERE user_id=@id
 
 GO

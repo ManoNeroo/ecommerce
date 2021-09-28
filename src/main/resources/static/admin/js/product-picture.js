@@ -197,36 +197,27 @@ async function handleClickPictureTab() {
 }
 
 function handleSaveProductPicture(picId) {
-    var input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
-    input.onchange = async function () {
-        var file = this.files[0];
-        const resp = await uploadFile(file);
-        if (resp.isSuccess) {
-            const productId = BASIC_FORM.querySelector("input[name='id']").value;
-            const body = {
-                name: resp.data,
-                productId
-            };
+    const modal = new uploadModal();
+    modal.onUpload(async url => {
+        const productId = BASIC_FORM.querySelector("input[name='id']").value;
+        const body = {
+            name: url,
+            productId
+        };
+        if (picId) {
+            body.id = picId;
+        }
+        const picResp = await httpClient("/api/productpicture", "POST", body);
+        if (picResp.isSuccess) {
             if (picId) {
-                body.id = picId;
-            }
-            const picResp = await httpClient("/api/productpicture", "POST", body);
-            if (picResp.isSuccess) {
-                if (picId) {
-                    imageList.editImage(picResp.data);
-                } else {
-                    imageList.addImage(picResp.data);
-                }
+                imageList.editImage(picResp.data);
             } else {
-                showAlert('failed', 'Lỗi', 'Có lỗi xảy ra, vui lòng thử lại!');
+                imageList.addImage(picResp.data);
             }
         } else {
-            showAlert('failed', 'Lỗi', 'Có lỗi xảy ra trong quá trình upload file!');
+            showAlert('failed', 'Lỗi', 'Có lỗi xảy ra, vui lòng thử lại!');
         }
-    };
-    input.click();
+    })
 }
 
 async function handleDeleteProductPicture(picId) {

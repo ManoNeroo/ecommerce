@@ -25,6 +25,12 @@
                                 </path>
                             </svg>
                         </button>
+                        <div class="header-search-suggest">
+                            <div class="suggest-title"></div>
+                            <ul>
+                               
+                            </ul>
+                        </div>
                     </form>
                 </div>
                 <div class="header-top-menu">
@@ -83,18 +89,18 @@
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                     aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="#"> 
+                                    <a class="dropdown-item" th:href="@{/user/account/profile}">
                                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Hồ sơ
-                                    </a> 
-                                    <a class="dropdown-item" th:href="@{/user/order}"> 
+                                    </a>
+                                    <a class="dropdown-item" th:href="@{/user/order}">
                                         <i class="fa fa-calendar-check mr-2 text-gray-400"></i> Đơn hàng
-                                    </a> 
-                                    <a class="dropdown-item" href="#"> 
+                                    </a>
+                                    <a class="dropdown-item" th:href="@{/user/account/password}">
                                         <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i> Mật khẩu
                                     </a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="javascript:void(0);" data-toggle="modal"
-                                        data-target="#logoutModal"> 
+                                        data-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Đăng xuất
                                     </a>

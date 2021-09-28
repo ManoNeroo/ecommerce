@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{customer/layouts/user-layout :: user-fragment(  
+                                                ~{::title},
+                                                ~{:: #style},
+                                                ~{:: #script},
+                                                ~{:: #main-content}
+                                               )}">
+
+<head>
+    <title>Hồ sơ</title>
+    <th:block id="style">
+        <link rel="stylesheet" th:href="@{/common/mylib/css/upload-modal.css}">
+    </th:block>
+</head>
+
+<body>
+
+    <div id="main-content">
+        <div class="user-page-wrapper">
+            <div class="user-page-header">
+                <h1>Hồ sơ của tôi</h1>
+                <p>Quản lý hồ sơ của bạn</p>
+            </div>
+            <div class="user-page-body">
+                <div class="user-profile-form">
+                    <form id="user-basic-info-form" method="POST">
+                        <input type="hidden" name="userId" th:value="${session.user.id}">
+                        <div class="form-group row mb-25">
+                            <label class="col-3 col-form-label">Tên đăng nhập:</label>
+                            <div class="col-9">
+                                <input type="text" readonly class="form-control-plaintext"
+                                    th:value="${session.user.userName}">
+                            </div>
+                        </div>
+                        <div class="form-group row mb-25">
+                            <label class="col-3 col-form-label">Tên họ:</label>
+                            <div class="col-9">
+                                <input type="text" name="lastName" th:value="${session.user.lastName}"
+                                    class="form-control" placeholder="Nhập tên họ">
+                                <span class="text-danger error lastName-error"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-25">
+                            <label class="col-3 col-form-label">Tên:</label>
+                            <div class="col-9">
+                                <input type="text" name="firstName" th:value="${session.user.firstName}"
+                                    class="form-control" placeholder="Nhập tên">
+                                <span class="text-danger error firstName-error"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-25">
+                            <label class="col-3 col-form-label">Số điện thoại:</label>
+                            <div class="col-9">
+                                <input type="text" name="phoneNumber" th:value="${session.user.phoneNumber}"
+                                    class="form-control" placeholder="Nhập số điện thoại">
+                                <span class="text-danger error phoneNumber-error"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-25">
+                            <label class="col-3 col-form-label">Giới tính</label>
+                            <div class="col-9 d-flex align-items-center">
+                                <div class="form-check form-check-inline">
+                                    <div class="e-radio mr-3">
+                                        <input type="radio" id="radio-male" th:checked="${!session.user.gender}"
+                                            name="gender" value="false">
+                                        <label for="radio-male">Nam</label>
+                                    </div>
+                                    <div class="e-radio">
+                                        <input type="radio" id="radio-female" th:checked="${session.user.gender}"
+                                        name="gender" value="true">
+                                        <label for="radio-female">Nữ</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-3"></label>
+                            <div class="col-9">
+                                <button class="btn btn-danger">Lưu lại</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="user-profile-avatar">
+                    <div class="user-avatar-wrapper">
+                        <img th:src="${session.user.avatar}">
+                    </div>
+                    <button class="btn btn-light" id="change-avatar-btn">Chọn ảnh</button>
+                    <div class="user-avatar-description">
+                        <div>Dụng lượng file tối đa 2 MB</div>
+                        <div>Định dạng:.JPEG, .PNG</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <th:block id="script">
+        <script th:src="@{/common/mylib/js/upload-modal.js}"></script>
+        <script th:src="@{/customer/js/profile-page.js}"></script>
+    </th:block>
+</body>
+
+</html>
