@@ -9,6 +9,22 @@
     max-height: 35.375em;
 }
 
+#cart-item-list .checkbox {
+    line-height: 1.25em;
+}
+
+#cart-item-list .checkbox i {
+    width: 1.25em;
+    height: 1.25em;
+    border-radius: 0.25em;
+    margin-right: 0.375em;
+}
+
+#cart-item-list .checkbox i::before {
+    width: 0.375em;
+    height: 0.85em;
+}
+
 .cart-header {
     display: flex;
     justify-content: space-between;

@@ -374,11 +374,11 @@ body {
 }
 
 .checkbox {
-    font-size: 0.875em;
+    font-size: 0.875rem;
     font-weight: 400;
     color: #4d4d4d;
     cursor: pointer;
-    line-height: 1.25em;
+    line-height: 1rem;
 }
 
 .checkbox > input[type="checkbox"] {
@@ -393,12 +393,12 @@ body {
 .checkbox i {
     display: inline-block;
     vertical-align: middle;
-    width: 1.25em;
-    height: 1.25em;
-    border-radius: 0.25em;
+    margin-right: 0.3125rem;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 0.25rem;
     border: solid 1px #97a3b9;
     background-color: #fff;
-    margin-right: 0.375em;
     position: relative;
     bottom: 1px;
 }
@@ -406,15 +406,15 @@ body {
 .checkbox i::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0.375em;
+    top: 50%;
+    left: 50%;
     display: table;
-    width: 0.375em;
-    height: 0.85em;
+    width: 0.3125rem;
+    height: 0.625rem;
     border: 2px solid #fff;
     border-top-width: 0;
     border-left-width: 0;
-    transform: rotate(45deg);
+    transform: translate(-50%, -65%) rotate(45deg);
 }
 
 .e-radio {
@@ -838,6 +838,10 @@ body {
     margin-top: -1.5rem;
 }
 
+#sign form .checkbox > input[type="checkbox"]:checked ~ i {
+    box-shadow:0 0 0 .2rem rgba(203, 28, 34, 0.25);
+}
+
 #sign .form-title {
     margin: -2rem 0rem 2rem;
 }
@@ -1024,7 +1028,7 @@ body {
     .header-search-suggest ul li {
         padding: 4px 16px 4px;
     }
-    
+
     .header-search-suggest ul li.hits-item {
         padding: 8px 16px;
     }

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+    th:fragment="product-fragment (title, style, script, mainContent)">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title th:replace="${title}">Blank Page</title>
+    <link rel="shortcut icon" th:href="@{/customer/img/favicon.ico}" type="image/x-icon">
+    <link th:href="@{/common/bootstrap/css/bootstrap.min.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/common/swiper/swiper.min.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/common/fontawesome/css/all.min.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/customer/css/page.css}" rel="stylesheet" type="text/css" />
+    <th:block th:replace="${style} ?: ~{}"></th:block>
+</head>
+
+<body>
+    <header th:replace="~{/customer/fragments/header :: header}"></header>
+
+    <main id="main">
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-12">
+                    <section class="section" style="padding: 0.25em">
+                        <div class="section-body" style="padding: 0">
+                            <div th:replace="~{/customer/fragments/another :: pageSlider}"></div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div th:replace="${mainContent} ?: ~{}">
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{/customer/fragments/footer :: footer}"></footer>
+    <th:block sec:authorize="isAnonymous()">
+        <div th:replace="~{/customer/fragments/another :: loginModal}"></div>
+    </th:block>
+    <div th:replace="~{/customer/fragments/another :: logoutModal}"></div>
+    <div th:replace="~{/customer/fragments/another :: confirmModal}"></div>
+    <div th:replace="~{/customer/fragments/another :: pageLoading}"></div>
+    <div th:replace="~{/customer/fragments/another :: pageAlert}"></div>
+
+    <script>
+        var g_sUserName;
+        var g_bIsAuthenticated = false;
+    </script>
+    <th:block sec:authorize="isAuthenticated()">
+        <script th:inline="javascript">
+            g_sUserName = /*[[${#authentication.principal.username}]]*/'default';
+            g_bIsAuthenticated = true;
+            var g_iUserId = /*[[${session.user.id}]]*/'default';
+        </script>
+    </th:block>
+    <script th:src="@{/common/jquery/jquery.min.js}"></script>
+    <script th:src="@{/common/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/common/swiper/swiper.min.js}"></script>
+    <script th:src="@{/common/mylib/js/utils.js}"></script>
+    <script th:src="@{/customer/js/page.js}"></script>
+    <script th:src="@{/customer/js/product-layout.js}"></script>
+    <th:block th:replace="${script} ?: ~{}"></th:block>
+</body>
+
+</html>

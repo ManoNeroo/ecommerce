@@ -364,5 +364,172 @@
     left: 50%;
     width: auto;
     height: 75%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
+}
+
+.product-page-filter .filter-block {
+    margin-bottom: 30px;
+}
+
+.product-page-filter .filter-block .filter-block-title {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1;
+    color: #212529;
+    margin-bottom: 21px;
+}
+
+.product-page-filter .filter-block .filter-block-checklist.filter-two-col {
+    display: flex;
+    align-items: flex-start;
+    flex-flow: row wrap;
+    margin-bottom: -14px;
+}
+
+.product-page-filter .filter-block .filter-block-checklist .checkbox-item {
+    margin-bottom: 14px;
+}
+
+.product-page-filter .filter-block .filter-block-checklist.filter-two-col > .checkbox-item {
+    flex: 1 50%;
+    max-width: 50%;
+}
+
+.section-product-filter {
+    padding: 0 1em;
+    margin-bottom: 25px;
+}
+
+.section-product-filter .filter-list {
+    display: flex;
+    flex: 1;
+    align-items: center;
+}
+
+.section-product-filter .filter-list > span {
+    font-size: 14px;
+    line-height: 14px;
+    color: #555;
+    margin-right: 20px;
+    display: inline-block;
+}
+
+.section-product-filter .filter-list .filter-items {
+    position: relative;
+    display: inline-flex;
+    vertical-align: middle;
+}
+
+.section-product-filter .filter-list .filter-items ul {
+    display: inline-flex;
+}
+
+.section-product-filter .filter-list .filter-items ul li span {
+    color: #8392a5;
+    border: solid 1px #ced4da;
+    cursor: pointer;
+    padding: 7px 12px;
+    color: #99a2aa;
+    display: inline-block;
+    font-weight: 300;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 14px;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
+        box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    cursor: pointer;
+}
+
+.section-product-filter .filter-list .filter-items ul li:first-child span {
+    border-top-left-radius: 4px !important;
+    border-bottom-left-radius: 4px !important;
+}
+
+.section-product-filter .filter-list .filter-items ul li:hover > span {
+    background-color: #99a2aa;
+    color: #fff;
+}
+
+.section-product-filter .filter-list .filter-items ul li:last-child span {
+    border-top-right-radius: 4px !important;
+    border-bottom-right-radius: 4px !important;
+}
+
+.section-product-filter .filter-list .filter-items ul li:not(:first-child) span,
+.section-product-filter .filter-list .filter-items ul li:not(:last-child) span {
+    border-radius: 0;
+    margin-left: -1px;
+}
+
+.section-product-filter .filter-list .filter-items ul li.active span {
+    border: solid 1px #cb1c22;
+    background-color: #cb1c22;
+    color: #fff;
+}
+
+
+#product-list-null {
+    display: none
+}
+
+#page-pagination {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 0 0 0.375em 0.375em
+}
+
+#page-pagination ul {
+    padding: .675em 1em 1.5em
+}
+
+#product-list-wrapper #product-list-section {
+    min-height: 51.75rem
+}
+
+#search-null {
+    width: 100%;
+    height: 51.75rem;
+    box-shadow: 0 1px 1px 0 rgb(0 0 0 / 5%);
+    border-radius: .125em;
+    overflow: hidden;
+    background: #fff
+}
+
+#search-null > div {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateY(70%);
+}
+
+#search-null > div div:nth-child(1) {
+    background-position: 50%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 200px;
+    height: 200px;
+    background-image: url(/common/mylib/img/noti-search.png)
+}
+
+#search-null > div div:nth-child(2) {
+    margin: 0;
+    font-size: 1.125em;
+    line-height: 1.4;
+    color: rgba(0, 0, 0, .8)
+}
+
+#product-list-wrapper .section {
+    margin-bottom: 0
+}
+
+#product-list-wrapper .section.none-radius-bottom {
+    border-radius: 0.375em 0.375em 0 0
 }

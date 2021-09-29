@@ -48,4 +48,9 @@ public class CustomerProductController {
         }
         return "customer/error/404";
     }
+
+    @GetMapping()
+    private String index() {
+        return "customer/product/index";
+    }
 }

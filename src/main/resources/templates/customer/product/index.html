@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{customer/layouts/product-layout :: product-fragment(  
+                                                ~{::title},
+                                                ~{:: #style},
+                                                ~{:: #script},
+                                                ~{:: #main-content}
+                                               )}">
+
+<head>
+    <title>Sản phẩm</title>
+    <th:block id="style">
+        <link th:href="@{/common/mylib/css/pagination.css}" rel="stylesheet" type="text/css" />
+        <link th:href="@{/customer/css/product-page.css}" rel="stylesheet" type="text/css" />
+    </th:block>
+</head>
+
+<body>
+
+    <div id="main-content" class="row">
+        <div class="col-3">
+            <div class="product-page-filter">
+                <div class="filter-block">
+                    <div class="filter-block-title">Danh mục sản phẩm</div>
+                    <div id="list-category" class="filter-block-checklist filter-two-col"></div>
+                </div>
+                <div class="filter-block">
+                    <div class="filter-block-title">Hãng sản xuất</div>
+                    <div id="list-brand" class="filter-block-checklist filter-two-col"></div>
+                </div>
+                <div class="filter-block">
+                    <div class="filter-block-title">Mức giá</div>
+                    <div id="list-pricerange" class="filter-block-checklist"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-9" id="product-list-wrapper">
+            <div class="section" id="product-list-section">
+                <div class="section-product-filter">
+                    <div class="filter-list">
+                        <span>Ưu tiên theo: </span>
+                        <div class="filter-items">
+                            <ul id="filter-sort">
+                                <li class="active" data-sort=''>
+                                    <span>Mặc định</span>
+                                </li>
+                                <li data-sort='false'>
+                                    <span>Giá cao</span>
+                                </li>
+                                <li data-sort='true'>
+                                    <span>Giá thấp</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="section-body" id="product-list">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div id="page-pagination"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-9" id="product-list-null">
+            <div id="search-null">
+                <div>
+                    <div></div>
+                    <div>Không tìm thấy sản phẩm nào!</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block id="script">
+        <script th:inline="javascript">
+
+        </script>
+        <script th:src="@{/common/mylib/js/pagination.js}"></script>
+        <script src="/customer/js/product2-page.js"></script>
+    </th:block>
+</body>
+
+</html>

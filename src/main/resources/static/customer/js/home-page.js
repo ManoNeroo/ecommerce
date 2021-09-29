@@ -1,16 +1,9 @@
 (function () {
-    new Swiper('#home-slider', {
-        loop: true,
-        autoplay: {
-            delay: 6e3,
-            disableOnInteraction: false,
-        }
-    });
     const TOP_PRODUCT = 12;
     const TOP_PRODUCT_CATEGORYIDS = "1,2,3"
-    const TOP_PRODUCT_TITLE = [{ title: "Điện thoại nổi bật", link: "/product?category=1" },
-    { title: "Laptop bán chạy", link: "/product?category=2" },
-    { title: "Tablet hot", link: "/product?category=3" }];
+    const TOP_PRODUCT_TITLE = [{ title: "Điện thoại nổi bật", link: "/product?category=dien thoai" },
+    { title: "Laptop bán chạy", link: "/product?category=laptop" },
+    { title: "Tablet hot", link: "/product?category=tablet" }];
 
     loadTopProduct();
 

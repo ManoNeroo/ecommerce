@@ -64,7 +64,7 @@
 			let html = '';
 			resp.data.forEach(category => {
 				html += `<li class="swiper-slide">
-						<a href="/product?category=${category.id}">
+						<a href="/product?category=${category.name}">
 							<i>
 								<svg viewBox="0 0 24 24">
 									<path
