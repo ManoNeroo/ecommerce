@@ -56,12 +56,17 @@ public class UserAccount {
 	@JoinTable(name = "user_role_detail", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Collection<UserRole> roles;
 
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "notification_topic_detail", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "topic_id"))
+	private Collection<NotificationTopic> notificationTopics;
+
 	public UserAccount() {
 
 	}
 
 	public UserAccount(int id, String userName, String password, String firstName, String lastName, String phoneNumber,
-			boolean gender, String avatar, Boolean status, Collection<UserRole> roles) {
+			boolean gender, String avatar, Boolean status, Collection<UserRole> roles,
+			Collection<NotificationTopic> notificationTopics) {
 		this.id = id;
 		this.userName = userName;
 		this.password = password;
@@ -72,6 +77,7 @@ public class UserAccount {
 		this.avatar = avatar;
 		this.status = status;
 		this.roles = roles;
+		this.notificationTopics = notificationTopics;
 	}
 
 	public Boolean getStatus() {
@@ -127,7 +133,7 @@ public class UserAccount {
 	}
 
 	public String getFullName() {
-		return firstName + " " + lastName;
+		return lastName + " " + firstName;
 	}
 
 	public void setFirstName(String firstName) {
@@ -148,6 +154,14 @@ public class UserAccount {
 
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+
+	public Collection<NotificationTopic> getNotificationTopics() {
+		return notificationTopics;
+	}
+
+	public void setNotificationTopics(Collection<NotificationTopic> notificationTopics) {
+		this.notificationTopics = notificationTopics;
 	}
 
 	public Collection<UserRole> getRoles() {

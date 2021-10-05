@@ -9,20 +9,22 @@
 	<title th:replace="${title}">Blank Page</title>
 	<link th:href="@{/common/fontawesome/css/all.min.css}" rel="stylesheet" type="text/css" />
 	<link th:href="@{/common/bootstrap/css/bootstrap.min.css}" rel="stylesheet" type="text/css" />
+	<link th:href="@{/common/daterangepicker/daterangepicker.min.css}" rel="stylesheet" type="text/css" />
 	<link th:href="@{/admin/css/admin.min.css}" rel="stylesheet" type="text/css" />
 	<link th:href="@{/admin/css/page.css}" rel="stylesheet" type="text/css" />
+	<link th:href="@{/admin/css/notification.css}" rel="stylesheet" type="text/css" />
 	<th:block th:replace="${style} ?: ~{}"></th:block>
 </head>
 
 <body id="page-top">
 	<div id="wrapper">
 		<!-- Sidebar -->
-		<ul th:replace="~{/admin/fragments/sidebar :: sidebar}"></ul>
+		<ul th:replace="~{admin/fragments/sidebar :: sidebar}"></ul>
 		<!-- Sidebar -->
 		<div id="content-wrapper" class="d-flex flex-column">
 			<div id="content">
 				<!-- ToolBar -->
-				<nav th:replace="~{/admin/fragments/toolbar :: toolbar}"></nav>
+				<nav th:replace="~{admin/fragments/toolbar :: toolbar}"></nav>
 				<!-- Toolbar -->
 
 				<!-- Main content-->
@@ -53,11 +55,11 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<div id="page-loading" th:fragment="pageLoading">
 				<img class="loading-gif" th:src="@{/common/mylib/img/loading.gif}" />
 			</div>
-		
+
 			<div class="alert" id="page-alert" role="alert" th:fragment="pageAlert">
 				<button type="button" class="close">
 					<span aria-hidden="true">×</span>
@@ -68,7 +70,7 @@
 				<span class="message">Thành công!</span>
 			</div>
 			<!-- Footer -->
-			<footer th:replace="~{/admin/fragments/footer :: footer}"> </footer>
+			<footer th:replace="~{admin/fragments/footer :: footer}"> </footer>
 			<!-- Footer -->
 		</div>
 	</div>
@@ -79,16 +81,23 @@
 
 	<script th:inline="javascript">
 		var g_aUserRoles = /*[[${#authentication.getAuthorities()}]]*/'default';
+		var g_aNotificationTopics = /*[[${session.user.notificationTopics}]]*/'default';
 		var g_iUserId = /*[[${session.user.id}]]*/'default';
+		var g_sUserName = /*[[${#authentication.principal.username}]]*/'default';
 	</script>
 
 	<script th:src="@{/common/jquery/jquery.min.js}"></script>
 	<script th:src="@{/common/jquery/jquery.easing.min.js}"></script>
 	<script th:src="@{/common/bootstrap/js/bootstrap.bundle.min.js}"></script>
+	<script th:src="@{/common/sockjs/sockjs.min.js}"></script>
+	<script th:src="@{/common/stompjs/stomp.min.js}"></script>
+	<script th:src="@{/common/moment/moment.min.js}"></script>
+	<script th:src="@{/common/daterangepicker/daterangepicker.min.js}"></script>
 	<script th:src="@{/admin/js/admin.min.js}"></script>
 	<script th:src="@{/common/mylib/js/utils.js}"></script>
 	<script th:src="@{/admin/js/page.js}"></script>
 	<th:block th:replace="${script} ?: ~{}"></th:block>
+	<script th:src="@{/admin/js/notification.js}"></script>
 </body>
 
 </html>

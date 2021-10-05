@@ -82,38 +82,6 @@ public class OrderController {
         return "admin/error/404";
     }
 
-    @GetMapping("/cancel/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_EMPLOYEE')")
-    public String cancel(@PathVariable String id) {
-        Order order = orderService.getById(id);
-        if (order != null) {
-            if (order.getStatus() != 3 && order.getStatus() != 4) {
-                OrderRequest request = new OrderRequest();
-                request.setOrderId(id);
-                request.setStatus(4);
-                orderService.updateOrderStatus(request);
-                return "redirect:/admin/order/" + id;
-            }
-        }
-        return "admin/error/404";
-    }
-
-    @GetMapping("/status/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_EMPLOYEE')")
-    public String changeStatus(@PathVariable String id, @RequestParam int status) {
-        Order order = orderService.getById(id);
-        if (order != null) {
-            if (order.getStatus() < status) {
-                OrderRequest request = new OrderRequest();
-                request.setOrderId(id);
-                request.setStatus(status);
-                orderService.updateOrderStatus(request);
-                return "redirect:/admin/order/" + id;
-            }
-        }
-        return "admin/error/404";
-    }
-
     @PostMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_EMPLOYEE')")
     public String updateCusInfo(@PathVariable String id, HttpServletRequest request) {

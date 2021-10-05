@@ -111,7 +111,7 @@ public class ProductRepository implements IProductRepository {
                         + "%'";
             }
         }
-        if (status != null) {
+        if (status != null && onlyEnable == null) {
             if (whereQueryString.equals("")) {
                 whereQueryString += " WHERE p.product_status = " + (status ? 1 : 0);
             } else {

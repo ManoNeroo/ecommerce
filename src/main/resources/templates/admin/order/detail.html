@@ -31,7 +31,7 @@
                 <div class="order-id">
                     <span>MÃ ĐƠN HÀNG: [[${order.id}]]</span>
                     <span>|</span>
-                    <span>[[${statusNames[order.status]}]]</span>
+                    <span id="order-status-text">[[${statusNames[order.status]}]]</span>
                 </div>
             </div>
             <div class="e-divide-t1">
@@ -124,22 +124,16 @@
                     </div>
                     <div class="order-action">
                         <th:block th:if="${order.status != 4 && order.status != 3}">
-                            <a class="btn btn-danger" th:href="${'/admin/order/cancel/' + order.id}"
-                                onclick="return confirm('Xác nhận hủy đơn hàng này?')">Hủy đơn hàng</a>
+                            <button class="btn btn-danger" id="btn-cancel-order">Hủy đơn hàng</button>
                         </th:block>
                         <th:block th:if="${order.status == 0}">
-                            <a class="btn btn-outline-info" onclick="return confirm('Xác nhận đơn hàng này?')"
-                                th:href="${'/admin/order/status/' + order.id + '?status=1'}">Xác nhận đơn hàng</a>
+                            <button class="btn btn-outline-info" id="btn-confirm-order">Xác nhận đơn hàng</button>
                         </th:block>
                         <th:block th:if="${order.status == 1}">
-                            <a class="btn btn-outline-info"
-                                onclick="return confirm('Cập nhật trạng thái đơn hàng đang giao?')"
-                                th:href="${'/admin/order/status/' + order.id + '?status=2'}">Xác nhận đang giao</a>
+                            <button class="btn btn-outline-info" id="btn-confirm-shipping">Xác nhận đang giao</button>
                         </th:block>
                         <th:block th:if="${order.status == 2}">
-                            <a class="btn btn-outline-info"
-                                onclick="return confirm('Cập nhật trạng thái đơn hàng đã được giao?')"
-                                th:href="${'/admin/order/status/' + order.id + '?status=3'}">Xác nhận đã Giao</a>
+                            <button class="btn btn-outline-info" id="btn-confirm-shipped">Xác nhận đã Giao</button>
                         </th:block>
                     </div>
                 </div>
@@ -208,6 +202,7 @@
 
     <th:block id="script">
         <script th:inline="javascript">
+            var g_sOrderId = /*[[${order.id}]]*/'default';
         </script>
         <script th:src="@{/admin/js/orderdetail-page.js}"></script>
     </th:block>

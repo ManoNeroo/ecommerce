@@ -71,8 +71,8 @@ CREATE TABLE brand(
 	brand_name NVARCHAR(50) NOT NULL UNIQUE,
 	brand_logo NVARCHAR(500) NOT NULL,
 	brand_status BIT DEFAULT 1,
-	created_at DATE DEFAULT GETDATE(),
-	updated_at DATE DEFAULT GETDATE()
+	created_at DATETIME DEFAULT GETDATE(),
+	updated_at DATETIME DEFAULT GETDATE()
 )
 
 GO
@@ -82,8 +82,8 @@ CREATE TABLE category(
 	category_name NVARCHAR(50) NOT NULL UNIQUE,
 	category_logo NVARCHAR(500) NOT NULL,
 	category_status BIT DEFAULT 1,
-	created_at DATE DEFAULT GETDATE(),
-	updated_at DATE DEFAULT GETDATE()
+	created_at DATETIME DEFAULT GETDATE(),
+	updated_at DATETIME DEFAULT GETDATE()
 )
 
 GO
@@ -105,14 +105,15 @@ CREATE TABLE product(
 	product_name NVARCHAR(100) NOT NULL UNIQUE,
 	product_quanlity INT NOT NULL,
 	product_avg_star FLOAT DEFAULT 0,
+	product_preavg_star FLOAT DEFAULT 0,
 	product_price INT NOT NULL, -- Giá gốc của sản phẩm
 	product_price_off INT, -- Giá được giảm
 	product_promo_price INT, -- Giá khuyến mãi (= product_price - product_price_off)
 	product_avatar NVARCHAR(500) NOT NULL,
 	product_number_vote INT DEFAULT 0,
 	product_status BIT DEFAULT 1,
-	created_at DATE DEFAULT GETDATE(),
-	updated_at DATE DEFAULT GETDATE(),
+	created_at DATETIME DEFAULT GETDATE(),
+	updated_at DATETIME DEFAULT GETDATE(),
 	CONSTRAINT product_brand_id_FK FOREIGN KEY(brand_id) REFERENCES brand(brand_id),
 	CONSTRAINT product_category_id_FK FOREIGN KEY(category_id) REFERENCES category(category_id)
 )
@@ -177,8 +178,8 @@ CREATE TABLE user_order(
 	buyer_full_name NVARCHAR(100) NOT NULL,
 	buyer_phone_number VARCHAR(11) NOT NULL,
 	buyer_gender BIT NOT NULL,
-	created_at DATE DEFAULT GETDATE(),
-	updated_at DATE DEFAULT GETDATE(),
+	created_at DATETIME DEFAULT GETDATE(),
+	updated_at DATETIME DEFAULT GETDATE(),
 	CONSTRAINT user_order_user_id_FK FOREIGN KEY(user_id) REFERENCES user_acc(user_id)
 )
 
@@ -192,11 +193,96 @@ CREATE TABLE order_item(
 	product_price INT NOT NULL,
 	product_avatar NVARCHAR(500) NOT NULL,
 	quanlity INT NOT NULL,
-	created_at DATE DEFAULT GETDATE(),
+	created_at DATETIME DEFAULT GETDATE(),
 	CONSTRAINT order_item_order_id_product_id_PK PRIMARY KEY(order_id, product_id),
 	CONSTRAINT order_item_product_id_FK FOREIGN KEY(product_id) REFERENCES product(product_id),
 	CONSTRAINT order_item_order_id_FK FOREIGN KEY(order_id) REFERENCES user_order(order_id)
 )
+
+GO
+
+CREATE TABLE product_purchased(
+	user_id INT NOT NULL,
+	product_id VARCHAR(30) NOT NULL,
+	has_evaluated BIT NOT NULL,
+	CONSTRAINT product_purchased_user_id_has_evaluated_PK PRIMARY KEY(user_id, product_id),
+	CONSTRAINT product_purchased_product_id_FK FOREIGN KEY(product_id) REFERENCES product(product_id),
+	CONSTRAINT product_purchased_user_id_FK FOREIGN KEY(user_id) REFERENCES user_acc(user_id)
+)
+
+GO
+
+CREATE TABLE product_comment(
+	comment_id INT IDENTITY PRIMARY KEY,
+	product_id VARCHAR(30) NOT NULL,
+	user_id INT NOT NULL,
+	comment_content NVARCHAR(500) NOT NULL,
+	comment_parent_id INT NOT NULL DEFAULT 0,
+	created_at DATETIME NOT NULL DEFAULT GETDATE(),
+	CONSTRAINT product_comment_user_id_FK FOREIGN KEY(user_id) REFERENCES user_acc(user_id),
+	CONSTRAINT product_comment_product_id_FK FOREIGN KEY(product_id) REFERENCES product(product_id)
+)
+
+GO
+
+CREATE TABLE product_evaluation(
+	evaluation_id INT IDENTITY PRIMARY KEY,
+	product_id VARCHAR(30) NOT NULL,
+	user_id INT NOT NULL,
+	evaluation_content NVARCHAR(500) NOT NULL,
+	evaluation_star INT NOT NULL CHECK(evaluation_star >= 1 AND evaluation_star <= 5),
+	evaluation_parent_id INT NOT NULL DEFAULT 0,
+	created_at DATETIME NOT NULL DEFAULT GETDATE(),
+	CONSTRAINT product_evaluation_user_id_FK FOREIGN KEY(user_id) REFERENCES user_acc(user_id),
+	CONSTRAINT product_evaluation_product_id_FK FOREIGN KEY(product_id) REFERENCES product(product_id)
+)
+
+GO
+
+CREATE TABLE notification_topic(
+	topic_id VARCHAR(50) PRIMARY KEY 
+)
+
+GO
+
+CREATE TABLE notification_topic_detail(
+	user_id INT NOT NULL,
+	topic_id VARCHAR(50) NOT NULL,
+	CONSTRAINT notification_topic_detail_user_id_topic_id_PK PRIMARY KEY(user_id, topic_id),
+	CONSTRAINT notification_topic_detail_user_id_FK FOREIGN KEY(user_id) REFERENCES user_acc(user_id),
+	CONSTRAINT notification_topic_detail_topic_id_FK FOREIGN KEY(topic_id) REFERENCES notification_topic(topic_id)
+)
+
+GO
+
+CREATE TABLE notification(
+	notification_id INT IDENTITY PRIMARY KEY,
+	notification_title NVARCHAR(100) NOT NULL,
+	notification_content NVARCHAR(500) NOT NULL,
+	notification_link NVARCHAR(500) NOT NULL,
+	has_read BIT NOT NULL DEFAULT 0,
+	notification_img NVARCHAR(500) NOT NULL,
+	topic_id VARCHAR(50) NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT GETDATE(),
+	CONSTRAINT notification_topic_id_FK FOREIGN KEY(topic_id) REFERENCES notification_topic(topic_id)
+)
+
+GO
+
+------------------- TẠO INDEX --------------------------------------
+
+CREATE INDEX uix_product_purchased 
+ON product_purchased(user_id, product_id)
+
+GO
+
+CREATE INDEX uix_product_comment
+ON product_comment(user_id, product_id, comment_parent_id)
+
+GO
+
+CREATE INDEX uix_product_evaluation
+ON product_evaluation(user_id, product_id, evaluation_parent_id, evaluation_star)
 
 GO
 
@@ -231,7 +317,106 @@ GROUP BY MONTH(od.created_at), YEAR(od.created_at)
 
 GO
 
+CREATE VIEW uv_product_star
+AS
+SELECT p.product_id, p.product_number_vote, p.product_avg_star,  
+(SELECT count(evaluation_id) FROM product_evaluation WHERE evaluation_star = 1 AND evaluation_parent_id = 0 AND product_id=p.product_id) one_star,
+(SELECT count(evaluation_id) FROM product_evaluation WHERE evaluation_star = 2 AND evaluation_parent_id = 0 AND product_id=p.product_id) two_stars,
+(SELECT count(evaluation_id) FROM product_evaluation WHERE evaluation_star = 3 AND evaluation_parent_id = 0 AND product_id=p.product_id) three_stars,
+(SELECT count(evaluation_id) FROM product_evaluation WHERE evaluation_star = 4 AND evaluation_parent_id = 0 AND product_id=p.product_id) four_stars,
+(SELECT count(evaluation_id) FROM product_evaluation WHERE evaluation_star = 5 AND evaluation_parent_id = 0 AND product_id=p.product_id) five_stars
+FROM product p
+
+GO
+
+CREATE VIEW uv_user_notification
+AS
+SELECT n.*, nd.user_id FROM notification n INNER JOIN  notification_topic_detail nd ON n.topic_id=nd.topic_id
+
+GO
+
 ----------------------------------------------- TẠO TRIGGER ----------------------------------------------------
+
+CREATE TRIGGER utg_afterUpdateEvaluation
+ON product_evaluation
+AFTER UPDATE
+AS
+BEGIN
+	DECLARE @avgStar FLOAT
+	DECLARE @preAvgStar FLOAT
+	DECLARE @numberVote INT
+	DECLARE @star INT
+	DECLARE @productId VARCHAR(30)
+	DECLARE @total FLOAT
+	DECLARE @parentId INT
+	SELECT @productId=product_id, @star=evaluation_star, @parentId=evaluation_parent_id FROM inserted
+	IF @parentId=0 
+	BEGIN
+		SELECT @avgStar=product_avg_star, @preAvgStar=product_preavg_star, @numberVote=product_number_vote FROM product WHERE product_id = @productId
+		SET @total = @preAvgStar * (@numberVote - 1)
+		SET @preAvgStar = @avgStar
+		SET @avgStar = (@total + @star)/@numberVote
+		UPDATE product SET product_avg_star=@avgStar, product_preavg_star=@preAvgStar WHERE product_id=@productId
+	END
+END
+
+GO
+
+CREATE TRIGGER utg_afterInsertEvaluation
+ON product_evaluation
+AFTER INSERT
+AS
+BEGIN
+	DECLARE @avgStar FLOAT
+	DECLARE @numberVote INT
+	DECLARE @star INT
+	DECLARE @productId VARCHAR(30)
+	DECLARE @total FLOAT
+	DECLARE @parentId INT
+	SELECT @productId=product_id, @star=evaluation_star, @parentId=evaluation_parent_id FROM inserted
+	IF @parentId=0 
+	BEGIN
+		SELECT @avgStar=product_avg_star, @numberVote=product_number_vote FROM product WHERE product_id = @productId
+		SET @total = @avgStar * @numberVote
+		SET @numberVote = @numberVote + 1
+		SET @avgStar = (@total + @star)/@numberVote
+		UPDATE product SET product_avg_star=@avgStar, product_number_vote=@numberVote WHERE product_id=@productId
+	END
+END
+
+GO
+
+CREATE TRIGGER utg_afterDeleteEvaluation
+ON product_evaluation
+AFTER DELETE
+AS
+BEGIN
+	DECLARE @avgStar FLOAT
+	DECLARE @numberVote INT
+	DECLARE @star INT
+	DECLARE @productId VARCHAR(30)
+	DECLARE @total FLOAT
+	DECLARE @parentId INT
+	SELECT @productId=product_id, @star=evaluation_star, @parentId=evaluation_parent_id FROM deleted
+	IF @parentId=0
+	BEGIN
+		SELECT @avgStar=product_avg_star, @numberVote=product_number_vote FROM product WHERE product_id = @productId
+		SET @total = @avgStar * @numberVote
+		SET @numberVote = @numberVote - 1
+		IF @numberVote > 0
+		BEGIN
+			SET @avgStar = (@total - @star)/@numberVote
+		END
+		ELSE
+		BEGIN
+			SET @numberVote=0
+			SET @avgStar = 0
+		END
+		UPDATE product SET product_avg_star=@avgStar, product_number_vote=@numberVote WHERE product_id=@productId
+	END
+END
+
+GO
 
 CREATE TRIGGER utg_afterInsertOrderItem
 ON order_item
@@ -423,6 +608,18 @@ GO
 INSERT INTO user_role_detail(user_id,role_id)
 VALUES 
 (1, 1),(2, 2),(3, 3),(4, 4)
+
+GO
+
+INSERT INTO notification_topic(topic_id)
+VALUES('TOPIC_ADMIN'), ('TOPIC_CUSTOMER'), ('TOPIC_USER_ADMIN'), ('TOPIC_USER_MANAGER'), ('TOPIC_USER_EMPLOYEE'), ('TOPIC_USER_GUEST')
+
+GO
+
+INSERT INTO notification_topic_detail(user_id, topic_id)
+VALUES(1, 'TOPIC_ADMIN'), (1, 'TOPIC_USER_ADMIN'), (2, 'TOPIC_ADMIN'), (2, 'TOPIC_USER_MANAGER'), (3, 'TOPIC_ADMIN'), (3, 'TOPIC_USER_EMPLOYEE'), (4, 'TOPIC_CUSTOMER'), (4, 'TOPIC_USER_GUEST')
+
+GO
 
 INSERT INTO brand(brand_name, brand_logo) VALUES
 ('Samsung', 'https://images.fpt.shop/unsafe/fit-in/108x40/filters:quality(90):fill(white)/fptshop.com.vn/Uploads/Originals/2020/8/26/637340490904217021_Samsung@2x.jpg'),
@@ -730,7 +927,7 @@ SELECT TOP(@top) p.product_id, p.brand_id, p.category_id, p.product_name, p.prod
 INNER JOIN product ON product.product_id=p.product_id AND order_item.product_id=p.product_id
 INNER JOIN user_order ON user_order.order_id = order_item.order_id AND user_order.order_status=3
 ) product_quanlity, p.product_status, p.updated_at,
-p.product_price, p.product_promo_price, p.product_avg_star, p.product_number_vote
+p.product_price, p.product_promo_price, p.product_avg_star, p.product_preavg_star, p.product_number_vote
 FROM product p WHERE p.product_status = 1
 ORDER BY product_quanlity DESC
 
@@ -809,5 +1006,123 @@ GO
 CREATE PROC usp_updateUserStatus(@id INT, @status BIT)
 AS 
 UPDATE user_acc SET user_status=@status WHERE user_id=@id
+
+GO
+
+CREATE PROC usp_insertProductEvaluation(@productId VARCHAR(30), @userId INT, @content NVARCHAR(500), @star INT, @parentId INT, @createdAt DATETIME, @id INT OUTPUT)
+AS
+BEGIN
+	SET NOCOUNT ON
+	INSERT INTO product_evaluation(product_id, user_id, evaluation_content, evaluation_star, evaluation_parent_id, created_at)
+	VALUES(@productId, @userId, @content, @star, @parentId, @createdAt)
+	SET @id = SCOPE_IDENTITY()
+END
+
+GO
+
+CREATE PROC usp_updateProductEvaluation(@id INT, @content NVARCHAR(500), @star INT)
+AS
+UPDATE product_evaluation SET evaluation_content=@content, evaluation_star=@star WHERE evaluation_id=@id
+
+GO
+
+CREATE PROC usp_deleteProductEvaluation(@id INT)
+AS
+DELETE FROM product_evaluation WHERE evaluation_id=@id
+
+GO
+
+CREATE PROC usp_selectProductEvaluation(@productId VARCHAR(30), @userId INT, @isOfUser BIT)
+AS
+BEGIN
+	IF @userId IS NULL
+	BEGIN
+		SELECT * FROM product_evaluation WHERE product_id = @productId AND evaluation_parent_id=0 ORDER BY evaluation_id DESC
+	END
+	ELSE
+	BEGIN
+		IF @isOfUser=1
+		BEGIN
+			SELECT * FROM product_evaluation WHERE product_id = @productId AND evaluation_parent_id=0 AND user_id=@userId ORDER BY evaluation_id DESC
+		END
+		ELSE
+		BEGIN
+			SELECT * FROM product_evaluation WHERE product_id = @productId AND evaluation_parent_id=0 AND user_id<>@userId ORDER BY evaluation_id DESC
+		END
+	END
+END
+
+GO
+
+CREATE PROC usp_selectProductEvaluationByParentId(@parentId INT) 
+AS
+SELECT * FROM product_evaluation WHERE evaluation_parent_id=@parentId ORDER BY evaluation_id DESC
+
+GO
+
+CREATE PROC usp_insertProductComment(@productId VARCHAR(30), @userId INT, @content NVARCHAR(500), @parentId INT, @createdAt DATETIME, @id INT OUTPUT)
+AS
+BEGIN
+	SET NOCOUNT ON
+	INSERT INTO product_comment(product_id, user_id, comment_content, comment_parent_id, created_at)
+	VALUES(@productId, @userId, @content, @parentId, @createdAt)
+	SET @id = SCOPE_IDENTITY()
+END
+
+GO
+
+CREATE PROC usp_updateProductComment(@id INT, @content NVARCHAR(500))
+AS
+UPDATE product_comment SET comment_content=@content WHERE comment_id=@id
+
+GO
+
+CREATE PROC usp_deleteProductComment(@id INT)
+AS
+DELETE FROM product_comment WHERE comment_id=@id
+
+GO
+
+CREATE PROC usp_selectProductComment(@productId VARCHAR(30), @userId INT, @isOfUser BIT)
+AS
+BEGIN
+	IF @userId IS NULL
+	BEGIN
+		SELECT * FROM product_comment WHERE product_id = @productId AND comment_parent_id=0 ORDER BY comment_id DESC
+	END
+	ELSE
+	BEGIN
+		IF @isOfUser=1
+		BEGIN
+			SELECT * FROM product_comment WHERE product_id = @productId AND comment_parent_id=0 AND user_id=@userId ORDER BY comment_id DESC
+		END
+		ELSE
+		BEGIN
+			SELECT * FROM product_comment WHERE product_id = @productId AND comment_parent_id=0 AND user_id<>@userId ORDER BY comment_id DESC
+		END
+	END
+END
+
+GO
+
+CREATE PROC usp_selectProductCommentByParentId(@parentId INT) 
+AS
+SELECT * FROM product_comment WHERE comment_parent_id=@parentId ORDER BY comment_id DESC
+
+GO
+
+CREATE PROC usp_saveProductPurchased(@productId VARCHAR(30), @userId INT, @hasEvaluated BIT)
+AS
+BEGIN
+	IF(EXISTS (SELECT product_id FROM product_purchased WHERE product_id=@productId AND user_id=@userId))
+	BEGIN
+		UPDATE product_purchased SET has_evaluated=@hasEvaluated WHERE product_id=@productId AND user_id=@userId
+	END
+	ELSE 
+	BEGIN
+		INSERT INTO product_purchased(product_id, user_id, has_evaluated) VALUES(@productId, @userId, @hasEvaluated)
+	END
+END
+
 
 GO

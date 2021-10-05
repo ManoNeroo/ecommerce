@@ -75,6 +75,7 @@ public class ProductService implements IProductService {
             product.setUpdatedAt(now);
             product.setCreatedAt(prod.getCreatedAt());
             product.setAvgStar(prod.getAvgStar());
+            product.setPreAvgStar(prod.getPreAvgStar());
             product.setNumberVote(prod.getNumberVote());
             product.setAvatar(prod.getAvatar());
         }

@@ -7,11 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import com.manonero.ecommerce.configs.AppSettings;
 import com.manonero.ecommerce.configs.OrderStatusEnum;
 import com.manonero.ecommerce.entities.Order;
-import com.manonero.ecommerce.entities.OrderItem;
 import com.manonero.ecommerce.entities.UserAccount;
-import com.manonero.ecommerce.models.CartItemRequest;
 import com.manonero.ecommerce.models.OrderRequest;
-import com.manonero.ecommerce.services.ICartItemService;
 import com.manonero.ecommerce.services.IOrderService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +27,6 @@ public class CustomerOrderController {
 
     @Autowired
     private IOrderService orderService;
-
-    @Autowired
-    private ICartItemService cartItemService;
 
     @GetMapping()
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
@@ -83,31 +77,6 @@ public class CustomerOrderController {
             return "customer/order/success";
         }
         return "customer/error/404";
-    }
-
-    @PostMapping()
-    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
-    public String add(HttpServletRequest servletRequest) {
-        UserAccount account = (UserAccount) servletRequest.getSession().getAttribute("user");
-        OrderRequest request = new OrderRequest();
-        request.setUserId(account.getId());
-        request.setUserName(account.getUserName());
-        request.setFullName(servletRequest.getParameter("fullName"));
-        request.setGender(Boolean.parseBoolean(servletRequest.getParameter("gender")));
-        request.setAddress(servletRequest.getParameter("address"));
-        request.setPhoneNumber(servletRequest.getParameter("phoneNumber"));
-        request.setDescription(servletRequest.getParameter("description"));
-        Order order = orderService.save(request);
-        if (order != null) {
-            for (OrderItem item : order.getOrderItems()) {
-                CartItemRequest cartItemRequest = new CartItemRequest();
-                cartItemRequest.setCartId(account.getUserName());
-                cartItemRequest.setProductId(item.getProductId());
-                cartItemService.deleteCartItem(cartItemRequest);
-            }
-            return "redirect:/user/order/success?id=" + order.getId();
-        }
-        return "redirect:/user/cart";
     }
 
     @GetMapping("/cancel/{id}")

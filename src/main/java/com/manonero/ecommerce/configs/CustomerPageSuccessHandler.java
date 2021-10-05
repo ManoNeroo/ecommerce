@@ -37,7 +37,6 @@ public class CustomerPageSuccessHandler implements AuthenticationSuccessHandler 
 			if (userAccount.getStatus() == true) {
 				HttpSession session = request.getSession();
 				session.setAttribute("user", userAccount);
-
 				String returnUrl = request.getParameter("returnUrl");
 				if (returnUrl != null) {
 					response.sendRedirect(request.getContextPath() + returnUrl);

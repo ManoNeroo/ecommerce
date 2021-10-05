@@ -16,36 +16,37 @@
 <body>
 
     <div id="main-content">
-        <div class="card shadow-sm col-xl-4 col-md-6 col-12" id="sign" style="margin: 0 auto">
+        <div class="card shadow-sm col-xl-5 col-md-6 col-12" id="sign" style="margin: 0 auto">
             <div class="card-body p-4">
                 <div class="form-title text-center pt-4">
                     <h4 class="pt-4">Đăng ký</h4>
                 </div>
                 <div class="d-flex flex-column">
-                    <form method="POST" th:action="@{/register}">
+                    <form method="POST" th:action="@{/register}" id="form-register">
                         <div class="form-group">
-                            <input type="text" name="username" class="form-control"
-                                placeholder="Tên đăng nhập...">
+                            <input type="text" name="userName" class="form-control" placeholder="Tên đăng nhập...">
+                            <span class="text-danger userName-error"></span>
                         </div>
                         <div class="form-group">
-                            <input type="text" name="lastName" class="form-control"
-                                placeholder="Tên họ...">
+                            <input type="text" name="lastName" class="form-control" placeholder="Tên họ...">
+                            <span class="text-danger lastName-error"></span>
                         </div>
                         <div class="form-group">
-                            <input type="text" name="firstName" class="form-control"
-                                placeholder="Tên...">
+                            <input type="text" name="firstName" class="form-control" placeholder="Tên...">
+                            <span class="text-danger firstName-error"></span>
                         </div>
                         <div class="form-group">
-                            <input type="text" name="phoneNumber" class="form-control"
-                                placeholder="Số điện thoại...">
+                            <input type="text" name="phoneNumber" class="form-control" placeholder="Số điện thoại...">
+                            <span class="text-danger phoneNumber-error"></span>
                         </div>
                         <div class="form-group">
-                            <input type="password" name="password" class="form-control"
-                                placeholder="Mật khẩu...">
+                            <input type="password" name="password" class="form-control" placeholder="Mật khẩu...">
+                            <span class="text-danger password-error"></span>
                         </div>
                         <div class="form-group">
-                            <input type="password" name="repassword" class="form-control"
+                            <input type="password" name="matchingPassword" class="form-control"
                                 placeholder="Nhập lại mật khẩu...">
+                            <span class="text-danger matchingPassword-error"></span>
                         </div>
                         <button type="submit" class="btn btn-danger btn-block btn-round">Đăng ký</button>
                     </form>
@@ -58,9 +59,18 @@
             </div>
         </div>
     </div>
+    <div class="alert" id="page-alert" role="alert" th:fragment="pageAlert">
+		<button type="button" class="close">
+			<span aria-hidden="true">×</span>
+		</button>
+		<h6>
+			<i class="fas"></i> <b class="title">Thành công!</b>
+		</h6>
+		<span class="message">Thành công!</span>
+	</div>
 
     <th:block id="script">
-
+        <script th:src="@{/customer/js/signup.js}"></script>
     </th:block>
 </body>
 

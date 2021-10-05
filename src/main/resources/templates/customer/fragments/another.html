@@ -10,15 +10,18 @@
 	<div id="page-slider" th:fragment="pageSlider">
 		<div class="swiper-wrapper">
 			<div class="swiper-slide">
-				<a target="_blank" href="#" title="" class="fixed-ratio ratio-25">
-					<img alt=""
-						src="https://images.fpt.shop/unsafe/fit-in/1200x300/filters:quality(90):fill(white)/fptshop.com.vn/Uploads/Originals/2021/8/31/637660292386915827_F-C1_1200x300.png">
+				<a href="javascript:void(0)" class="fixed-ratio ratio-25">
+					<img src="https://images.fpt.shop/unsafe/fit-in/1200x300/filters:quality(90):fill(white)/fptshop.com.vn/Uploads/Originals/2021/10/1/637686909938218976_F-C1_1200x300.png">
 				</a>
 			</div>
 			<div class="swiper-slide">
-				<a target="_blank" href="#" title="" class="fixed-ratio ratio-25">
-					<img alt=""
-						src="https://images.fpt.shop/unsafe/fit-in/1200x300/filters:quality(90):fill(white)/fptshop.com.vn/Uploads/Originals/2021/9/4/637663744526489882_F-C1_1200x300.png">
+				<a href="javascript:void(0)" class="fixed-ratio ratio-25">
+					<img src="https://images.fpt.shop/unsafe/fit-in/1200x300/filters:quality(90):fill(white)/fptshop.com.vn/Uploads/Originals/2021/9/30/637686364259795936_F-C1_1200x300%20(2).png">
+				</a>
+			</div>
+			<div class="swiper-slide">
+				<a href="javascript:void(0)" class="fixed-ratio ratio-25">
+					<img src="https://images.fpt.shop/unsafe/fit-in/1200x300/filters:quality(90):fill(white)/fptshop.com.vn/Uploads/Originals/2021/9/30/637686369536560304_F-C1_1200x300.png">
 				</a>
 			</div>
 		</div>
@@ -40,32 +43,6 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-outline-danger" data-dismiss="modal">Đóng</button>
 					<a th:href="@{/logout}" class="btn btn-danger">Đăng xuất</a>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="modal fade" id="confirm-modal" tabindex="-1" role="dialog" aria-hidden="true"
-		th:fragment="confirmModal">
-		<div class="modal-dialog modal-sm">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">Cảnh báo!</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<span class="icon">
-						<svg viewBox="0 0 24 24">
-							<path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path>
-						</svg>
-					</span>
-					<span class="confirm-content">Xác nhận hành động!</span>
-				</div>
-				<div class="modal-footer">
-					<button data-dismiss="modal" class="btn btn-warning">Xác nhận</button>
-					<button data-dismiss="modal" class="btn btn-outline-warning">Đóng</button>
 				</div>
 			</div>
 		</div>

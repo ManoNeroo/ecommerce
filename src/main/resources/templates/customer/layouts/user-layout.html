@@ -10,21 +10,23 @@
     <title th:replace="${title}">Blank Page</title>
     <link rel="shortcut icon" th:href="@{/customer/img/favicon.ico}" type="image/x-icon">
     <link th:href="@{/common/bootstrap/css/bootstrap.min.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/common/daterangepicker/daterangepicker.min.css}" rel="stylesheet" type="text/css" />
     <link th:href="@{/common/swiper/swiper.min.css}" rel="stylesheet" type="text/css" />
     <link th:href="@{/common/fontawesome/css/all.min.css}" rel="stylesheet" type="text/css" />
     <link th:href="@{/customer/css/page.css}" rel="stylesheet" type="text/css" />
     <link th:href="@{/customer/css/user-page.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/customer/css/notification.css}" rel="stylesheet" type="text/css" />
     <th:block th:replace="${style} ?: ~{}"></th:block>
 </head>
 
 <body>
-    <header th:replace="~{/customer/fragments/header :: header}"></header>
+    <header th:replace="~{customer/fragments/header :: header}"></header>
 
     <main id="main">
         <div class="wrapper">
             <div class="row py-2">
                 <div class="col-3">
-                    <ul th:replace="~{/customer/fragments/user-sidebar :: userSidebar}"></ul>
+                    <ul th:replace="~{customer/fragments/user-sidebar :: userSidebar}"></ul>
                 </div>
                 <div class="col-9">
                     <div class="account-content" th:insert="${mainContent} ?: ~{}">
@@ -35,28 +37,36 @@
         </div>
     </main>
 
-    <footer th:replace="~{/customer/fragments/footer :: footer}"></footer>
+    <footer th:replace="~{customer/fragments/footer :: footer}"></footer>
 
-    <div th:replace="~{/customer/fragments/another :: logoutModal}"></div>
-    <div th:replace="~{/customer/fragments/another :: confirmModal}"></div>
-    <div th:replace="~{/customer/fragments/another :: pageLoading}"></div>
-    <div th:replace="~{/customer/fragments/another :: pageAlert}"></div>
+    <div th:replace="~{customer/fragments/another :: logoutModal}"></div>
+    <div th:replace="~{customer/fragments/another :: pageLoading}"></div>
+    <div th:replace="~{customer/fragments/another :: pageAlert}"></div>
 
     <script>
         var g_sUserName;
+        var g_bIsAuthenticated = false;
     </script>
     <th:block sec:authorize="isAuthenticated()">
         <script th:inline="javascript">
             g_sUserName = /*[[${#authentication.principal.username}]]*/'default'
+            g_bIsAuthenticated = true;
+            var g_aNotificationTopics = /*[[${session.user.notificationTopics}]]*/'default';
             var g_iUserId = /*[[${session.user.id}]]*/'default';
+            var g_aUserRoles = /*[[${#authentication.getAuthorities()}]]*/'default';
         </script>
     </th:block>
     <script th:src="@{/common/jquery/jquery.min.js}"></script>
     <script th:src="@{/common/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/common/sockjs/sockjs.min.js}"></script>
+    <script th:src="@{/common/stompjs/stomp.min.js}"></script>
     <script th:src="@{/common/swiper/swiper.min.js}"></script>
+    <script th:src="@{/common/moment/moment.min.js}"></script>
+	<script th:src="@{/common/daterangepicker/daterangepicker.min.js}"></script>
     <script th:src="@{/common/mylib/js/utils.js}"></script>
     <script th:src="@{/customer/js/page.js}"></script>
     <th:block th:replace="${script} ?: ~{}"></th:block>
+    <script th:src="@{/customer/js/notification.js}"></script>
 </body>
 
 </html>

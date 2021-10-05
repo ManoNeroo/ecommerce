@@ -29,7 +29,7 @@ public class CustomerProfileController {
     @GetMapping("/password")
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     public String password() {
-        return "/customer/profile/password";
+        return "customer/profile/password";
     }
 
     @GetMapping("/resetusersession")

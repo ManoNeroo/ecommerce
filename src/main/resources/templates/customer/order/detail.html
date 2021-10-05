@@ -100,11 +100,10 @@
                     </div>
                     <div class="order-action">
                         <th:block th:if="${order.status == 0}">
-                            <a class="btn btn-danger" th:href="${'/user/order/cancel/' + order.id}"
-                                onclick="return confirm('Xác nhận hủy đơn hàng này?')">Hủy đơn hàng</a>
+                            <button class="btn btn-danger btn-cancel-order" th:attr="data-id=${order.id}">Hủy đơn hàng</button>
                         </th:block>
                         <th:block th:if="${order.status == 3}">
-                            <button class="btn btn-outline-danger" th:attr="data-id=${order.id}">Gửi đánh giá</button>
+                            <button class="btn btn-outline-danger btn-evaluate-order" th:attr="data-id=${order.id}">Gửi đánh giá</button>
                         </th:block>
                     </div>
                 </div>
@@ -168,6 +167,23 @@
                 </div>
             </div>
         </th:block>
+        <div class="modal" id="evaluate-modal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Các sản phẩm trong đơn hàng</h5>
+                        <button type="button" class="close" data-dismiss="modal">×
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" type="button" style="width: 5rem" class="btn btn-danger btn-block">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <th:block id="script">
         <script th:src="@{/customer/js/order-page.js}"></script>

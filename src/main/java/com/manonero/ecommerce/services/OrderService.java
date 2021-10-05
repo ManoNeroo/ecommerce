@@ -12,6 +12,7 @@ import com.manonero.ecommerce.entities.Cart;
 import com.manonero.ecommerce.entities.CartItem;
 import com.manonero.ecommerce.entities.Order;
 import com.manonero.ecommerce.entities.OrderItem;
+import com.manonero.ecommerce.entities.ProductPurchased;
 import com.manonero.ecommerce.models.OrderRequest;
 import com.manonero.ecommerce.repositories.IOrderRepository;
 import com.manonero.ecommerce.utils.AppUtils;
@@ -29,6 +30,9 @@ public class OrderService implements IOrderService {
 
     @Autowired
     private ICartService cartService;
+
+    @Autowired
+    private IProductPurchaseService purchaseService;
 
     @Override
     @Transactional
@@ -102,8 +106,25 @@ public class OrderService implements IOrderService {
 
     @Override
     @Transactional
-    public Integer updateOrderStatus(OrderRequest request) {
-        return orderRepository.updateOrderStatus(request.getOrderId(), request.getStatus());
+    public Order updateOrderStatus(OrderRequest request) {
+        Order order = orderRepository.selectById(request.getOrderId());
+        if (order != null) {
+            if (order.getStatus() < request.getStatus()) {
+                Integer newStatus = orderRepository.updateOrderStatus(request.getOrderId(), request.getStatus());
+                if (newStatus == 3) {
+                    for (OrderItem item : order.getOrderItems()) {
+                        ProductPurchased purchased = new ProductPurchased();
+                        purchased.setUserId(order.getUserId());
+                        purchased.setProductId(item.getProductId());
+                        purchased.setHasEvaluated(false);
+                        purchaseService.save(purchased);
+                    }
+                }
+                order.setStatus(newStatus);
+                return order;
+            }
+        }
+        return null;
     }
 
     @Override

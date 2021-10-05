@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{customer/layouts/user-layout :: user-fragment(  
+                                                ~{::title},
+                                                ~{:: #style},
+                                                ~{:: #script},
+                                                ~{:: #main-content}
+                                               )}">
+
+<head>
+    <title>Thông báo</title>
+    <th:block id="style">
+        <link th:href="@{/common/mylib/css/pagination.css}" rel="stylesheet" type="text/css" />
+        <style>
+            .daterangepicker td.active, .daterangepicker td.active:hover {
+                background-color: #cb1c22;
+            }
+            .daterangepicker .drp-buttons .btn-primary {
+                background-color: #cb1c22;
+                border-color: #cb1c22 !important;
+            }
+            .daterangepicker .drp-buttons .btn-primary:hover, .daterangepicker .drp-buttons .btn-primary:focus {
+                background-color: #cb1c22;
+                border-color: #cb1c22 !important;
+            }
+            .user-page-header {
+                display: flex;
+                align-items: center;
+            }
+            .user-page-header h1 {
+                flex: 2;
+            }
+            .user-page-header .header-filter {
+                flex: 3;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+            }
+            #page-noti-list {
+                min-height: 32.625rem;
+                padding: 1rem 1.5rem 0;
+                display: block !important;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+
+    <div id="main-content">
+        <div class="user-page-wrapper">
+            <div class="user-page-header">
+                <h1>Thông báo của bạn</h1>
+                <div class="header-filter page-filter">
+                    <div class="filter-item item-daterange">
+                        <i class="fa fa-calendar icon" aria-hidden="true"></i>
+                        <input type="text" id="daterange" name="daterange" class="form-control" placeholder="Khoảng thời gian">
+                        <i class="fa fa-chevron-down icon" aria-hidden="true"></i>
+                    </div>
+                    <div class="filter-item item-status">
+                        <i class="fa fa-tags icon" aria-hidden="true"></i>
+                        <select class="form-control" id="hasread">
+                            <option value="">Tất cả</option>
+                            <option value="true">Đã đọc</option>
+                            <option value="false">Chưa đọc</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="user-page-body" id="page-noti-list">
+                
+            </div>
+            <div id="page-pagination"></div>
+        </div>
+    </div>
+    <th:block id="script">
+        <script th:src="@{/common/mylib/js/pagination.js}"></script>
+    </th:block>
+</body>
+
+</html>

@@ -45,7 +45,7 @@ public class ProductController {
         }
         int offset = (page * limit) - limit + 1;
         List<Product> list = productService.filterProduct(offset, limit, category, brand, priceRange, name, status,
-                isSort, false);
+                isSort, null);
         int total = productService.getProductCount();
         List<Brand> brands = brandService.getAllBrand(null, true);
         List<Category> categories = categoryService.getAllCategory(null, true);
@@ -65,7 +65,7 @@ public class ProductController {
     }
 
     @GetMapping("/add")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     public String add(Model model) {
         List<Brand> brands = brandService.getAllBrand(null, true);
         List<Category> categories = categoryService.getAllCategory(null, true);
@@ -75,7 +75,7 @@ public class ProductController {
     }
 
     @GetMapping("/edit/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')")
     public String edit(Model model, @PathVariable String id) {
         Product product = productService.getProductById(id);
         if(product == null) {

@@ -9,7 +9,6 @@
 <head>
     <title>Đơn hàng</title>
     <th:block id="style">
-        <link th:href="@{/common/daterangepicker/daterangepicker.min.css}" rel="stylesheet" type="text/css" />
         <link th:href="@{/common/select2/select2.min.css}" rel="stylesheet" type="text/css" />
         <link th:href="@{/common/mylib/css/pagination.css}" rel="stylesheet" type="text/css" />
         <link th:href="@{/admin/css/order-page.css}" rel="stylesheet" type="text/css" />
@@ -118,8 +117,6 @@
             var g_dEndDate = /*[[${endDate}]]*/'default';
             var g_aStatuses = /*[[${statuses}]]*/'default';
         </script>
-        <script th:src="@{/common/moment/moment.min.js}"></script>
-        <script th:src="@{/common/daterangepicker/daterangepicker.min.js}"></script>
         <script th:src="@{/common/mylib/js/pagination.js}"></script>
         <script th:src="@{/common/select2/select2.min.js}"></script>
         <script th:src="@{/admin/js/order-page.js}"></script>

@@ -1,9 +1,1 @@
-(function () {
-    new Swiper('#page-slider', {
-        loop: true,
-        autoplay: {
-            delay: 6e3,
-            disableOnInteraction: false,
-        }
-    });
-})();
+new Swiper("#page-slider",{loop:!0,autoplay:{delay:6e3,disableOnInteraction:!1}});

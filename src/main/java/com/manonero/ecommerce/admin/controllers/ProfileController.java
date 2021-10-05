@@ -21,13 +21,13 @@ public class ProfileController {
     @GetMapping("/admin/profile")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_EMPLOYEE')")
     public String index() {
-        return "/admin/profile/index";
+        return "admin/profile/index";
     }
 
     @GetMapping("/admin/password")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_EMPLOYEE')")
     public String changePassword() {
-        return "/admin/profile/password";
+        return "admin/profile/password";
     }
 
     @GetMapping("/admin/resetusersession")

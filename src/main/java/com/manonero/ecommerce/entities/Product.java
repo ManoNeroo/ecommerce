@@ -29,6 +29,9 @@ public class Product {
     @Column(name = "product_avg_star")
     private double avgStar;
 
+    @Column(name = "product_preavg_star")
+    private double preAvgStar;
+
     @Column(name = "product_price")
     private int price;
 
@@ -64,13 +67,14 @@ public class Product {
     public Product() {
     }
 
-    public Product(String id, String name, int quanlity, double avgStar, int price, int priceOff, int promoPrice,
-            String avatar, boolean status, Date createdAt, Date updatedAt, int numberVote, Brand brand,
+    public Product(String id, String name, int quanlity, double avgStar, double preAvaStar, int price, int priceOff,
+            int promoPrice, String avatar, boolean status, Date createdAt, Date updatedAt, int numberVote, Brand brand,
             Category category) {
         this.id = id;
         this.name = name;
         this.quanlity = quanlity;
         this.avgStar = avgStar;
+        this.preAvgStar = preAvaStar;
         this.price = price;
         this.priceOff = priceOff;
         this.promoPrice = promoPrice;
@@ -81,6 +85,14 @@ public class Product {
         this.numberVote = numberVote;
         this.brand = brand;
         this.category = category;
+    }
+
+    public double getPreAvgStar() {
+        return preAvgStar;
+    }
+
+    public void setPreAvgStar(double preAvgStar) {
+        this.preAvgStar = preAvgStar;
     }
 
     public int getNumberVote() {

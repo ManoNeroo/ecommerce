@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class CustomerSignController {
 
+
 	@GetMapping("/login")
 	public String signin(@RequestParam(defaultValue = "false") boolean error) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();

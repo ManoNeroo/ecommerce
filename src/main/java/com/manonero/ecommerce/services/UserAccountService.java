@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.manonero.ecommerce.configs.UserAccountRoleEnum;
+import com.manonero.ecommerce.entities.NotificationTopic;
 import com.manonero.ecommerce.entities.UserAccount;
 import com.manonero.ecommerce.entities.UserRole;
 import com.manonero.ecommerce.models.UserRequest;
@@ -58,10 +59,12 @@ public class UserAccountService implements IUserAccountService {
 				user.setAvatar(gender ? "/admin/img/girl.png" : "/admin/img/boy.png");
 				user.setStatus(true);
 				Set<UserRole> roles = generateRoles(request.getRoleIxs());
+				Set<NotificationTopic> topics = generateNotificationTopic(roles, request.getUserName());
 				if (roles.size() > 0) {
+					user.setNotificationTopics(topics);
 					user.setRoles(roles);
+					return userRepository.save(user);
 				}
-				return userRepository.save(user);
 			}
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
@@ -81,6 +84,21 @@ public class UserAccountService implements IUserAccountService {
 			}
 		}
 		return roles;
+	}
+
+	private Set<NotificationTopic> generateNotificationTopic(Set<UserRole> roles, String userName) {
+		Set<NotificationTopic> topics = new HashSet<>();
+		topics.add(new NotificationTopic("TOPIC_USER_" + userName.toUpperCase()));
+		boolean isTopicAdmin = roles.stream().anyMatch(r -> r.getName().equals("ROLE_ADMIN")
+				|| r.getName().equals("ROLE_MANAGER") || r.getName().equals("ROLE_EMPLOYEE"));
+		boolean isTopicCustomer = roles.stream().anyMatch(r -> r.getName().equals("ROLE_CUSTOMER"));
+		if (isTopicAdmin) {
+			topics.add(new NotificationTopic("TOPIC_ADMIN"));
+		}
+		if (isTopicCustomer) {
+			topics.add(new NotificationTopic("TOPIC_CUSTOMER"));
+		}
+		return topics;
 	}
 
 	@Override
@@ -156,8 +174,22 @@ public class UserAccountService implements IUserAccountService {
 				UserAccount account = getById(request.getUserId());
 				if (account != null) {
 					Set<UserRole> roles = generateRoles(request.getRoleIxs());
+					Set<NotificationTopic> topics = generateNotificationTopic(roles, account.getUserName());
+					for (NotificationTopic topic : account.getNotificationTopics()) {
+						boolean isContain = false;
+						for(NotificationTopic topic2 : topics) {
+							if(topic2.equals(topic)) {
+								isContain = true;
+								break;
+							}
+						}
+						if(!isContain && !topic.getId().equals("TOPIC_CUSTOMER") && !topic.getId().equals("TOPIC_ADMIN")) {
+							topics.add(topic);
+						}
+					}
 					if (roles.size() > 0) {
-						account.setRoles(generateRoles(request.getRoleIxs()));
+						account.setNotificationTopics(topics);
+						account.setRoles(roles);
 						userRepository.save(account);
 						return request.getRoleIxs();
 					}

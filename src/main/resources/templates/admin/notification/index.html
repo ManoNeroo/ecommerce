@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{admin/layouts/main-layout :: main-fragment(  
+                                                ~{::title},
+                                                ~{:: #dashboard-style},
+                                                ~{:: #dashboard-script},
+                                                ~{:: #main-content}
+                                               )}">
+
+<head>
+    <title>Thông báo</title>
+    <th:block id="dashboard-style">
+        <link th:href="@{/common/mylib/css/pagination.css}" rel="stylesheet" type="text/css" />
+    </th:block>
+</head>
+
+<body>
+
+    <div id="main-content">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-12">
+                <div class="page-notification-list card mb-4">
+                    <div class="card-body">
+                        <div class="list-header">
+                            <h4 class="list-title">Thông báo của bạn</h4>
+                            <div class="list-filter page-filter">
+                                <div class="filter-item item-daterange">
+                                    <i class="fa fa-calendar icon" aria-hidden="true"></i>
+                                    <input type="text" id="daterange" name="daterange" class="form-control" placeholder="Khoảng thời gian">
+                                    <i class="fa fa-chevron-down icon" aria-hidden="true"></i>
+                                </div>
+                                <div class="filter-item item-status">
+                                    <i class="fa fa-tags icon" aria-hidden="true"></i>
+                                    <select class="form-control" id="hasread">
+                                        <option value="">Tất cả</option>
+                                        <option value="true">Đã đọc</option>
+                                        <option value="false">Chưa đọc</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-body">
+    
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-center" id="page-pagination"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block id="dashboard-script">
+        <script th:src="@{/common/mylib/js/pagination.js}"></script>
+    </th:block>
+</body>
+
+</html>
